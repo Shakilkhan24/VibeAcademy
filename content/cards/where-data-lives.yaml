@@ -1,0 +1,111 @@
+slug: where-data-lives
+version: 1
+updated: "2026-11-18"
+status: draft
+title: Where does your data live?
+domain: data
+chapter: blueprint
+minRank: prompter
+decisionIds: [da-database, da-model]
+
+question: When someone saves something in your app, where does it go, and will it still be there tomorrow?
+
+moment: >-
+  As soon as your app needs to remember anything between visits: orders, bookings, profiles
+  or posts.
+
+ifSilent: >-
+  The AI uses whatever its template uses. Sometimes that is browser storage, which lives on one
+  device only and disappears when the visitor clears their browser. Sometimes it is a free
+  database tier without backups, or a database type that fits your data badly, which you only
+  discover when you need a report.
+
+options:
+  - key: managed-postgres
+    label: A managed SQL database (Postgres)
+    recommended: true
+    summary: >-
+      A hosted relational database such as Supabase, Neon or Amazon RDS. Data lives in tables
+      with clear links between them.
+    pros:
+      - Fits most apps with users, orders, bookings and payments
+      - Transactions keep money and stock counts consistent
+      - Reporting with SQL and a very large ecosystem
+    cons:
+      - Tables need some design up front
+      - Backups and production limits usually need a paid plan
+    cost: Free tiers exist; plan for a paid tier once real customers depend on it.
+    effort: Medium
+    promptLine: >-
+      Database: managed Postgres on [Supabase / Neon / RDS], in [the region closest to most users].
+      Design tables for [main records] with foreign keys and created_at and updated_at on every table.
+      Change the schema only through migrations committed to Git.
+
+  - key: document-database
+    label: A document database
+    summary: >-
+      Stores flexible, nested records instead of tables, for example Firestore or MongoDB Atlas.
+    pros:
+      - Quick to start when the shape of data changes often
+      - Built-in real-time updates in Firestore
+    cons:
+      - Relationships and reports get harder as data grows
+      - Easy to duplicate data and let the copies drift apart
+    cost: Free tiers exist; costs grow with reads and writes, so busy pages can get expensive.
+    effort: Low to start, higher later
+    promptLine: >-
+      Database: [Firestore / MongoDB Atlas]. Document the shape of each collection in SPEC.md, avoid
+      duplicating data that changes, and add an index for every query the app runs.
+
+  - key: no-server-data
+    label: No saved server data yet
+    summary: >-
+      Keep version 1 free of server data: a static site, a form that emails you, or a
+      spreadsheet you update by hand.
+    pros:
+      - Nothing to secure, back up or pay for
+      - The fastest way to test demand
+    cons:
+      - Cannot support logins, carts or order history
+      - Manual work grows with every customer
+    cost: Free.
+    effort: Low
+    promptLine: >-
+      No database in version 1. Store nothing on a server; send form submissions to [my email / a
+      spreadsheet]. Do not add a database or user accounts without asking me.
+
+proveIt:
+  steps:
+    - Create a test record in your app, for example an order.
+    - Close the browser, open the app on a different device and look for the record.
+    - Find the same record in your database provider's dashboard.
+  passWhen: >-
+    The record appears on the second device and in the database dashboard, and you can name the
+    plan your database is on and where its backups are kept.
+
+depths:
+  story: >-
+    Your data is the shop's order book. Writing orders on your hand (the browser) works until you
+    wash your hands. A ledger in a locked cabinet (a database) keeps every order, and you can count
+    them at the end of the month.
+  practical: >-
+    Tell the AI exactly where data should be saved and on which service. For most apps with users
+    and orders, say: managed Postgres on Supabase or Neon. Then check that you can see your records
+    in that service's dashboard. If you cannot find them, the AI probably saved them somewhere temporary.
+  technical: >-
+    Relational databases such as Postgres and MySQL store rows in tables linked by keys, and
+    enforce rules with constraints and transactions. Document databases store nested records and
+    trade some of that structure for flexibility. Browser storage (localStorage, IndexedDB) lives on
+    one device and is not a place for shared data.
+  engineer: >-
+    Model the entities and relationships first (users, orders, order_items, products). Add foreign
+    keys, NOT NULL and unique constraints, and index the columns you filter on. Manage the schema with
+    versioned migrations in Git, pick a region near your users, use connection pooling from serverless
+    functions, and keep database credentials on the server.
+  senior: >-
+    Default to Postgres unless a requirement rules it out: it handles relational, JSON and full-text
+    needs well enough that one well-run database beats several half-run ones. The decisions that
+    matter are operational: backup and restore time, region and data-residency rules, connection
+    limits under serverless load, and a migration path that lets the schema evolve without downtime.
+
+related: [backups-and-restore, who-sees-what]

@@ -1,0 +1,112 @@
+slug: who-sees-what
+version: 1
+updated: "2026-11-18"
+status: draft
+title: Who can see whose data?
+domain: identity-access
+chapter: first-build
+minRank: builder
+decisionIds: [ia-row-access, ia-login, ss-privacy]
+
+question: Can one customer see another customer's orders, messages or profile?
+
+moment: >-
+  The moment you add user accounts. From then on your app holds other people's data, and each
+  person must see only their own.
+
+ifSilent: >-
+  Many AI-built apps talk to the database straight from the browser using a public key. If access
+  rules are missing, anyone who opens the browser's developer tools can read every row. A 2025
+  scan of 5,600 public vibe-coded apps found more than 2,000 high-impact vulnerabilities, many
+  caused by missing or misconfigured database access rules.
+
+options:
+  - key: own-rows-only
+    label: Each user sees only their own data
+    recommended: true
+    summary: >-
+      Every table records an owner, and the database itself refuses to read or write rows that
+      are not yours. Staff get a separate admin role.
+    pros:
+      - Enforced by the database, so a bug in a page cannot leak data
+      - Works for apps that query the database from the browser
+    cons:
+      - Every new table needs its own policy
+      - Policies need tests, or a typo silently blocks or opens access
+    cost: No extra money.
+    effort: "Medium: one prompt per table, plus a test"
+    promptLine: >-
+      Enable row-level security on every table. A user can read and write only rows where user_id
+      equals their own id; admins are a separate role checked on the server. Add an automated test
+      proving user A cannot read or change user B's data.
+
+  - key: server-checks
+    label: All data goes through your own server
+    summary: >-
+      The browser never talks to the database. Your API checks who is asking before every query.
+    pros:
+      - One place to check permissions and validate input
+      - Database credentials never reach the browser
+    cons:
+      - More code to write and maintain
+      - Every endpoint must remember to check ownership
+    cost: No extra money; slightly more hosting.
+    effort: Medium
+    promptLine: >-
+      The browser never queries the database directly. Every API endpoint loads the signed-in user on
+      the server and filters by their id, returning 404 for records they do not own. Add tests for each
+      endpoint using two different users.
+
+  - key: public-by-design
+    label: Public on purpose
+    summary: >-
+      Content anyone may read, such as a directory or a blog, with editing limited to each author.
+    pros:
+      - Simple when nothing is private
+    cons:
+      - Easy to add a private field later and forget it is public
+      - Never suitable for orders, messages or contact details
+    cost: No extra money.
+    effort: Low
+    promptLine: >-
+      Records in [table] are public to read. Only the author can create, edit or delete their own
+      records, enforced by the database. Keep personal details such as email addresses in a separate
+      table that is never public.
+
+proveIt:
+  steps:
+    - Create two test accounts, A and B.
+    - As B, create a private record such as an order, and copy its link or id.
+    - Log in as A and open B's link. Then repeat the app's data request from the browser's developer tools using B's id.
+  passWhen: >-
+    Every attempt by A to read or change B's record fails, both in the page and in the raw request.
+
+depths:
+  story: >-
+    Your shop keeps every customer's order slip in one big drawer. Logging in is the front door: it
+    decides who comes in. Row access is the drawer lock that lets each customer take out only their
+    own slips. A front door without drawer locks still lets every customer read everyone's orders.
+  practical: >-
+    Logging in is not the same as access control. Tell the AI in plain words that each user must
+    only see and change their own data, and ask for a test that proves it with two accounts. Then
+    run the two-account check yourself before you launch.
+  technical: >-
+    Authentication answers "who are you?"; authorisation answers "what may you do?". In apps where
+    the browser holds a public database key (for example the Supabase anon key), the database must
+    enforce authorisation itself with row-level security policies such as `user_id = auth.uid()`.
+  engineer: >-
+    Enable row-level security on every table and deny by default. Write separate policies for select,
+    insert, update and delete, and test them with two real user sessions, not the service key, which
+    bypasses them. Keep service keys on the server. In custom endpoints, watch for insecure direct
+    object references: loading a record by id without checking who owns it.
+  senior: >-
+    Treat tenant isolation as an invariant, not a feature: enforce it at the lowest layer you control
+    and test it in CI so nobody can forget it. Choose the isolation model deliberately (rows, schemas
+    or separate databases per customer) based on compliance needs and blast radius, and keep an audit
+    log of staff access to customer data.
+
+related: [where-secrets-live, where-data-lives]
+
+sources:
+  - title: "Escape: how we discovered over 2,000 vulnerabilities in apps built with vibe coding platforms (Oct 2025)"
+    url: https://escape.tech/blog/methodology-how-we-discovered-vulnerabilities-apps-built-with-vibe-coding/

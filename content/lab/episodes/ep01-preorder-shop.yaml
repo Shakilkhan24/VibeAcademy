@@ -1,0 +1,15 @@
+slug: ep01-preorder-shop
+number: 1
+title: A pre-order shop for a home bakery
+idea: >-
+  Customers see this week's menu, sign in, pre-order for a pickup time and pay online. The owner
+  sees each time slot's orders and marks them collected.
+tool: To be chosen before filming (Lovable or Bolt)
+status: planned
+methodologyVersion: 1
+twinA:
+  label: "Twin A: vibe-only"
+  approach: Built from a short beginner prompt plus follow-up fixes, with no planning documents.
+twinB:
+  label: "Twin B: Blueprint"
+  approach: Built from a SeniorSeat Blueprint and Build Pack, in small steps with a check after each.

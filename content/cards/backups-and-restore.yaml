@@ -1,0 +1,109 @@
+slug: backups-and-restore
+version: 1
+updated: "2026-11-18"
+status: draft
+title: What if your data disappears?
+domain: reliability-operations
+chapter: first-100-users
+minRank: shipper
+decisionIds: [ro-backups]
+
+question: If your database were deleted or corrupted tonight, how much would you lose, and how long would it take to get it back?
+
+moment: >-
+  When real people start depending on the app. The first customer order is the moment backups
+  stop being optional.
+
+ifSilent: >-
+  Backups are rarely part of the AI's plan unless you ask, and free database tiers may keep few or
+  none. A mistaken migration, a bad AI edit or a deleted table can then erase every customer record
+  with no way back.
+
+options:
+  - key: managed-pitr
+    label: Managed backups with point-in-time recovery
+    recommended: true
+    summary: >-
+      Use your database provider's automatic backups and point-in-time recovery, which can restore
+      the database to a moment just before the mistake.
+    pros:
+      - No code to write; the provider runs it
+      - Recovers from mistakes, not only from hardware failures
+    cons:
+      - Usually needs a paid plan
+      - Only as good as your last tested restore
+    cost: Typically included in paid database plans.
+    effort: Low
+    promptLine: >-
+      Use a database plan with automatic daily backups and point-in-time recovery. Write the restore
+      steps in RUNBOOK.md and test a restore into a separate database before launch.
+
+  - key: scheduled-exports
+    label: Scheduled exports you control
+    summary: >-
+      A scheduled job exports the database, for example with pg_dump, to separate storage such as
+      Amazon S3 or Cloudflare R2, and keeps copies for a set number of days.
+    pros:
+      - Works with any plan or provider
+      - Copies live outside the database provider
+    cons:
+      - You maintain the job and must notice when it fails
+      - A restore loses everything since the last export
+    cost: Low storage costs for small apps.
+    effort: Medium
+    promptLine: >-
+      Run a nightly encrypted pg_dump of the database to [S3 / R2] and keep 30 days of copies. Alert me
+      when a backup fails, and write and test the restore steps.
+
+  - key: both
+    label: Both, for important data
+    summary: >-
+      Managed point-in-time recovery for quick fixes, plus independent exports in case you lose
+      access to the provider account itself.
+    pros:
+      - Survives provider outages and account problems
+      - Meets most customer and compliance expectations
+    cons:
+      - Two systems to monitor
+      - More setup time
+    cost: A paid database plan plus storage.
+    effort: Medium
+    promptLine: >-
+      Enable managed point-in-time recovery AND a nightly encrypted export to storage owned by a
+      different account. Test a restore from each one monthly and record how long it took in RUNBOOK.md.
+
+proveIt:
+  steps:
+    - Create a separate copy of your database, such as a branch or a new instance.
+    - Restore last night's backup into it, following only your written steps.
+    - Time it, and check that a recent test record is present.
+  passWhen: >-
+    You restore a backup into a separate database using only your written steps, the recent record
+    is there, and you know how many minutes it took.
+
+depths:
+  story: >-
+    A photographer who keeps every wedding album on one laptop is one spilled coffee from disaster.
+    A backup is the second copy in another building, and a restore drill is checking that the second
+    copy actually opens.
+  practical: >-
+    Ask your database provider, or the AI, three questions: are backups on, how far back can I
+    restore, and what are the steps? Then do one practice restore into a copy before launch. A backup
+    you have never restored is a hope, not a plan.
+  technical: >-
+    Two numbers describe a backup plan. RPO (recovery point objective) is how much recent data you can
+    afford to lose; RTO (recovery time objective) is how long you can be down. Daily backups mean an
+    RPO of up to a day. Point-in-time recovery replays the database's write-ahead log to restore to
+    almost any moment.
+  engineer: >-
+    Enable point-in-time recovery, keep logical dumps in separate storage with retention and
+    encryption, and monitor the backup jobs. Restore into an isolated instance on a schedule and check
+    row counts and recent records. Take a snapshot before risky migrations, and write the restore
+    procedure as a runbook someone else could follow.
+  senior: >-
+    Backups are defined by tested restores, not by settings. Set RPO and RTO from business impact, keep
+    at least one copy outside the primary provider account to survive compromise or lockout, and
+    rehearse restores like fire drills. Pair them with controls that prevent the incident in the first
+    place: least-privilege database roles, deletion protection and reviewed production changes.
+
+related: [where-data-lives, where-secrets-live]

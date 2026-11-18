@@ -1,0 +1,110 @@
+slug: one-job
+version: 1
+updated: "2026-11-18"
+status: draft
+title: Who is it for, and what is the one job?
+domain: product-scope
+chapter: dream
+minRank: dreamer
+decisionIds: [ps-audience, ps-scope-v1]
+
+question: Who is this app for, and what is the one thing they must be able to do with it?
+
+moment: >-
+  Before your first prompt. Everything the AI builds will be shaped by this answer,
+  or by its guess if you skip it.
+
+ifSilent: >-
+  The AI imagines a generic user and builds every feature it associates with your topic:
+  sign-up, dashboards, settings, a blog. You get a wide, shallow app that does nothing
+  especially well, and each later prompt pulls it in a new direction.
+
+options:
+  - key: one-user-one-job
+    label: One user, one job
+    recommended: true
+    summary: >-
+      Name a single primary user and the one task that must work perfectly.
+      Everything else waits for version 2.
+    pros:
+      - A small first version you can actually test
+      - Every screen has a clear purpose
+      - Fewer prompts and less rework
+    cons:
+      - You say no to good ideas for now
+      - Secondary users wait for version 2
+    cost: No money. About 20 minutes of thinking.
+    effort: Low
+    promptLine: >-
+      Primary user: [who, e.g. busy parents ordering weekly meals]. The one job: [e.g. place a
+      repeat order in under a minute]. Version 1 includes only what that job needs; list anything
+      else as out of scope and ask me before adding it.
+
+  - key: two-sided
+    label: Two user types from the start
+    summary: >-
+      Build for both sides at once, for example buyers and sellers, or students and tutors.
+      Only choose this when the product is useless without both.
+    pros:
+      - Necessary when value only exists with both sides
+      - Avoids rebuilding permissions later
+    cons:
+      - Roughly doubles screens, roles and access rules
+      - Much harder to test, launch and support
+    cost: No money up front; more moderation and support work later.
+    effort: High
+    promptLine: >-
+      Two user types: [type A] who need to [job A], and [type B] who need to [job B]. Build the
+      smallest version of both jobs first, with separate roles, and ask me before adding anything else.
+
+  - key: prototype-first
+    label: A clickable prototype first
+    summary: >-
+      Do not build the real app yet. Ask the AI for a clickable prototype with fake data and
+      test the idea with five people who fit your user.
+    pros:
+      - The cheapest way to learn what users want
+      - No database, logins or bills to manage
+    cons:
+      - Not a real product; you will rebuild it
+      - Easy to mistake a demo for a launch
+    cost: Free on most AI builders.
+    effort: Low
+    promptLine: >-
+      Build a clickable prototype only: no real accounts, payments or database, and use fake sample
+      data. Label it clearly as a prototype. The goal is to test whether [who] understands how to [job].
+
+proveIt:
+  steps:
+    - "Write your one-job sentence: [who] can [job] in [time or number of steps]."
+    - Ask someone who fits that description to do the job in your app without help.
+    - Note every moment they hesitate or ask a question.
+  passWhen: >-
+    A person who fits your primary user completes the one job without help, and every screen
+    they touched was needed for that job.
+
+depths:
+  story: >-
+    A food stall that sells one dish very well beats a stall with a forty-item menu and a
+    confused cook. Your app is the stall. Decide the dish first, then the kitchen, then the
+    decorations.
+  practical: >-
+    Write one sentence: who the app is for and the one thing they must be able to do. Paste it
+    at the top of every prompt. When the AI suggests extra features, ask whether the one job
+    needs them. If not, put them on a later list instead of building them.
+  technical: >-
+    This is scope definition: a primary persona, a core user journey and explicit non-goals.
+    Written scope gives the AI acceptance criteria to test against and prevents scope creep,
+    where each prompt adds features nobody asked for.
+  engineer: >-
+    Turn the one job into a user story with acceptance criteria, for example: given a returning
+    customer, when they tap reorder, then last week's order is placed and confirmed. Make the
+    criteria end-to-end tests, and keep non-goals in SPEC.md so the agent checks proposals against
+    them instead of re-deciding scope in every session.
+  senior: >-
+    Scope is the strongest cost control you have: every feature adds data, permissions, states and
+    support load that compound later. Protect the core loop, ship it to real users and let usage
+    choose version 2. Two-sided products are the classic exception: if value only exists with both
+    sides, cut each side's job to the minimum and solve getting both sides on board before adding features.
+
+related: [where-data-lives]

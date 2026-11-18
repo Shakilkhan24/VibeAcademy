@@ -1,0 +1,88 @@
+version: 1
+updated: "2026-11-18"
+
+rules:
+  - Both twins are built by the same person, in the same tool, from the same idea, in the same week.
+  - Twin A starts from a prompt written the way a typical beginner writes one. Twin B starts from a SeniorSeat Blueprint. Both are published in full.
+  - Both twins face identical tests, run by the scripts in the repository's lab/ folder, against live deployments.
+  - Every published number links to the raw test output. If Twin A wins a metric, that result is published too.
+  - Sponsors never choose the idea, the tool, the tests or the results.
+
+metrics:
+  - id: p95-latency-ms
+    name: Response time under load (95th percentile)
+    category: load
+    unit: ms
+    betterWhen: lower
+    tool: k6
+    howMeasured: The main user flow under a five-minute ramp to the episode's target virtual users. 95% of requests finish within this time.
+  - id: error-rate-under-load
+    name: Errors under load
+    category: load
+    unit: "%"
+    betterWhen: lower
+    tool: k6
+    howMeasured: Share of failed requests during the same load test, including timeouts and 5xx responses.
+  - id: security-findings-high
+    name: High-severity security findings
+    category: security
+    unit: findings
+    betterWhen: lower
+    tool: OWASP ZAP baseline + two-user access test
+    howMeasured: High and critical alerts from a passive ZAP baseline scan, plus each failed step of the scripted two-user access test.
+  - id: exposed-secrets
+    name: Exposed secrets
+    category: security
+    unit: secrets
+    betterWhen: lower
+    tool: gitleaks + bundle scan
+    howMeasured: Secret keys found in the public JavaScript bundles or anywhere in the Git history.
+  - id: restore-minutes
+    name: Time to restore after the database is deleted
+    category: recovery
+    unit: minutes
+    betterWhen: lower
+    tool: Stopwatch, recorded on video
+    howMeasured: From deleting the production database to the app serving the last known order again, following only the twin's own documentation.
+  - id: monthly-cost-100-users
+    name: Monthly cost at 100 users
+    category: cost
+    unit: USD
+    betterWhen: lower
+    tool: Provider pricing calculators
+    howMeasured: Hosting, database, AI and third-party costs at 100 monthly active users, from each provider's published pricing on the test date.
+  - id: monthly-cost-10k-users
+    name: Monthly cost at 10,000 users
+    category: cost
+    unit: USD
+    betterWhen: lower
+    tool: Provider pricing calculators
+    howMeasured: The same calculation at 10,000 monthly active users, using usage measured in the load test.
+  - id: lighthouse-performance
+    name: Lighthouse performance
+    category: quality
+    unit: score
+    betterWhen: higher
+    tool: Lighthouse CI (mobile)
+    howMeasured: Median of three mobile Lighthouse runs on the home page and the main flow page.
+  - id: lighthouse-accessibility
+    name: Lighthouse accessibility
+    category: quality
+    unit: score
+    betterWhen: higher
+    tool: Lighthouse CI (mobile)
+    howMeasured: Median of three mobile Lighthouse accessibility runs on the same pages.
+  - id: prompts-used
+    name: Prompts used to finish
+    category: effort
+    unit: prompts
+    betterWhen: lower
+    tool: Tool history export
+    howMeasured: Every prompt sent to the AI tool from the first build to the tested version, counted from the tool's exported history.
+  - id: build-hours
+    name: Hours to finish
+    category: effort
+    unit: hours
+    betterWhen: lower
+    tool: Time log
+    howMeasured: Hands-on time from the first prompt to the tested version, including planning time for Twin B.

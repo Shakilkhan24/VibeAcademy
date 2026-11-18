@@ -1,0 +1,58 @@
+{
+  "name": "seniorseat",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SeniorSeat: teaches vibe coders to make the decisions a senior engineer makes. Phase 0 foundation.",
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "content:check": "node --conditions=react-server --import tsx scripts/check-content.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node --conditions=react-server --import tsx scripts/migrate.ts",
+    "smoke": "node scripts/smoke.mjs",
+    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm content:check && pnpm build"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.16",
+    "@fontsource-variable/archivo": "5.3.0",
+    "@fontsource-variable/ibm-plex-sans": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "clsx": "2.1.1",
+    "drizzle-orm": "0.45.4",
+    "next": "16.4.6",
+    "postgres": "4.1.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "0.0.1",
+    "yaml": "2.9.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.5",
+    "@types/node": "^22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "drizzle-kit": "0.31.11",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.6",
+    "tailwindcss": "4.3.5",
+    "tsx": "^4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.1.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
