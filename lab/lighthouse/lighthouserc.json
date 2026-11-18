@@ -1,0 +1,9 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "settings": { "preset": "mobile" }
+    },
+    "upload": { "target": "filesystem", "outputDir": "lab/results/raw/lighthouse" }
+  }
+}
