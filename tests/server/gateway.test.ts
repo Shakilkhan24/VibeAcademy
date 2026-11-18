@@ -26,10 +26,10 @@ describe("AiGateway", () => {
     expect(ledger.reduce((s, r) => s + r.costMicroUsd, 0)).toBe(700);
   });
 
-  it("never serves a simulated cache entry to a real provider", async () => {
-    const ctxSim = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+  it("never serves a rule-based cache entry to an AI provider", async () => {
+    const ctxSim = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     const sim = await ctxSim.ai.run(xrayClassifyFeature, { prompt: SHOP_PROMPT }, { cacheKey: "same" });
-    expect(sim.provider).toBe("simulated");
+    expect(sim.provider).toBe("rules");
 
     // Same database, now with a "real" provider: must miss the cache.
     const { provider, calls } = fakeAnthropic();

@@ -6,7 +6,18 @@ What was generated, how it was verified, which choices were made and why, and wh
 
 SeniorSeat's Phase 0 is a working, tested Next.js application: about 5,100 lines of TypeScript in `src/`, 900 lines of tests, 5 Decision Cards, Lab content and harness, and full agent-oriented documentation. A visitor can X-ray a prompt, see the decisions it leaves to the AI across 12 domains, read the top risks, copy an upgraded prompt, download an AGENTS.md starter, share a score without exposing the prompt, read Decision Cards at five depths and join the waitlist.
 
-The AI path is complete but has **not** been exercised against the real Anthropic API, because no API key was available in the generation environment. Every result produced during verification came from the clearly labelled simulated mode.
+The AI path is complete but has **not** been exercised against the real Anthropic API, because no API key was available in the generation environment. Every result produced during verification came from the clearly labelled keyword-rule mode.
+
+### Update after generation (2026-11-18)
+
+At the founder's direction, the project is now tutorials-first and paid AI is deferred ([ADR 0011](docs/decisions/0011-rules-first-ai-deferred.md)):
+
+- The keyword-rule provider was renamed from `simulated` to `rules` and is now the default engine in every environment, labelled "Rule-based check". `ALLOW_SIMULATED_AI` was removed.
+- The Anthropic provider is opt-in only (`AI_PROVIDER=anthropic`).
+- M1 was rewritten around tutorials, and `docs/design-brief.md` and `docs/agent-prompts.md` were added.
+- After the change, `pnpm verify` and the smoke test were re-run; see [docs/status.md](docs/status.md).
+
+The tables below describe the original generation run. Where they mention "simulated" mode or `ALLOW_SIMULATED_AI`, read "rule-based check".
 
 ## Verification results
 
@@ -78,7 +89,7 @@ What the tests cover, by file:
 
 ## Remaining work
 
-The next milestone is **M1: real analysis, ready for the first public visitors** ([docs/roadmap.md](docs/roadmap.md)): run and tune the classifier on real prompts with an API key, deploy with a real database, add error tracking and uptime, and get the cards reviewed. Founder decisions that gate later milestones are listed in [docs/open-decisions.md](docs/open-decisions.md).
+The next milestone is **M1: tutorials website, ready for the first public visitors** ([docs/roadmap.md](docs/roadmap.md)). It covers the founder's design pass, the tutorial content type and `/learn` path, browser-side progress, an authoring workflow, hand-labelled fixtures for the rule-based X-Ray, deployment with monitoring, and card review. Paid AI analysis is deferred. Founder decisions that gate later milestones are listed in [docs/open-decisions.md](docs/open-decisions.md).
 
 ## Repository map
 

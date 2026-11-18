@@ -25,7 +25,7 @@ export interface GatewayResult<T> {
   costMicroUsd: number;
 }
 
-const SIMULATED_MODEL = "simulated-keyword-rules";
+const RULES_MODEL = "keyword-rules";
 
 export function startOfUtcDay(now: Date): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
@@ -61,8 +61,8 @@ export class AiGateway {
     const provider = this.deps.provider;
     if (!provider) throw new AiError("provider_disabled", this.deps.config.ai.providerReason);
 
-    const model = provider.name === "simulated" ? SIMULATED_MODEL : feature.model(this.deps.config.ai);
-    // Provider and model are part of the key: a simulated result can never be served as AI.
+    const model = provider.name === "rules" ? RULES_MODEL : feature.model(this.deps.config.ai);
+    // Provider and model are part of the key: a rule-based result can never be served as AI.
     const cacheKey = opts.cacheKey
       ? [feature.key, `p${feature.promptVersion}`, `c${feature.contentVersion}`, provider.name, model, opts.cacheKey].join("|")
       : undefined;
@@ -75,7 +75,7 @@ export class AiGateway {
       }
     }
 
-    if (provider.name !== "simulated") await this.assertBudget();
+    if (provider.name !== "rules") await this.assertBudget();
 
     const started = Date.now();
     let usage: Usage = { inputTokens: 0, outputTokens: 0 };
@@ -83,14 +83,14 @@ export class AiGateway {
       const response = await this.callWithRetry(provider, feature, input, model);
       usage = response.usage;
       const output = feature.parse(response.json);
-      const cost = provider.name === "simulated" ? 0 : costMicroUsd(model, usage);
+      const cost = provider.name === "rules" ? 0 : costMicroUsd(model, usage);
       if (cacheKey) await this.writeCache(feature, cacheKey, model, response.json);
       await this.recordUsage({ feature: feature.key, provider: provider.name, model, usage, cost, cacheHit: false, latencyMs: Date.now() - started, outcome: "ok" });
       return { output, cached: false, provider: provider.name, model: response.model, costMicroUsd: cost };
     } catch (error) {
       const aiError = error instanceof AiError ? error : new AiError("invalid_output", error instanceof Error ? error.message : "Invalid AI output.");
       const spent = aiError.usage ?? usage;
-      const cost = provider.name === "simulated" ? 0 : costMicroUsd(model, spent);
+      const cost = provider.name === "rules" ? 0 : costMicroUsd(model, spent);
       await this.recordUsage({ feature: feature.key, provider: provider.name, model, usage: spent, cost, cacheHit: false, latencyMs: Date.now() - started, outcome: aiError.code });
       throw aiError;
     }

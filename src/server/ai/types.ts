@@ -3,7 +3,8 @@ import type { z } from "zod";
 
 /**
  * The AI layer has one entry point (AiGateway.run) and two seams:
- *  - AiProvider: talks to a model vendor (or simulates one). Knows nothing about features.
+ *  - AiProvider: produces the structured output: a model vendor, or the rule-based checker.
+ *                Knows nothing about features.
  *  - AiFeature:  one product use of AI (e.g. X-Ray classification). Owns its prompt, schema,
  *                version and limits. Knows nothing about vendors.
  * Nothing else in the codebase may call a model.
@@ -17,7 +18,7 @@ export interface StructuredRequest {
   /** JSON Schema for the output (vendor structured-output format). */
   jsonSchema: Record<string, unknown>;
   maxOutputTokens: number;
-  /** The feature's raw input, for simulated providers only. Real providers must ignore it. */
+  /** The feature's raw input, for the rule-based provider only. Model providers must ignore it. */
   input: unknown;
   signal: AbortSignal;
 }
@@ -34,7 +35,7 @@ export interface StructuredResponse {
 }
 
 export interface AiProvider {
-  readonly name: "anthropic" | "simulated";
+  readonly name: "rules" | "anthropic";
   generate(request: StructuredRequest): Promise<StructuredResponse>;
 }
 

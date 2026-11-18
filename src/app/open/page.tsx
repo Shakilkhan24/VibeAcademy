@@ -21,7 +21,7 @@ export default async function OpenPage() {
   const rows: { label: string; value: string; how: string }[] = [
     { label: "Prompt X-Rays run", value: m.xrayTotal.toLocaleString("en-US"), how: m.firstRunAt ? `Stored analyses since ${m.firstRunAt.slice(0, 10)}. Results deleted by their owners are not counted.` : "None yet." },
     { label: "X-Rays in the last 30 days", value: m.xrayLast30Days.toLocaleString("en-US"), how: "Count of stored analyses created in the last 30 days." },
-    { label: "Simulated (development) X-Rays", value: m.simulatedRuns.toLocaleString("en-US"), how: "Runs produced by keyword rules instead of AI. They are labelled as simulated everywhere." },
+    { label: "Rule-based X-Rays", value: m.rulesRuns.toLocaleString("en-US"), how: "Runs scored by keyword rules, not AI. They are labelled as rule-based everywhere." },
     { label: "Results shared by their owners", value: m.sharedRuns.toLocaleString("en-US"), how: "Sharing is opt-in and never includes the prompt." },
     { label: "AI requests in the last 30 days", value: m.aiRequestsLast30Days.toLocaleString("en-US"), how: "Every request through the AI gateway, including cache hits and failures." },
     { label: "Served from cache", value: pct(m.cacheHitRateLast30Days), how: "Identical prompts reuse a stored classification at no cost." },
@@ -39,10 +39,10 @@ export default async function OpenPage() {
       </PageIntro>
 
       {m.analysisMode !== "ai" ? (
-        <Notice tone="simulated" title={m.analysisMode === "simulated" ? "This server runs in development mode" : "AI analysis is switched off on this server"} className="mb-8">
-          {m.analysisMode === "simulated"
-            ? "X-Rays here are simulated with keyword rules, so AI spend is zero by design."
-            : "No AI provider is configured, so the X-Ray cannot run here."}
+        <Notice tone="caveat" title={m.analysisMode === "rules" ? "X-Rays here use the rule-based check" : "The X-Ray is switched off on this server"} className="mb-8">
+          {m.analysisMode === "rules"
+            ? "AI-assisted analysis is not switched on yet, so the AI figures below stay at zero by design."
+            : "The analysis engine is misconfigured, so the X-Ray cannot run here."}
         </Notice>
       ) : null}
 

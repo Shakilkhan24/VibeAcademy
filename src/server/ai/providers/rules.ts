@@ -3,11 +3,13 @@ import { APP_TYPES, DECISION_IDS, type AppType, type TraitId } from "@/domain/ta
 import { AiError, type AiProvider, type StructuredRequest, type StructuredResponse } from "../types";
 
 /**
- * DEVELOPMENT MODE ONLY. A keyword-rule stand-in for the X-Ray classifier, so the full journey
- * runs without an API key. Results are stored with mode "simulated" and the UI labels them
- * as simulated on every surface. Never present this as AI analysis.
+ * The rule-based X-Ray check: the default engine while AI-assisted analysis is deferred.
+ * Keyword rules decide which of the 36 decisions a prompt makes, so the journey runs with no
+ * API key and no cost, in development and production. Results are stored with mode "rules"
+ * and every surface labels them as a rule-based check. Never present this as AI analysis.
  *
- * Production refuses this provider unless ALLOW_SIMULATED_AI=true (see env.ts).
+ * Known limits: it misses decisions phrased in unusual words and can credit a decision that
+ * is only mentioned. Improve the patterns below (with tests) before reaching for AI.
  */
 
 const TRAIT_RULES: Record<TraitId, RegExp> = {
@@ -36,7 +38,7 @@ const APP_TYPE_RULES: [AppType, RegExp][] = [
 ];
 const SOFTWARE = /\b(build|make|create|develop|app|website|site|tool|platform|shop|store|dashboard|bot|game|page|system)\b/i;
 
-/** [addressed, partial] patterns per decision. Deliberately simple: this is a demo stand-in. */
+/** [addressed, partial] patterns per decision. Deliberately simple and readable; extend with tests. */
 const DECISION_RULES: Record<string, [RegExp, RegExp]> = {
   "ps-audience": [/\b(for (small|busy|local|independent) \w+|primary users?|target (users|audience)|so that \w+ can)\b/i, /\b(customers?|users?|people|clients?)\b/i],
   "ps-scope-v1": [/\b(out of scope|not (include|needed)|(v1|mvp|first version) (only|includes)|later version|phase 2)\b/i, /\b(features?|mvp|v1|first version)\b/i],
@@ -76,7 +78,7 @@ const DECISION_RULES: Record<string, [RegExp, RegExp]> = {
   "cb-ai-costs": [/\b(quota|spending cap|usage limits?|per[- ]user limits?)\b/i, /\b(ai|gpt|openai|claude|llm|chat ?bot)\b/i],
 };
 
-export function simulateClassification(prompt: string) {
+export function classifyWithRules(prompt: string) {
   const traits = Object.fromEntries(
     (Object.keys(TRAIT_RULES) as TraitId[]).map((t) => [t, t === "isPublic" ? !PRIVATE_USE.test(prompt) : TRAIT_RULES[t].test(prompt)]),
   ) as Record<TraitId, boolean>;
@@ -94,16 +96,16 @@ export function simulateClassification(prompt: string) {
   return { isSoftwareRequest, language: "und", appType: isSoftwareRequest ? appType : "unclear", traits, decisions };
 }
 
-export function createSimulatedProvider(): AiProvider {
+export function createRulesProvider(): AiProvider {
   return {
-    name: "simulated",
+    name: "rules",
     async generate(req: StructuredRequest): Promise<StructuredResponse> {
       if (req.feature !== "xray.classify") {
-        throw new AiError("provider_error", `The simulated provider has no simulation for feature "${req.feature}".`);
+        throw new AiError("provider_error", `The rule-based provider has no rules for feature "${req.feature}".`);
       }
       const prompt = (req.input as { prompt?: unknown })?.prompt;
-      if (typeof prompt !== "string") throw new AiError("provider_error", "Simulated X-Ray needs a prompt.");
-      return { json: simulateClassification(prompt), usage: { inputTokens: 0, outputTokens: 0 }, model: "simulated-keyword-rules" };
+      if (typeof prompt !== "string") throw new AiError("provider_error", "The rule-based X-Ray needs a prompt.");
+      return { json: classifyWithRules(prompt), usage: { inputTokens: 0, outputTokens: 0 }, model: "keyword-rules" };
     },
   };
 }

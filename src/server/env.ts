@@ -6,7 +6,6 @@ import { z } from "zod";
  * Never import process.env elsewhere in server code: add the variable here instead.
  */
 const onOff = z.enum(["on", "off"]).default("on").transform((v) => v === "on");
-const bool = z.enum(["true", "false"]).default("false").transform((v) => v === "true");
 const emptyToUndefined = (v: unknown) => (typeof v === "string" && v.trim() === "" ? undefined : v);
 
 const EnvSchema = z.object({
@@ -15,18 +14,22 @@ const EnvSchema = z.object({
   DATABASE_URL: z.preprocess(emptyToUndefined, z.string().optional()),
   PGLITE_DATA_DIR: z.preprocess(emptyToUndefined, z.string().default(".data/pglite")),
   HASH_SECRET: z.preprocess(emptyToUndefined, z.string().min(16).optional()),
-  AI_PROVIDER: z.preprocess(emptyToUndefined, z.enum(["anthropic", "simulated"]).optional()),
+  AI_PROVIDER: z.preprocess(emptyToUndefined, z.enum(["rules", "anthropic"]).default("rules")),
   ANTHROPIC_API_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
   AI_MODEL_XRAY: z.preprocess(emptyToUndefined, z.string().default("claude-haiku-5-5")),
   AI_DAILY_BUDGET_USD: z.preprocess(emptyToUndefined, z.coerce.number().nonnegative().default(2)),
-  ALLOW_SIMULATED_AI: z.preprocess(emptyToUndefined, bool),
   FEATURE_XRAY: z.preprocess(emptyToUndefined, onOff),
   FEATURE_WAITLIST: z.preprocess(emptyToUndefined, onOff),
   XRAY_DAILY_LIMIT: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(8)),
   XRAY_MINUTE_LIMIT: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(3)),
 });
 
-export type AiProviderName = "anthropic" | "simulated" | "disabled";
+/**
+ * "rules": the rule-based X-Ray check, the default engine. No API key, no cost.
+ * "anthropic": AI-assisted classification. DEFERRED: built and tested against mocks, but kept
+ * opt-in until the AI milestone (docs/roadmap.md). Never selected just because a key exists.
+ */
+export type AiProviderName = "rules" | "anthropic" | "disabled";
 
 export interface AppConfig {
   env: "development" | "test" | "production";
@@ -64,16 +67,15 @@ export function loadConfig(source: Record<string, string | undefined> = process.
 
   let provider: AiProviderName;
   let providerReason: string;
-  const requested = e.AI_PROVIDER ?? (e.ANTHROPIC_API_KEY ? "anthropic" : "simulated");
-  if (requested === "anthropic" && !e.ANTHROPIC_API_KEY) {
+  if (e.AI_PROVIDER === "anthropic" && !e.ANTHROPIC_API_KEY) {
     provider = "disabled";
     providerReason = "AI_PROVIDER=anthropic but ANTHROPIC_API_KEY is not set.";
-  } else if (requested === "simulated" && isProd && !e.ALLOW_SIMULATED_AI) {
-    provider = "disabled";
-    providerReason = "Simulated analysis is not allowed in production. Set ANTHROPIC_API_KEY, or ALLOW_SIMULATED_AI=true for a labelled demo.";
+  } else if (e.AI_PROVIDER === "anthropic") {
+    provider = "anthropic";
+    providerReason = "AI-assisted analysis selected with AI_PROVIDER=anthropic.";
   } else {
-    provider = requested;
-    providerReason = requested === "anthropic" ? "ANTHROPIC_API_KEY is set." : "No AI key configured: development mode with simulated, keyword-based analysis.";
+    provider = "rules";
+    providerReason = "Rule-based check (the default). AI-assisted analysis is a later milestone.";
   }
 
   return {

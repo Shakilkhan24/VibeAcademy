@@ -46,7 +46,7 @@ Scale tokens: `text-micro` 13, `text-small` 15, `text-body` 17, `text-h3` 21, `t
 
 ## Primitives (`src/components/ui`)
 
-`Button` / `ButtonLink` (primary, secondary, quiet), `Input`, `Textarea`, `Select`, `Checkbox`, `Label`, `Notice` (info, simulated, error, success), `Tag` (plain, pencil, redline, dashed), `CopyButton`, `Prose` (safe paragraphs + inline code). Reuse these before adding new ones.
+`Button` / `ButtonLink` (primary, secondary, quiet), `Input`, `Textarea`, `Select`, `Checkbox`, `Label`, `Notice` (info, caveat, error, success; caveat carries the "Rule-based check" label), `Tag` (plain, pencil, redline, dashed), `CopyButton`, `Prose` (safe paragraphs + inline code). Reuse these before adding new ones.
 
 ## Accessibility checklist
 

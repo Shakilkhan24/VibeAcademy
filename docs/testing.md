@@ -21,7 +21,7 @@ Smoke test against a production build locally:
 
 ```bash
 pnpm build
-NODE_ENV=production HASH_SECRET=local-smoke-secret-123456 ALLOW_SIMULATED_AI=true \
+NODE_ENV=production HASH_SECRET=local-smoke-secret-123456 \
   PGLITE_DATA_DIR=/tmp/seniorseat-smoke pnpm start -p 3000 &
 BASE_URL=http://localhost:3000 pnpm smoke
 ```
@@ -33,4 +33,4 @@ Against a deployed environment: `BASE_URL=https://your-domain pnpm smoke` (it cr
 - Services: `createTestContext({ env, provider })` from `tests/support/test-context.ts` gives an isolated in-memory database and a chosen provider. `fakeAnthropic()` behaves like a paid provider (usage, cost) with deterministic answers.
 - Any new storage of user data: extend the prompt-leak test in `tests/server/xray-service.test.ts`.
 - Any new endpoint that reads user data (Phase 1): test with two users and assert that user A cannot read or change user B's data.
-- Classifier quality (M1): add labelled real prompts under `tests/fixtures/prompts/` and a test that runs them only when `ANTHROPIC_API_KEY` is set, so CI stays free and deterministic.
+- Classifier quality (M1): add hand-labelled prompts under `tests/fixtures/prompts/` and a test that measures how often the rule-based check agrees with the labels. It runs in CI at no cost. If AI analysis is switched on later, the same fixtures measure it, in a test that runs only when `AI_PROVIDER=anthropic` and a key are set.

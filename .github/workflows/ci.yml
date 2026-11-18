@@ -33,7 +33,7 @@ jobs:
         env:
           NODE_ENV: production
           HASH_SECRET: ci-smoke-secret-0123456789
-          ALLOW_SIMULATED_AI: "true"
+          AI_PROVIDER: rules
           PGLITE_DATA_DIR: /tmp/seniorseat-ci
           NEXT_TELEMETRY_DISABLED: "1"
         run: |

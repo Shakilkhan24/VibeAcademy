@@ -3,7 +3,9 @@
 You are continuing **SeniorSeat**, a platform that teaches vibe coders to make the engineering decisions a senior engineer makes, while AI does the typing. This file is the entry point for any person or AI agent picking up the project. Read it fully before changing anything.
 
 *Tagline:* Vibe like a beginner. Decide like a senior.
-*Core idea:* every vague prompt silently hands dozens of engineering decisions to the AI. SeniorSeat reveals them (Prompt X-Ray), teaches them (Decision Cards at five depths), turns them into a spec (Blueprint and Build Pack) and proves the difference (Twin Builds Lab, Reality Check).
+*Core idea:* every vague prompt silently hands dozens of engineering decisions to the AI. SeniorSeat reveals them (Prompt X-Ray), teaches them (tutorials and Decision Cards at five depths), turns them into a spec (Blueprint and Build Pack) and proves the difference (Twin Builds Lab, Reality Check).
+
+*Current direction:* a **tutorials-first website**. Nothing in the product calls a paid AI API. The founder writes tutorials and Lab comparisons offline with Claude Code, and the Prompt X-Ray runs on a rule-based check ([ADR 0011](docs/decisions/0011-rules-first-ai-deferred.md)).
 
 ## 1. Where the project stands
 
@@ -12,12 +14,12 @@ You are continuing **SeniorSeat**, a platform that teaches vibe coders to make t
 Working now:
 
 - Landing page, Prompt X-Ray with results, shareable results (no prompt ever shown), share image, waitlist, Twin Builds Lab foundation, `/open` transparency page, privacy page.
-- One controlled AI pathway (`src/server/ai/gateway.ts`) with provider abstraction, structured outputs, caching, daily budget, usage ledger, retries, timeouts and kill switches.
+- One controlled analysis pathway (`src/server/ai/gateway.ts`). The rule-based check is the default engine; an Anthropic provider with caching, a daily budget and a usage ledger is built but switched off as a deferred placeholder.
 - Deterministic, versioned scoring of 36 decisions across 12 domains (`src/domain/xray/`).
 - Five Decision Cards (drafts awaiting your review) with the Depth Dial, validated by schema.
 - 77 unit and integration tests, a 27-check smoke test, lint and a production build, all passing (details in [GENERATION_REPORT.md](GENERATION_REPORT.md)).
 
-Not done yet: real AI calls have never run (no API key in the generation environment), the Lab has no measured results, and Phase 1 (accounts, Blueprint, learning path) is designed but not built.
+Not done yet: the tutorial section (M1), the founder's design pass, a deployment, and measured Lab results. Phase 1 (accounts, Blueprint) is designed but not built. Paid AI analysis is deferred and has never been run against the real API.
 
 ## 2. Run it
 
@@ -27,7 +29,7 @@ cp .env.example .env.local   # optional: everything has a development default
 pnpm dev                # http://localhost:3000
 ```
 
-With no `ANTHROPIC_API_KEY`, the X-Ray runs in a **clearly labelled simulated mode** (keyword rules, not AI). Add a key to `.env.local` to use real analysis. The database is an embedded PGlite (real Postgres in WASM) in `.data/pglite`; nothing to install.
+No API key is needed. The X-Ray uses the **rule-based check** (keyword rules, labelled as such on every result) in development and production. The database is an embedded PGlite (real Postgres in WASM) in `.data/pglite`; nothing to install.
 
 ## 3. Verify any change
 
@@ -68,25 +70,29 @@ ESLint enforces these boundaries. Full picture: [docs/architecture.md](docs/arch
 | Raw prompts are never stored, logged or returned | [ADR 0005](docs/decisions/0005-prompt-privacy.md) |
 | Rate limits and analytics in Postgres, no extra infrastructure | [ADR 0006](docs/decisions/0006-rate-limits.md), [ADR 0007](docs/decisions/0007-analytics.md) |
 | Content as YAML in Git, validated by Zod, versioned per card | [ADR 0008](docs/decisions/0008-content-as-yaml.md) |
-| Cyanotype blueprint design language | [ADR 0009](docs/decisions/0009-design-language.md), [docs/design-system.md](docs/design-system.md) |
+| Cyanotype blueprint design language (until the founder's design brief replaces it) | [ADR 0009](docs/decisions/0009-design-language.md), [docs/design-system.md](docs/design-system.md), [docs/design-brief.md](docs/design-brief.md) |
+| Rule-based X-Ray by default; paid AI deferred | [ADR 0011](docs/decisions/0011-rules-first-ai-deferred.md) |
 
 All ADRs: [docs/decisions/README.md](docs/decisions/README.md).
 
 ## 6. What to do next
 
-**Next milestone: M1, "Real analysis, ready for the first public visitors".** See [docs/roadmap.md](docs/roadmap.md). In short:
+**Next milestone: M1, "Tutorials website, ready for the first public visitors".** The full scope is in [docs/roadmap.md](docs/roadmap.md). In short:
 
-1. Run the X-Ray against the real Anthropic API with a test key; tune the classifier prompt on a set of real prompts and add them as regression fixtures.
-2. Deploy (Vercel or similar + Neon/Supabase Postgres), run `pnpm db:migrate`, set production env vars.
-3. Get the five draft cards reviewed and marked `reviewed`.
-4. Add error tracking and uptime monitoring so `/open` can report them.
+1. Apply the founder's design direction from [docs/design-brief.md](docs/design-brief.md). Wait until the brief is marked "Ready for the agent", and propose a plan before you change anything.
+2. Add tutorials as a content type (Markdown or MDX with validated frontmatter), with a `/learn` path ordered by the seven chapters and a tutorial page.
+3. Add progress tracking in the browser, plus a template and guide so the founder can write tutorials with Claude Code.
+4. Improve the rule-based X-Ray with hand-labelled prompt fixtures (no API calls).
+5. Deploy with a real Postgres database, error tracking and uptime monitoring, and get the five draft cards reviewed.
 
-Decisions that need the founder before or during M1 are listed in [docs/open-decisions.md](docs/open-decisions.md). Do not silently decide them.
+**Handing this to a coding agent:** paste-ready prompts for each kind of session (orientation, design pass, the next roadmap step, drafting a tutorial, producing a Lab comparison) are in [docs/agent-prompts.md](docs/agent-prompts.md).
+
+Decisions that need the founder (design direction, first tutorials, brand, vendors, prices, and whether to ever switch on paid AI) are listed in [docs/open-decisions.md](docs/open-decisions.md). Do not silently decide them.
 
 ## 7. Rules that must never be broken
 
 1. Never store, log or return raw prompt text. A test enforces this; keep it passing.
-2. Never present simulated analysis as AI analysis. The `mode` field and its labels exist everywhere a result appears.
+2. Never present a rule-based result as AI analysis. The `mode` field and the "Rule-based check" label exist everywhere a result appears. Do not switch on paid AI (`AI_PROVIDER=anthropic`) without the founder.
 3. Never call a model outside `src/server/ai/gateway.ts`.
 4. Never publish a Lab number that is not a measured, published result with raw artifacts. The schema enforces this.
 5. Reality Check (future) must verify site ownership and stay passive.

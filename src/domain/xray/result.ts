@@ -3,10 +3,10 @@ import type { DecisionAssessment, DomainCoverage, ScoreBandId } from "./scoring"
 import type { UpgradeLine } from "./prompt-upgrade";
 
 /**
- * How an analysis was produced. "simulated" is the keyword-rule development mode and must
- * always be labelled as such in the UI. It is never presented as AI analysis.
+ * How an analysis was produced. "rules" is the rule-based check (keyword rules), the default
+ * engine; it is always labelled as a rule-based check in the UI and never presented as AI.
  */
-export type AnalysisMode = "ai" | "simulated";
+export type AnalysisMode = "ai" | "rules";
 
 /** Everything that may appear on a public share page. Contains nothing from the prompt. */
 export interface XRaySharedSummary {

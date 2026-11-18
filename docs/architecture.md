@@ -17,7 +17,7 @@ flowchart LR
     Content[content loaders]
     DB[(Postgres<br/>PGlite in dev/test)]
   end
-  Provider[[AI provider<br/>Anthropic or simulated]]
+  Provider[[Analysis provider<br/>rule-based (default) or Anthropic (deferred)]]
   YAML[/content/*.yaml/]
 
   UI -->|fetch JSON| Routes
@@ -85,7 +85,7 @@ sequenceDiagram
 | `src/domain/blueprint/build-pack.ts` | Blueprint types (Phase 1 shape) and the AGENTS.md renderer shared by X-Ray and Blueprint. |
 | `src/domain/content/*-schema.ts` | Zod schemas for Decision Cards and Lab content (the honesty rules live here). |
 | `src/server/env.ts` | The only reader of environment variables. Provider selection and production safety rules. |
-| `src/server/ai/` | `gateway.ts` (pathway), `types.ts` (seams), `providers/` (Anthropic, simulated), `features/` (X-Ray classify), `pricing.ts`. |
+| `src/server/ai/` | `gateway.ts` (pathway), `types.ts` (seams), `providers/` (`rules.ts`, the default rule-based check; `anthropic.ts`, deferred), `features/` (X-Ray classify), `pricing.ts`. |
 | `src/server/db/` | Drizzle schema, client factory (PGlite or postgres-js), migrations in `/drizzle`. |
 | `src/server/services/` | Product operations with validation, limits and events. |
 | `src/server/security/` | HMAC, tokens, rate limiting. |
@@ -111,11 +111,11 @@ Also link `xray_runs.user_id` (nullable) so signed-in learners can keep their X-
 
 ## AI layer
 
-- **Provider seam** (`AiProvider`): `generate(request) -> { json, usage, model }`. Anthropic implementation uses the Messages API with `output_config.format` JSON schema (structured outputs, no beta header). The simulated provider is a labelled development stand-in.
+- **Provider seam** (`AiProvider`): `generate(request) -> { json, usage, model }`. Anthropic implementation uses the Messages API with `output_config.format` JSON schema (structured outputs, no beta header). The `rules` provider (keyword rules) is the default engine in every environment and is labelled "Rule-based check"; the Anthropic provider is a deferred placeholder used only with `AI_PROVIDER=anthropic` (ADR 0011).
 - **Feature seam** (`AiFeature`): owns its system prompt, user-message wrapper, Zod schema, JSON schema, version, output token cap and cache TTL.
 - **Gateway**: provider check, cache (keyed by feature, prompt version, content version, provider, model and input HMAC), daily budget, timeout (25 s), one retry on 429/5xx/timeouts, validation, cache write, usage ledger including failures and cache hits.
 - **Product limits** (per-visitor rate limits, kill switches) live in services because they apply even to cache hits.
-- **Cost**: Haiku 5.5 at $0.10 / $0.50 per million tokens (input / output). An X-Ray classification is roughly 3,000 to 4,000 input tokens (system prompt with 36 decision criteria, prompt, structured-output overhead) and under 1,000 output tokens: an estimated $0.0005 to $0.001 per uncached analysis. Measure the real number in M1 and publish it on `/open`.
+- **Cost**: Haiku 5.5 at $0.10 / $0.50 per million tokens (input / output). An X-Ray classification is roughly 3,000 to 4,000 input tokens (system prompt with 36 decision criteria, prompt, structured-output overhead) and under 1,000 output tokens: an estimated $0.0005 to $0.001 per uncached analysis. Measure the real number before switching AI on (roadmap, "Later: AI features") and publish it on `/open`.
 
 ## Security posture
 
@@ -124,13 +124,13 @@ Also link `xray_runs.user_id` (nullable) so signed-in learners can keep their X-
 - Zod validation on every input and on model output.
 - HMAC (with `HASH_SECRET`) for prompts and IPs; owner tokens are random, stored only as SHA-256 hashes, compared in constant time.
 - Rate limits per hashed IP; daily AI budget; kill switches per feature.
-- Production refuses to start without `HASH_SECRET` and refuses simulated AI unless explicitly allowed.
+- Production refuses to start without `HASH_SECRET`. Paid AI runs only when `AI_PROVIDER=anthropic` is set explicitly.
 - Future Reality Check: ownership verification (DNS TXT or a file) and passive checks only. Hard requirement.
 
 ## Deployment (recommended, not yet done)
 
 - App: Vercel or any Node 22 host (Render, Fly.io, Railway). `pnpm build && pnpm start`.
 - Database: Neon or Supabase Postgres. Set `DATABASE_URL` (pooled connection), run `pnpm db:migrate` on each deploy.
-- Required env in production: `HASH_SECRET`, `DATABASE_URL`, `ANTHROPIC_API_KEY`, `NEXT_PUBLIC_SITE_URL`, `AI_DAILY_BUDGET_USD`.
+- Required env in production: `HASH_SECRET`, `DATABASE_URL`, `NEXT_PUBLIC_SITE_URL`. `ANTHROPIC_API_KEY` and `AI_DAILY_BUDGET_USD` matter only once AI is switched on.
 - Behind a proxy that sets `x-forwarded-for` (all of the above do); rate limiting relies on it.
 - Phase 2 can move the database and a scan worker to AWS with Terraform; the founder's DevOps background makes this good public content, but only when traffic or cost justify it.

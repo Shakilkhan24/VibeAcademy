@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           <h2 className="text-h2">Your prompt</h2>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-chalk-dim">
             <li>We never store your prompt, log it or use it to train any model.</li>
-            <li>When AI analysis is switched on, your prompt is sent to our AI model provider for that single request, under the provider&rsquo;s API data terms.</li>
+            <li>Today the X-Ray is a rule-based check that runs on our server, so your prompt is not sent to any AI provider. If we switch on AI-assisted analysis later, we will update this page before we do.</li>
             <li>We keep a keyed fingerprint (an HMAC) of the prompt, so an identical prompt can reuse its earlier analysis. The fingerprint cannot be turned back into the text.</li>
             <li>The upgraded prompt is assembled in your browser. Our server never sends your words back.</li>
           </ul>

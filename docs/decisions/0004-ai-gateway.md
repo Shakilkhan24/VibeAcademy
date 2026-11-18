@@ -1,6 +1,6 @@
 # 0004: A single AI gateway with provider and feature seams
 
-**Status:** Accepted (Phase 0)
+**Status:** Accepted (Phase 0). Amended by [0011](0011-rules-first-ai-deferred.md): the keyword provider is now the `rules` provider and the default engine in every environment; Anthropic is opt-in and deferred.
 
 ## Context
 AI cost and behaviour must be controlled centrally: budgets, caching, limits, errors, model choice. The runtime provider must stay configurable, and development must work without keys.

@@ -40,7 +40,8 @@ These are fixed concepts. Changing them needs the founder and an ADR.
 
 | Experience | Role | Phase |
 | --- | --- | --- |
-| Prompt X-Ray | Reveals the silent decisions in any prompt. Free hook and the first proof of value. | 0 (built) |
+| Tutorials | Longer, hands-on lessons (Git, databases, cloud, DevOps, observability, security, cost and more) ordered by the App Life Path and written at a chosen depth. The main reason learners return. Written by the founder with Claude Code. | 0 (M1: first chapter), then every phase |
+| Prompt X-Ray | Reveals the silent decisions in any prompt. Free hook and the first proof of value. Runs on a rule-based check; AI-assisted analysis is deferred (ADR 0011). | 0 (built) |
 | Decision Cards + Depth Dial | Teach one decision each, at five depths. | 0 (5 cards), 1 (30), 2 (70), 3 (120) |
 | App Life Path | Orders cards by the moment an app meets them. | 0 (static map), 1 (personal path) |
 | Blueprint | The learner's decisions, collected per project. | 1 |
@@ -48,10 +49,10 @@ These are fixed concepts. Changing them needs the founder and an ADR.
 | Twin Builds Lab | Same app built twice and tested identically; public proof. | 0 (foundation), 2 (results) |
 | Crash Theater | Simulated production incidents. | 1 (one scenario), 2 |
 | Reality Check | Passive, ownership-verified scan of a learner's live app; the Reality Score. | 2 |
-| Senior in the Seat | AI mentor grounded in the card library. | 3 |
+| Senior in the Seat | AI mentor grounded in the card library. Deferred with the other paid-AI features. | Later |
 | SeniorSeat agent skill | The curriculum inside the learner's coding tool. | 3 |
 
-The X-Ray, the cards and the Build Pack share one taxonomy: every X-Ray finding links to a decision, every decision to a card, every card option to a prompt line, and every prompt line can enter a Blueprint. Keep that chain intact.
+Tutorials, the X-Ray, the cards and the Build Pack share one taxonomy (a tutorial lists the decisions it covers): every X-Ray finding links to a decision, every decision to a card, every card option to a prompt line, and every prompt line can enter a Blueprint. Keep that chain intact.
 
 ## Audience
 

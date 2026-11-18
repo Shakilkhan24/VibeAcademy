@@ -3,9 +3,9 @@ import { SHOP_PROMPT } from "../support/fixtures";
 
 /**
  * Exercises the real route handlers end to end (request parsing, origin checks, service,
- * embedded database, error mapping) through the process-wide context in simulated mode.
+ * embedded database, error mapping) through the process-wide context with the rule-based check.
  */
-const ENV = { NODE_ENV: "test", AI_PROVIDER: "simulated", PGLITE_DATA_DIR: "memory://", HASH_SECRET: "route-test-secret-123", XRAY_MINUTE_LIMIT: "20", XRAY_DAILY_LIMIT: "50" };
+const ENV = { NODE_ENV: "test", AI_PROVIDER: "rules", PGLITE_DATA_DIR: "memory://", HASH_SECRET: "route-test-secret-123", XRAY_MINUTE_LIMIT: "20", XRAY_DAILY_LIMIT: "50" };
 const saved: Record<string, string | undefined> = {};
 
 beforeAll(() => {
@@ -38,7 +38,7 @@ describe("API routes", () => {
     expect(created.status).toBe(201);
     expect(created.headers.get("cache-control")).toBe("no-store");
     const result = await created.json();
-    expect(result.mode).toBe("simulated");
+    expect(result.mode).toBe("rules");
     expect(JSON.stringify(result)).not.toContain("homemade candles");
 
     const owner = { runId: result.runId, ownerToken: result.ownerToken };
@@ -78,6 +78,6 @@ describe("API routes", () => {
     const health = await import("@/app/api/health/route");
     const res = await health.GET();
     expect(res.status).toBe(200);
-    expect(await res.json()).toMatchObject({ ok: true, database: "up", analysis: "simulated" });
+    expect(await res.json()).toMatchObject({ ok: true, database: "up", analysis: "rules" });
   });
 });

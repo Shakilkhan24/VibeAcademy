@@ -1,6 +1,6 @@
 # AGENTS.md: SeniorSeat
 
-Instructions for any AI coding agent (and human) working in this repository. Start with [START_HERE.md](START_HERE.md) if you have not read it.
+Instructions for any AI coding agent (and human) working in this repository. Start with [START_HERE.md](START_HERE.md) if you have not read it. For anything visual, [docs/design-brief.md](docs/design-brief.md) is the founder's direction and wins over the current look.
 
 ## What this product is
 
@@ -11,7 +11,7 @@ SeniorSeat teaches vibe coders to make the engineering decisions a senior engine
 | Task | Command |
 | --- | --- |
 | Install | `pnpm install` |
-| Develop | `pnpm dev` (simulated AI unless `ANTHROPIC_API_KEY` is set) |
+| Develop | `pnpm dev` (rule-based X-Ray; no API key needed) |
 | Type check | `pnpm typecheck` |
 | Lint (includes architecture boundaries) | `pnpm lint` |
 | Unit and integration tests | `pnpm test` |
@@ -32,7 +32,7 @@ SeniorSeat teaches vibe coders to make the engineering decisions a senior engine
 ## Non-negotiables
 
 1. **Prompt privacy.** Raw prompts are never stored, logged, cached as text or returned in responses. The X-Ray stores an HMAC and the classification only. `tests/server/xray-service.test.ts` proves it; extend that test when you add storage.
-2. **Honest modes.** Results carry `mode: "ai" | "simulated"`. Every surface that shows a result shows the simulated label when it applies.
+2. **Honest modes.** Results carry `mode: "ai" | "rules"`. Every surface that shows a result shows the "Rule-based check" label when it applies. AI-assisted analysis is deferred ([ADR 0011](docs/decisions/0011-rules-first-ai-deferred.md)): do not switch it on or spend on an API without the founder.
 3. **Deterministic scoring.** The AI only classifies. Any change to scoring rules bumps `SCORING_VERSION`; any change to decisions, weights, applicability or classifier criteria bumps `TAXONOMY_VERSION`; any change to the classifier prompt bumps `XRAY_PROMPT_VERSION`.
 4. **No invented evidence.** No hard-coded metrics, testimonials, prices presented as final, or Lab results. Lab numbers come only from published episodes that pass `EpisodeSchema`.
 5. **Accessible and respectful UI.** Keyboard reachable, visible focus, labelled controls, reduced motion respected. Copy never mocks vibe coders.

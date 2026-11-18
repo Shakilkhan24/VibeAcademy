@@ -9,10 +9,10 @@ import { SHOP_PROMPT } from "../support/fixtures";
 const IP = "203.0.113.7";
 
 describe("runXRay", () => {
-  it("returns a scored, explained result in simulated mode", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+  it("returns a scored, explained result from the rule-based check", async () => {
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     const r = await runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP });
-    expect(r.mode).toBe("simulated");
+    expect(r.mode).toBe("rules");
     expect(r.model).toBeNull();
     expect(r.traits.takesPayments).toBe(true);
     expect(r.score).toBeGreaterThanOrEqual(0);
@@ -33,7 +33,7 @@ describe("runXRay", () => {
 
   it("never stores or returns the prompt text", async () => {
     const secret = "Quantum pickle subscription for left-handed astronauts with login and Stripe";
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     const result = await runXRay(ctx, { prompt: secret, clientIp: IP });
 
     expect(JSON.stringify(result).toLowerCase()).not.toContain("astronaut");
@@ -47,14 +47,14 @@ describe("runXRay", () => {
   });
 
   it("validates prompt length", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     await expect(runXRay(ctx, { prompt: "too short", clientIp: IP })).rejects.toMatchObject({ code: "invalid_input" });
     await expect(runXRay(ctx, { prompt: "x".repeat(4001), clientIp: IP })).rejects.toMatchObject({ code: "invalid_input" });
     await expect(runXRay(ctx, { prompt: 42, clientIp: IP })).rejects.toMatchObject({ code: "invalid_input" });
   });
 
   it("rate-limits per visitor per minute", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated", XRAY_MINUTE_LIMIT: "2", XRAY_DAILY_LIMIT: "50" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules", XRAY_MINUTE_LIMIT: "2", XRAY_DAILY_LIMIT: "50" } });
     await runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP });
     await runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP });
     const err = await runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP }).catch((e) => e);
@@ -66,7 +66,7 @@ describe("runXRay", () => {
   });
 
   it("honours the feature kill switch", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated", FEATURE_XRAY: "off" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules", FEATURE_XRAY: "off" } });
     await expect(runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP })).rejects.toMatchObject({ code: "feature_disabled", status: 503 });
   });
 
@@ -87,7 +87,7 @@ describe("runXRay", () => {
 
 describe("sharing and deletion", () => {
   it("shares only with the owner token, and the shared summary has no prompt-derived detail", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     const r = await runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP });
 
     await expect(shareRun(ctx, { runId: r.runId, ownerToken: "x".repeat(43) })).rejects.toMatchObject({ code: "forbidden" });
@@ -107,7 +107,7 @@ describe("sharing and deletion", () => {
   });
 
   it("deletes a run for its owner", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     const r = await runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP });
     await deleteRun(ctx, { runId: r.runId, ownerToken: r.ownerToken });
     expect(await ctx.db.select().from(xrayRuns)).toHaveLength(0);
@@ -115,7 +115,7 @@ describe("sharing and deletion", () => {
   });
 
   it("rejects malformed slugs without touching the database", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     expect(await getSharedSummary(ctx, "'; drop table xray_runs; --")).toBeNull();
   });
 });

@@ -66,7 +66,7 @@ export async function runXRay(ctx: AppContext, input: { prompt: unknown; clientI
   const c = classified.output;
   const score = scoreClassification(c);
   const upgradeLines = buildUpgradeLines(score);
-  const mode = classified.provider === "simulated" ? "simulated" : "ai";
+  const mode = classified.provider === "rules" ? "rules" : "ai";
   const runId = randomUUID();
   const ownerToken = randomToken();
   const createdAt = ctx.now();

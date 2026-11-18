@@ -22,7 +22,7 @@ Engineering record of exactly what SeniorSeat stores. Keep it in sync with `src/
 
 ## Processors
 
-- AI provider (Anthropic) receives the prompt in AI mode for a single request, under its API data terms. Verify the provider's current retention and training terms before launch and reflect them on `/privacy`.
+- With the rule-based check (the default, ADR 0011), the prompt never leaves our server. If AI-assisted analysis is switched on later, the AI provider receives the prompt for a single request under its API data terms: verify its retention and training terms first and update `/privacy` before switching.
 - Hosting and database providers (once chosen) store the tables above.
 
 ## Before public launch

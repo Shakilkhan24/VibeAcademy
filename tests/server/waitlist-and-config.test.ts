@@ -9,7 +9,7 @@ import { SHOP_PROMPT } from "../support/fixtures";
 
 describe("joinWaitlist", () => {
   it("stores a normalised email once and answers identically for duplicates", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     const body = { email: "  Ada@Example.COM ", tool: "lovable", experience: "no-code", consent: true };
     expect(await joinWaitlist(ctx, { body, clientIp: "1.1.1.1" })).toEqual({ ok: true });
     expect(await joinWaitlist(ctx, { body, clientIp: "1.1.1.1" })).toEqual({ ok: true });
@@ -22,7 +22,7 @@ describe("joinWaitlist", () => {
   });
 
   it("requires consent and a valid email", async () => {
-    const ctx = await createTestContext({ env: { AI_PROVIDER: "simulated" } });
+    const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     await expect(joinWaitlist(ctx, { body: { email: "ada@example.com" }, clientIp: "1" })).rejects.toMatchObject({ code: "invalid_input" });
     await expect(joinWaitlist(ctx, { body: { email: "not-an-email", consent: true }, clientIp: "1" })).rejects.toMatchObject({ code: "invalid_input" });
     await expect(joinWaitlist(ctx, { body: { email: "a@b.co", consent: true, tool: "notepad" }, clientIp: "1" })).rejects.toMatchObject({ code: "invalid_input" });
@@ -30,19 +30,18 @@ describe("joinWaitlist", () => {
 });
 
 describe("loadConfig", () => {
-  it("uses simulated mode in development when no key is set", () => {
-    const c = loadConfig({ NODE_ENV: "development" });
-    expect(c.ai.provider).toBe("simulated");
+  it("uses the rule-based check by default, in development and production", () => {
+    expect(loadConfig({ NODE_ENV: "development" }).ai.provider).toBe("rules");
+    expect(loadConfig({ NODE_ENV: "production", HASH_SECRET: "a-long-production-secret" }).ai.provider).toBe("rules");
   });
 
-  it("uses Anthropic when a key is set", () => {
-    expect(loadConfig({ NODE_ENV: "development", ANTHROPIC_API_KEY: "sk" }).ai.provider).toBe("anthropic");
+  it("never switches to paid AI just because a key is present", () => {
+    expect(loadConfig({ NODE_ENV: "development", ANTHROPIC_API_KEY: "sk" }).ai.provider).toBe("rules");
   });
 
-  it("refuses simulated analysis in production unless explicitly allowed", () => {
-    const base = { NODE_ENV: "production", HASH_SECRET: "a-long-production-secret" };
-    expect(loadConfig(base).ai.provider).toBe("disabled");
-    expect(loadConfig({ ...base, ALLOW_SIMULATED_AI: "true" }).ai.provider).toBe("simulated");
+  it("uses Anthropic only when selected explicitly and a key is set", () => {
+    expect(loadConfig({ AI_PROVIDER: "anthropic", ANTHROPIC_API_KEY: "sk" }).ai.provider).toBe("anthropic");
+    expect(loadConfig({ AI_PROVIDER: "anthropic" }).ai.provider).toBe("disabled");
   });
 
   it("requires HASH_SECRET in production", () => {

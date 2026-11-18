@@ -149,10 +149,10 @@ function Workbench({ hydrated }: { hydrated: boolean }) {
 
       {result ? (
         <div ref={resultRef} tabIndex={-1} className="mt-16 outline-none" aria-label="X-Ray result">
-          {result.mode === "simulated" ? (
-            <Notice tone="simulated" title="Development mode: simulated analysis" className="mb-8">
-              This result came from simple keyword rules, not from AI, because no AI provider is configured on this server. Use it to explore the
-              interface only. Set ANTHROPIC_API_KEY to run real analysis.
+          {result.mode === "rules" ? (
+            <Notice tone="caveat" title="Rule-based check" className="mb-8">
+              This result comes from keyword rules that look for each decision in your prompt, not from AI. It can miss a decision you described in
+              your own words, or count one you only mentioned. Read the risks below as questions to ask, not as a verdict.
             </Notice>
           ) : null}
           {!result.isSoftwareRequest ? (

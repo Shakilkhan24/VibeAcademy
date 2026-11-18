@@ -2,7 +2,7 @@ import { createPgliteDb } from "@/server/db/client";
 import { loadConfig } from "@/server/env";
 import { createAppContext, type AppContext } from "@/server/context";
 import type { AiProvider, StructuredRequest, StructuredResponse } from "@/server/ai/types";
-import { simulateClassification } from "@/server/ai/providers/simulated";
+import { classifyWithRules } from "@/server/ai/providers/rules";
 
 /** A fresh in-memory Postgres (PGlite) with migrations applied. */
 export async function createTestDb() {
@@ -21,7 +21,7 @@ export async function createTestContext(opts: {
 
 /**
  * A fake "real" provider: behaves like Anthropic (name, usage, cost) but answers with the
- * keyword simulation so tests are deterministic. Records every call.
+ * rule-based classifier so tests are deterministic. Records every call.
  */
 export function fakeAnthropic(opts: { usage?: { inputTokens: number; outputTokens: number }; respond?: (req: StructuredRequest) => unknown } = {}) {
   const calls: StructuredRequest[] = [];
@@ -30,7 +30,7 @@ export function fakeAnthropic(opts: { usage?: { inputTokens: number; outputToken
     async generate(req: StructuredRequest): Promise<StructuredResponse> {
       calls.push(req);
       const prompt = (req.input as { prompt: string }).prompt;
-      const json = opts.respond ? opts.respond(req) : simulateClassification(prompt);
+      const json = opts.respond ? opts.respond(req) : classifyWithRules(prompt);
       return { json, usage: opts.usage ?? { inputTokens: 3000, outputTokens: 800 }, model: req.model };
     },
   };

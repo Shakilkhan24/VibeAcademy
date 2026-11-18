@@ -20,5 +20,5 @@ Versions: `TAXONOMY_VERSION`, `SCORING_VERSION`, `XRAY_PROMPT_VERSION`, `UPGRADE
 
 ## Consequences
 - Scores can be explained line by line and regression-tested.
-- Quality depends on classification accuracy: M1 adds a labelled set of real prompts as regression fixtures.
+- Quality depends on classification accuracy: M1 adds a hand-labelled set of prompts as regression fixtures for the rule-based check (and, later, for AI).
 - The classification contains no prompt text, which makes caching and storage privacy-safe (ADR 0005).

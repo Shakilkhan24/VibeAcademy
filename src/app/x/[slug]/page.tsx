@@ -46,9 +46,9 @@ export default async function SharedXRayPage({ params }: Props) {
         </p>
       </div>
 
-      {summary.mode === "simulated" ? (
-        <Notice tone="simulated" title="Simulated analysis" className="mb-10">
-          This result came from SeniorSeat&rsquo;s development mode (keyword rules), not from AI analysis.
+      {summary.mode === "rules" ? (
+        <Notice tone="caveat" title="Rule-based check" className="mb-10">
+          This result came from SeniorSeat&rsquo;s rule-based check (keyword rules), not from AI analysis.
         </Notice>
       ) : null}
 

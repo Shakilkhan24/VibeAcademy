@@ -1,7 +1,7 @@
 import "server-only";
 import { AiGateway } from "./ai/gateway";
 import { createAnthropicProvider } from "./ai/providers/anthropic";
-import { createSimulatedProvider } from "./ai/providers/simulated";
+import { createRulesProvider } from "./ai/providers/rules";
 import type { AiProvider } from "./ai/types";
 import { getDb, type Db } from "./db/client";
 import { loadConfig, type AppConfig } from "./env";
@@ -21,8 +21,8 @@ export function providerFor(config: AppConfig): AiProvider | null {
   switch (config.ai.provider) {
     case "anthropic":
       return createAnthropicProvider({ apiKey: config.ai.anthropicApiKey! });
-    case "simulated":
-      return createSimulatedProvider();
+    case "rules":
+      return createRulesProvider();
     default:
       return null;
   }

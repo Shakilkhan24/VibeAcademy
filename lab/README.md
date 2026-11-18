@@ -4,6 +4,8 @@ Scripts that produce every number in a Lab episode. Methodology and metric defin
 
 **Status:** written, not yet run against real twin builds (milestone M4). Treat as a starting point and fix anything the first real run reveals.
 
+**Who runs it:** the founder, offline, with a coding agent such as Claude Code (prompt 5 in [docs/agent-prompts.md](../docs/agent-prompts.md)). The website never calls an AI API to produce comparisons; it only publishes the finished episode YAML and links to the raw artifacts.
+
 ## Per episode
 
 1. Deploy both twins. Record their URLs in the episode YAML.

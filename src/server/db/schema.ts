@@ -22,7 +22,7 @@ export const xrayRuns = pgTable(
     /** HMAC of the visitor's IP, for abuse investigation only. */
     subjectHmac: text("subject_hmac").notNull(),
     ownerTokenHash: text("owner_token_hash").notNull(),
-    mode: text("mode", { enum: ["ai", "simulated"] }).notNull(),
+    mode: text("mode", { enum: ["ai", "rules"] }).notNull(),
     model: text("model"),
     cached: boolean("cached").notNull().default(false),
     taxonomyVersion: integer("taxonomy_version").notNull(),

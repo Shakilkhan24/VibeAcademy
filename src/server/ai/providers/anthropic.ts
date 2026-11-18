@@ -2,6 +2,10 @@ import "server-only";
 import { AiError, type AiProvider, type StructuredRequest, type StructuredResponse } from "../types";
 
 /**
+ * STATUS: DEFERRED PLACEHOLDER. Built and tested against mocked HTTP only, never against the
+ * live API. Off unless AI_PROVIDER=anthropic is set explicitly. Before switching it on, follow
+ * "Later: AI-assisted X-Ray" in docs/roadmap.md (measure against the rule-based check first).
+ *
  * Anthropic Messages API with structured outputs (`output_config.format` = json_schema,
  * no beta header: https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
  *

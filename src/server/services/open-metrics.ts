@@ -9,11 +9,11 @@ import { aiUsage, waitlistEntries, xrayRuns } from "../db/schema";
  */
 export interface OpenMetrics {
   generatedAt: string;
-  analysisMode: "ai" | "simulated" | "disabled";
+  analysisMode: "ai" | "rules" | "disabled";
   firstRunAt: string | null;
   xrayTotal: number;
   xrayLast30Days: number;
-  simulatedRuns: number;
+  rulesRuns: number;
   sharedRuns: number;
   aiRequestsLast30Days: number;
   cacheHitRateLast30Days: number | null;
@@ -31,7 +31,7 @@ export async function getOpenMetrics(ctx: AppContext): Promise<OpenMetrics> {
 
   const [runs] = await db.select({ total: count(), first: min(xrayRuns.createdAt) }).from(xrayRuns);
   const [recent] = await db.select({ n: count() }).from(xrayRuns).where(gte(xrayRuns.createdAt, since30));
-  const [simulated] = await db.select({ n: count() }).from(xrayRuns).where(eq(xrayRuns.mode, "simulated"));
+  const [rulesRun] = await db.select({ n: count() }).from(xrayRuns).where(eq(xrayRuns.mode, "rules"));
   const [shared] = await db.select({ n: count() }).from(xrayRuns).where(isNotNull(xrayRuns.shareSlug));
   const [usage] = await db
     .select({
@@ -61,7 +61,7 @@ export async function getOpenMetrics(ctx: AppContext): Promise<OpenMetrics> {
     firstRunAt: runs?.first ? new Date(runs.first).toISOString() : null,
     xrayTotal: Number(runs?.total ?? 0),
     xrayLast30Days: Number(recent?.n ?? 0),
-    simulatedRuns: Number(simulated?.n ?? 0),
+    rulesRuns: Number(rulesRun?.n ?? 0),
     sharedRuns: Number(shared?.n ?? 0),
     aiRequestsLast30Days: requests,
     cacheHitRateLast30Days: requests > 0 ? hits / requests : null,
