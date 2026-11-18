@@ -21,7 +21,7 @@ Smoke test against a production build locally:
 
 ```bash
 pnpm build
-NODE_ENV=production HASH_SECRET=local-smoke-secret-123456 \
+NODE_ENV=production HASH_SECRET="$(openssl rand -hex 32)" \
   PGLITE_DATA_DIR=/tmp/seniorseat-smoke pnpm start -p 3000 &
 BASE_URL=http://localhost:3000 pnpm smoke
 ```

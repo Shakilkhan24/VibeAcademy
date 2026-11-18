@@ -32,11 +32,12 @@ jobs:
       - name: Smoke test against the production build
         env:
           NODE_ENV: production
-          HASH_SECRET: ci-smoke-secret-0123456789
           AI_PROVIDER: rules
           PGLITE_DATA_DIR: /tmp/seniorseat-ci
           NEXT_TELEMETRY_DISABLED: "1"
         run: |
+          # Throwaway value for this run only, so no secret-like literal lives in the repo.
+          export HASH_SECRET="$(openssl rand -hex 32)"
           pnpm start -p 3000 &
           for i in $(seq 1 30); do curl -sf http://localhost:3000/api/health && break; sleep 1; done
           BASE_URL=http://localhost:3000 pnpm smoke
@@ -49,4 +50,4 @@ jobs:
           fetch-depth: 0
       - name: Scan for committed secrets
         run: |
-          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source /repo --redact --verbose
+          docker run --rm -v "$PWD:/repo" -w /repo zricethezav/gitleaks:latest detect --source /repo --gitleaks-ignore-path /repo/.gitleaksignore --redact --verbose

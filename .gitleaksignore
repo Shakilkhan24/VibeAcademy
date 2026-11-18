@@ -1,0 +1,3 @@
+# Reviewed false positives. Each line is a gitleaks finding fingerprint (commit:file:rule:line).
+# A dummy HASH_SECRET used only by the CI smoke test, before it was generated at runtime.
+882206dfc7f89d5d10ec7bd226689b275c7a64ed:.github/workflows/ci.yml:generic-api-key:35
