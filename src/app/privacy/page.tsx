@@ -33,6 +33,10 @@ export default function PrivacyPage() {
           </ul>
         </section>
         <section>
+          <h2 className="text-h2">Your learning progress</h2>
+          <p className="mt-4 text-chalk-dim">This browser remembers which tutorials you mark as done. You can mark a lesson as incomplete or clear the stored data for this site to remove your progress.</p>
+        </section>
+        <section>
           <h2 className="text-h2">Your visit and your email</h2>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-chalk-dim">
             <li>Your IP address is turned into a keyed fingerprint to enforce fair-use limits. We do not store the address itself.</li>

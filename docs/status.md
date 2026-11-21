@@ -11,6 +11,7 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 | Tutorial format | Markdown with typed YAML frontmatter, shared taxonomy IDs, and HTML escaped in lesson bodies ([ADR 0012](decisions/0012-tutorial-markdown.md)) | Tutorial format tests cover metadata, delimiters, code examples and link handling |
 | Learning path and reader | Home and navigation link to `/learn`. All seven chapters appear in order. Three Dream drafts have reader pages with contents, prerequisite and Decision Card links, copyable examples, callouts and adjacent lessons. The sitemap and share images cover the new routes. | Content tests and production smoke checks cover reader pages, missing slugs, sitemap and share images. |
 | Accessibility | The Lab and transparency tables support keyboard scrolling inside the page width. | Chromium desktop and mobile journey checks and axe WCAG A/AA checks on the learning path and main pages |
+| Tutorial progress | Visitors can mark and unmark lessons. The learning path shows completed lessons and the total. Separate browser storage keys allow open tabs to update different lessons independently. | Production smoke test plus Chromium checks for reloads, cross-tab updates and unavailable storage |
 | Tutorial library and authoring | The loader orders lessons by chapter and the founder's optional sequence. The content checker validates prerequisite chains and related cards. [Template](../content/tutorials/_template.md) and [authoring guide](content-guide.md) are ready. Three draft Dream lessons cover a user and job (Story), the first workflow (Practical), and a testable prompt (Technical). | Content tests exercise real files, the template, ordering, invalid filenames and broken links. `pnpm content:check` reports lesson counts by review state. |
 | Landing page | Hero with X-Ray launcher, ghost floor plan, silent-decision examples, how it works (with honest availability tags), card list, Lab teaser, waitlist | Production build, smoke test, screenshots |
 | Prompt X-Ray | Prompt input (20–4,000 chars), analysis, score on a band scale with critical cap, 12-domain floor plan, top 3 risks, upgraded prompt (assembled in the browser), AGENTS.md starter download, all-decisions list, "Rule-based check" label on every result | Unit, integration and route tests; smoke test; browser run |
@@ -36,7 +37,7 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 
 ## Planned (designed, not built)
 
-M1 browser progress, tutorial review and launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
+M1 tutorial review and launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
 
 ## Deferred on purpose
 

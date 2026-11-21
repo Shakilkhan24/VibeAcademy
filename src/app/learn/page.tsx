@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container, PageIntro } from "@/components/layout/page-intro";
+import { CompletionLabel, ProgressSummary } from "@/components/learn/lesson-progress";
 import { ButtonLink } from "@/components/ui/button";
 import { Tag } from "@/components/ui/tag";
 import { loadTutorials } from "@/content/tutorials";
@@ -27,6 +28,7 @@ export default async function LearnPage() {
               {CHAPTERS.map((chapter) => <li key={chapter.id}><a className="underline" href={`#${chapter.id}`}>{chapter.name}</a></li>)}
             </ol>
           </nav>
+          <ProgressSummary slugs={tutorials.map((lesson) => lesson.slug)} />
         </aside>
         <div>
           {CHAPTERS.map((chapter) => {
@@ -45,6 +47,7 @@ export default async function LearnPage() {
                             <span>{DEPTHS.find((depth) => depth.id === lesson.level)?.name}</span>
                             <span>{lesson.estimatedMinutes} min</span>
                             {lesson.status === "draft" && <Tag tone="dashed">Draft</Tag>}
+                            <CompletionLabel slug={lesson.slug} />
                           </div>
                           <h3 className="mt-2 text-h3"><Link href={`/learn/${lesson.slug}`} className="underline decoration-line-strong hover:decoration-pencil">{lesson.title}</Link></h3>
                           <p className="mt-1 max-w-prose text-small text-chalk-dim">{lesson.summary}</p>

@@ -22,6 +22,8 @@ Engineering record of exactly what SeniorSeat stores. Keep it in sync with `src/
 
 ## Processors
 
+Tutorial completion is stored locally by lesson slug using the browser's local storage. The reader keeps an in-memory fallback when storage is unavailable. Marking a lesson incomplete removes its completion record. The server receives no completion events.
+
 - With the rule-based check (the default, ADR 0011), the prompt never leaves our server. If AI-assisted analysis is switched on later, the AI provider receives the prompt for a single request under its API data terms: verify its retention and training terms first and update `/privacy` before switching.
 - Hosting and database providers (once chosen) store the tables above.
 

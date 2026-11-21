@@ -51,6 +51,8 @@ for (const [path, mustContain] of [
 }
 
 const health = await get("/api/health");
+const lesson = await get("/learn/choose-one-job");
+check("reader has a completion control", lesson.text.includes("Mark as done"));
 const learningMap = await get("/sitemap.xml");
 check("sitemap includes the tutorial reader", learningMap.text.includes("/learn/write-a-testable-build-prompt"));
 const missingLesson = await get("/learn/unknown-lesson");

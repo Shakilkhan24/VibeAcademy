@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/page-intro";
 import { TutorialBody } from "@/components/learn/tutorial-body";
+import { LessonCompletion } from "@/components/learn/lesson-progress";
 import { Tag } from "@/components/ui/tag";
 import { loadCards } from "@/content";
 import { loadTutorials } from "@/content/tutorials";
@@ -68,6 +69,7 @@ export default async function TutorialPage({ params }: Props) {
               <h2 className="text-h3">Decisions this tutorial covers</h2>
               <ul className="mt-3 space-y-2">{related.map((card) => <li key={card.slug}><Link className="text-pencil underline" href={`/cards/${card.slug}`}>{card.title}</Link></li>)}</ul>
             </section>}
+            <LessonCompletion slug={lesson.slug} />
             <nav aria-label="Lesson navigation" className="mt-10 grid gap-5 border-t border-line-strong pt-5 sm:grid-cols-2">
               {previous && <Link href={`/learn/${previous.slug}`} className="underline"><span className="block text-small text-chalk-dim">Previous lesson</span>{previous.title}</Link>}
               {next ? <Link href={`/learn/${next.slug}`} className="underline"><span className="block text-small text-chalk-dim">Next lesson</span>{next.title}</Link> :
