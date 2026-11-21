@@ -21,7 +21,7 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 | Twin Builds Lab | Methodology (11 metrics), episode schema that forbids unpublished numbers, episode 1 planned, fight card that shows "Not measured yet" | Content tests |
 | `/open` | Live counts, cache hit rate, AI spend, average cost per paid call, budget cap, waitlist size | Integration test, smoke test |
 | Waitlist | Email, tool, experience, consent; no enumeration; rate-limited | Integration tests, smoke test |
-| Tooling | TypeScript strict, ESLint with boundary rules, Vitest, content check, migrations, smoke script, CI workflow | Ran locally (CI itself not yet run on GitHub) |
+| Tooling | TypeScript strict, ESLint with boundary rules, Vitest, content check, migrations, smoke script, CI workflow | Local verification and the GitHub Actions verify job passed. The secret scan uses a finding-specific exception for the historical smoke-test fixture. |
 
 ## Partially implemented
 
@@ -31,7 +31,6 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 | Build Pack | AGENTS.md starter from an X-Ray; Blueprint types and renderer | SPEC.md, TASKS.md, tool adapters, Blueprint persistence. M2–M3. |
 | App Life Path | Static page of chapters with the cards that exist | Personal path per project. M2. |
 | Lab harness | Scripts and configs in `lab/` | Never run against real builds. M4. |
-| CI | `.github/workflows/ci.yml` | Has not run on GitHub yet. |
 
 ## Planned (designed, not built)
 
