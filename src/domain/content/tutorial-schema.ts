@@ -22,3 +22,9 @@ export const TutorialMetadataSchema = z.strictObject({
 });
 
 export type TutorialMetadata = z.infer<typeof TutorialMetadataSchema>;
+
+export interface TutorialHeading {
+  id: string;
+  text: string;
+  level: number;
+}

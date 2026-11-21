@@ -140,6 +140,21 @@
     border: 1px solid var(--color-line);
     background: rgb(11 36 64 / 0.9);
   }
+
+  .lesson-body { max-width: 66ch; overflow-wrap: anywhere; }
+  .lesson-body > * + * { margin-top: 1rem; }
+  .lesson-body h2 { @apply scroll-mt-5 text-h2; }
+  .lesson-body h3 { @apply scroll-mt-5 text-h3; }
+  .lesson-body :is(h2, h3):not(:first-child) { margin-top: 2.5rem; }
+  .lesson-body ol { @apply list-decimal space-y-2 pl-6; }
+  .lesson-body ul { @apply list-disc space-y-2 pl-6; }
+  .lesson-body li > :is(ol, ul) { margin-top: 0.5rem; }
+  .lesson-body a { @apply text-pencil underline; }
+  .lesson-body blockquote { @apply border-l-2 border-pencil bg-paper-deep px-5 py-4; }
+  .lesson-body pre { @apply overflow-x-auto border border-line bg-paper-deep p-4 text-small; white-space: pre-wrap; }
+  .lesson-body :not(pre) > code { @apply bg-paper-deep px-1 font-mono text-small; }
+  .lesson-body .lesson-copy { display: block; margin-left: auto; }
+  .lesson-body .lesson-copy + pre { margin-top: 0.25rem; }
 }
 
 @layer utilities {

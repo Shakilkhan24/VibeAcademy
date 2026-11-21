@@ -25,9 +25,18 @@ describe("tutorial format", () => {
     const source = document("## A heading\n\nA *short* paragraph.\n\n---\n\nMore text.");
     const tutorial = parseTutorial("\uFEFF" + source.replaceAll("\n", "\r\n"));
     expect(tutorial).toMatchObject({ ...metadata, prerequisites: [], relatedCards: [] });
-    expect(tutorial.html).toContain("<h2>A heading</h2>");
+    expect(tutorial.html).toContain('<h2 id="lesson-a-heading">A heading</h2>');
     expect(tutorial.html).toContain("<em>short</em>");
     expect(tutorial.html).toContain("<hr");
+  });
+
+  it("gives repeated headings unique link targets and preserves inline heading text", () => {
+    const lesson = parseTutorial(document("## *Try* this\n\n### Try this\n\n## Try this-2\n\n## Try this"));
+    expect(lesson.headings.map((heading) => heading.id)).toEqual([
+      "lesson-try-this", "lesson-try-this-2", "lesson-try-this-2-2", "lesson-try-this-3",
+    ]);
+    expect(lesson.headings[0]?.text).toBe("Try this");
+    for (const heading of lesson.headings) expect(lesson.html).toContain(`id="${heading.id}"`);
   });
 
   it.each([

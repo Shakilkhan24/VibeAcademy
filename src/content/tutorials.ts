@@ -3,7 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import MarkdownIt from "markdown-it";
 import { parse } from "yaml";
-import { TutorialMetadataSchema, type TutorialMetadata } from "@/domain/content/tutorial-schema";
+import { TutorialMetadataSchema, type TutorialHeading, type TutorialMetadata } from "@/domain/content/tutorial-schema";
 import { CHAPTER_IDS } from "@/domain/taxonomy";
 
 const markdown = new MarkdownIt({ html: false });
@@ -11,6 +11,7 @@ const frontmatter = /^---[ \t]*\n([\s\S]*?)\n---[ \t]*(?:\n|$)/;
 
 export interface Tutorial extends TutorialMetadata {
   html: string;
+  headings: TutorialHeading[];
 }
 
 export function parseTutorial(source: string): Tutorial {
@@ -21,7 +22,24 @@ export function parseTutorial(source: string): Tutorial {
   const metadata = TutorialMetadataSchema.parse(parse(match[1]!));
   const body = text.slice(match[0].length);
   if (!body.trim()) throw new Error("Write the tutorial body after the frontmatter.");
-  return { ...metadata, html: markdown.render(body) };
+  const env = {};
+  const tokens = markdown.parse(body, env);
+  const headings: TutorialHeading[] = [];
+  const ids = new Set<string>();
+  for (const [index, token] of tokens.entries()) {
+    if (token.type !== "heading_open" || !["h2", "h3"].includes(token.tag)) continue;
+    const inline = tokens[index + 1];
+    const label = inline?.children?.map((part) => part.type === "softbreak" ? " " : part.content).join("").trim();
+    if (!label) continue;
+    const stem = label.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "section";
+    const base = "lesson-" + stem;
+    let id = base;
+    for (let suffix = 2; ids.has(id); suffix++) id = base + "-" + suffix;
+    ids.add(id);
+    token.attrSet("id", id);
+    headings.push({ id, text: label, level: Number(token.tag.slice(1)) });
+  }
+  return { ...metadata, headings, html: markdown.renderer.render(tokens, markdown.options, env) };
 }
 
 export async function loadTutorials(): Promise<Tutorial[]> {

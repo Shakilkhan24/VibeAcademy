@@ -37,6 +37,8 @@ Scale tokens: `text-micro` 13, `text-small` 15, `text-body` 17, `text-h3` 21, `t
 
 ## Signature elements
 
+The founder retained this design for M1. The learning path groups tutorials by chapter and shows reading depth, estimated time and editorial state. The reader uses a 66-character text measure, linked section headings, pencil-edged callouts, copyable examples and previous/next lesson navigation. Its desktop sidebar moves above the article on narrow screens.
+
 - **Floor plan** (`components/xray/floor-plan.tsx`): twelve domains as rooms with shared walls. Dashed walls = undecided; pencil hatching = decided share; redline wall = critical gap; "Not needed" = domain does not apply.
 - **Score scale** (`components/xray/score-scale.tsx`): the score as a dimension line with the four bands and a pencil marker; the critical cap is a dashed redline.
 - **Sheet** (`.sheet`): a panel with corner registration ticks, for forms, option sheets and featured content.

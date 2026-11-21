@@ -32,6 +32,10 @@ async function send(method, path, body) {
 
 for (const [path, mustContain] of [
   ["/", "Every prompt hides decisions"],
+  ["/learn", "The learning path"],
+  ["/learn/choose-one-job", "Choose one person and one job"],
+  ["/learn/sketch-the-first-workflow", "Decisions this tutorial covers"],
+  ["/learn/write-a-testable-build-prompt", "Describe an empty day"],
   ["/xray", "Prompt X-Ray"],
   ["/cards", "Decisions in the order your app meets them"],
   ["/cards/who-sees-what", "Who can see whose data?"],
@@ -47,6 +51,14 @@ for (const [path, mustContain] of [
 }
 
 const health = await get("/api/health");
+const learningMap = await get("/sitemap.xml");
+check("sitemap includes the tutorial reader", learningMap.text.includes("/learn/write-a-testable-build-prompt"));
+const missingLesson = await get("/learn/unknown-lesson");
+check("unknown lesson returns 404", missingLesson.res.status === 404);
+for (const url of ["/learn/opengraph-image", "/learn/choose-one-job/opengraph-image"]) {
+  const image = await fetch(BASE + url);
+  check(`learning path share image at ${url}`, image.ok && image.headers.get("content-type")?.includes("image/png"));
+}
 check("health endpoint", health.res.status === 200 && JSON.parse(health.text).ok === true, health.text);
 
 const home = await get("/");

@@ -23,8 +23,9 @@ export default async function HomePage() {
           <h1 className="mt-4 max-w-[21ch] text-h1">Every prompt hides decisions. Make them before the AI does.</h1>
           <p className="mt-6 max-w-[60ch] text-chalk-dim">
             SeniorSeat shows you which engineering decisions your prompt leaves to the AI, and teaches each one at your level, at the moment your app
-            needs it. Start by X-raying a prompt.
+            needs it. Start with the Dream tutorials or try a prompt of your own.
           </p>
+          <ButtonLink href="/learn" className="mt-6">Explore the learning path</ButtonLink>
           <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
             <XRayLauncher />
             <FloorPlan state="ghost" caption="Twelve decision domains, drawn as rooms. A vague prompt leaves every one of them undecided." />
@@ -120,7 +121,7 @@ export default async function HomePage() {
 
         <section id="waitlist" className="sheet p-6 sm:p-10" aria-labelledby="wl-heading">
           <h2 id="wl-heading" className="text-h2">Get in first</h2>
-          <p className="mt-3 mb-8 max-w-[56ch] text-chalk-dim">The full learning path, Blueprints and Build Packs are next. Join the waitlist and we will email you once, when it opens.</p>
+          <p className="mt-3 mb-8 max-w-[56ch] text-chalk-dim">More chapters, Blueprints and Build Packs are next. Join the waitlist for the launch announcement.</p>
           <WaitlistForm source="home" />
         </section>
       </Container>

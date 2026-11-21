@@ -3,6 +3,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Wordmark } from "./wordmark";
 
 const NAV = [
+  { href: "/learn", label: "Learning path" },
   { href: "/xray", label: "Prompt X-Ray" },
   { href: "/cards", label: "Decision Cards" },
   { href: "/lab", label: "Twin Builds Lab" },
