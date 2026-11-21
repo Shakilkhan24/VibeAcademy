@@ -29,6 +29,7 @@
     "@fontsource/ibm-plex-mono": "5.3.0",
     "clsx": "2.1.1",
     "drizzle-orm": "0.45.4",
+    "markdown-it": "15.0.3",
     "next": "16.4.6",
     "postgres": "4.1.1",
     "react": "19.3.1",

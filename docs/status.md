@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-11-18, after switching to a tutorials-first plan with the rule-based X-Ray as the default ([ADR 0011](decisions/0011-rules-first-ai-deferred.md)). Update this file in the same change as the work it describes.
+Last updated on 2026-11-21 during M1 tutorial development. Update this file in the same change as the work it describes.
 
 ## Implemented and verified
 
@@ -8,6 +8,7 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 
 | Area | What exists | Verified by |
 | --- | --- | --- |
+| Tutorial format | Markdown with typed YAML frontmatter, shared taxonomy IDs, and HTML escaped in lesson bodies ([ADR 0012](decisions/0012-tutorial-markdown.md)) | Tutorial format tests cover metadata, delimiters, code examples and link handling |
 | Landing page | Hero with X-Ray launcher, ghost floor plan, silent-decision examples, how it works (with honest availability tags), card list, Lab teaser, waitlist | Production build, smoke test, screenshots |
 | Prompt X-Ray | Prompt input (20–4,000 chars), analysis, score on a band scale with critical cap, 12-domain floor plan, top 3 risks, upgraded prompt (assembled in the browser), AGENTS.md starter download, all-decisions list, "Rule-based check" label on every result | Unit, integration and route tests; smoke test; browser run |
 | Sharing | Opt-in share link via owner token, public summary page without prompt or app type, Open Graph image, unshare, delete | Integration tests, smoke test |
@@ -33,7 +34,7 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 
 ## Planned (designed, not built)
 
-M1 tutorial section (content type, `/learn` path, tutorial page, browser progress, authoring workflow) and the founder's design pass ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
+M1 tutorial file discovery and cross-link checks, `/learn` path, tutorial page, browser progress, authoring workflow and the founder's design pass ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
 
 ## Deferred on purpose
 

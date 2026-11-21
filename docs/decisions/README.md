@@ -15,3 +15,4 @@ Each record states the context, the decision, the alternatives considered and th
 | [0009](0009-design-language.md) | Cyanotype blueprint design language, built on Tailwind tokens | Accepted |
 | [0010](0010-authentication.md) | Authentication for Phase 1 | Proposed: awaiting founder |
 | [0011](0011-rules-first-ai-deferred.md) | Rule-based X-Ray by default; AI features deferred | Accepted |
+| [0012](0012-tutorial-markdown.md) | Plain Markdown with validated YAML frontmatter for tutorials | Accepted |
