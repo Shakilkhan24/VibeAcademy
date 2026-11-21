@@ -6,7 +6,6 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 | --- | --- | --- | --- | --- |
 | 1 | Final brand name (SeniorSeat is provisional) | Domain, trademark, social handles, share images | "SeniorSeat" everywhere; name lives in a handful of components and metadata | Before public launch (M1) |
 | 2 | Review of the five Decision Cards | Credibility rests on expert-checked content | All five are `status: draft` and labelled "Draft" in the UI | M1 |
-| 3 | Rule-based check quality bar | Defines when the X-Ray is good enough to promote | Suggested: 80% agreement on critical decisions over 20–30 hand-labelled prompts | M1 |
 | 4 | Whether and when to switch on AI features, and the daily budget | Paid API spend | Off: rule-based check only (ADR 0011). `AI_DAILY_BUDGET_USD=2` applies only once switched on | Later (deferred) |
 | 5 | Hosting and database vendors | Cost, region, data residency | Recommended: Vercel + Neon (or Supabase Postgres); not provisioned | M1 |
 | 6 | Email provider (double opt-in, magic links) | Vendor, deliverability, cost | None; waitlist stores consented emails without confirmation | M1/M2 |
@@ -17,6 +16,8 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 | 11 | Lab episode 1 tool and filming | First public proof | Episode YAML says "Lovable or Bolt", status planned | M4 |
 
 ## Resolved for M1
+
+- **3. X-Ray quality.** The founder set an 80% minimum agreement target for the four critical decisions across 20–30 hand-labelled prompts on 2026-11-21. The offline test runs in CI.
 
 - **12. Launch design.** The founder retained the existing blueprint look on 2026-11-21. See the [design brief](design-brief.md).
 - **13. Opening tutorials.** The founder delegated topic and depth selection and requested increasing difficulty. The Dream sequence moves from one user's job to a minimal workflow to a testable build prompt. Editorial review of the drafts is still open.

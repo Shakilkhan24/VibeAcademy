@@ -17,6 +17,7 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 | Prompt X-Ray | Prompt input (20–4,000 chars), analysis, score on a band scale with critical cap, 12-domain floor plan, top 3 risks, upgraded prompt (assembled in the browser), AGENTS.md starter download, all-decisions list, "Rule-based check" label on every result | Unit, integration and route tests; smoke test; browser run |
 | Sharing | Opt-in share link via owner token, public summary page without prompt or app type, Open Graph image, unshare, delete | Integration tests, smoke test |
 | Analysis gateway | Provider abstraction (`rules`, the default rule-based check; Anthropic structured outputs, deferred and opt-in), feature definitions, cache keyed by versions + provider + model + prompt HMAC, daily budget, timeout, one retry, usage ledger with costs, kill switches | `tests/server/gateway.test.ts`, `anthropic-provider.test.ts` (mocked HTTP) |
+| Rule-based X-Ray quality | Taxonomy v2 recognises more ways to state ownership, secret storage and recovery. Payment confirmation requires a named provider and payment-specific confirmation evidence. | On 24 hand-labelled prompts, agreement rose from 72/96 (75%) to 94/96 (97.9%). CI enforces the founder-approved 80% target on this fixture set. |
 | Scoring | 36 decisions, 12 domains, 7 traits, applicability rules, weights, critical cap, bands, top risks, versioned | `tests/domain/*` |
 | Privacy | No prompt text stored, cached, logged or returned; HMAC'd IPs; owner tokens hashed | Test that searches every table for a prompt phrase |
 | Security | Security headers, same-origin checks, JSON size limits, Zod validation, rate limits, production config guards | Route tests, smoke test |
@@ -30,7 +31,6 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 
 | Item | State | What is missing |
 | --- | --- | --- |
-| Rule-based X-Ray quality | Keyword rules for 7 traits, 11 app types and 36 decisions | Never measured against labelled prompts. M1 step 6 adds hand-labelled fixtures and an agreement test. |
 | Build Pack | AGENTS.md starter from an X-Ray; Blueprint types and renderer | SPEC.md, TASKS.md, tool adapters, Blueprint persistence. M2–M3. |
 | App Life Path | Static page of chapters with the cards that exist | Personal path per project. M2. |
 | Lab harness | Scripts and configs in `lab/` | Never run against real builds. M4. |

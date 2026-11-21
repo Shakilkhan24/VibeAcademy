@@ -1,0 +1,50 @@
+# Editorial examples annotated against addressedWhen / partialWhen in the taxonomy.
+# Each label describes what the prompt says, before the scoring engine filters applicability.
+- prompt: Build a calendar that shows the phases of the moon.
+  expected: {ia-row-access: missing, ss-secrets: missing, ro-backups: missing, cb-payments: missing}
+- prompt: Build a member diary. Each reader can open only their own entries. Keep the API key on the server. Back up the diary every night.
+  expected: {ia-row-access: addressed, ss-secrets: addressed, ro-backups: addressed, cb-payments: missing}
+- prompt: Make a private dashboard for customers to see their orders and pay with Stripe.
+  expected: {ia-row-access: partial, ss-secrets: partial, ro-backups: missing, cb-payments: partial}
+- prompt: Build a shop. Keep the Stripe key in an environment variable and mark an order paid only after a verified webhook.
+  expected: {ia-row-access: missing, ss-secrets: addressed, ro-backups: missing, cb-payments: addressed}
+- prompt: Build a student notebook. Store the notes securely. Students should have their own dashboard.
+  expected: {ia-row-access: partial, ss-secrets: missing, ro-backups: partial, cb-payments: missing}
+- prompt: Make a membership site with PayPal checkout and nightly database snapshots. Keep credentials in a secret manager.
+  expected: {ia-row-access: missing, ss-secrets: addressed, ro-backups: addressed, cb-payments: partial}
+- prompt: Build a booking tool. Verify the payment with Stripe on the server before confirming a booking. Only the owner of a booking can view it.
+  expected: {ia-row-access: addressed, ss-secrets: partial, ro-backups: missing, cb-payments: addressed}
+- prompt: Make a customer portal with row-level security and point-in-time recovery. Put API keys in server-side environment variables.
+  expected: {ia-row-access: addressed, ss-secrets: addressed, ro-backups: addressed, cb-payments: missing}
+- prompt: Build a garden journal. Keep entries private and make sure I never lose my notes.
+  expected: {ia-row-access: partial, ss-secrets: missing, ro-backups: partial, cb-payments: missing}
+- prompt: Create an invoice tool that takes payments. Keep payment credentials out of the browser bundle.
+  expected: {ia-row-access: missing, ss-secrets: addressed, ro-backups: missing, cb-payments: partial}
+- prompt: Build an issue board. Send a webhook notification to our chat room when an issue closes.
+  expected: {ia-row-access: missing, ss-secrets: missing, ro-backups: missing, cb-payments: missing}
+- prompt: Build a recipe site that charges via Paddle. Only unlock a recipe after the server verifies the payment. Backups run daily.
+  expected: {ia-row-access: missing, ss-secrets: partial, ro-backups: addressed, cb-payments: addressed}
+- prompt: Make a photo gallery. Each user can see only their own albums. Restore the database from a backup during a practice run.
+  expected: {ia-row-access: addressed, ss-secrets: missing, ro-backups: addressed, cb-payments: missing}
+- prompt: Build a support inbox. Agents have a private dashboard. Use an API key for email and make sure the data is safe.
+  expected: {ia-row-access: partial, ss-secrets: partial, ro-backups: partial, cb-payments: missing}
+- prompt: Create a store using Stripe checkout. Send a webhook to chat when stock runs low.
+  expected: {ia-row-access: missing, ss-secrets: partial, ro-backups: missing, cb-payments: partial}
+- prompt: Make a weather page using an API key. Use the arrow keys to move between cities.
+  expected: {ia-row-access: missing, ss-secrets: partial, ro-backups: missing, cb-payments: missing}
+- prompt: Build a typing game where the arrow keys move the cursor. The escape key pauses the clock.
+  expected: {ia-row-access: missing, ss-secrets: missing, ro-backups: missing, cb-payments: missing}
+- prompt: Make a booking dashboard. Reject access to another customer's reservations. Keep secrets in a vault and store bookings securely.
+  expected: {ia-row-access: addressed, ss-secrets: addressed, ro-backups: partial, cb-payments: missing}
+- prompt: Build a community forum with private messages. Store API tokens only on the server and test restoring last night's backup.
+  expected: {ia-row-access: partial, ss-secrets: addressed, ro-backups: addressed, cb-payments: missing}
+- prompt: Build a membership app. Use Stripe and verify its signed payment webhook before activating membership. Protect user privacy.
+  expected: {ia-row-access: partial, ss-secrets: partial, ro-backups: missing, cb-payments: addressed}
+- prompt: Make a team planner. Ownership checks must guard each record. Save a daily backup and use a secrets manager for service credentials.
+  expected: {ia-row-access: addressed, ss-secrets: addressed, ro-backups: addressed, cb-payments: missing}
+- prompt: Build a ticket shop with PayPal. Check the transaction with PayPal on the server before issuing the ticket. Keep the database safely stored.
+  expected: {ia-row-access: missing, ss-secrets: partial, ro-backups: partial, cb-payments: addressed}
+- prompt: Build a running club page with a weekly schedule, a map and a form to take payments for race entry.
+  expected: {ia-row-access: missing, ss-secrets: missing, ro-backups: missing, cb-payments: partial}
+- prompt: Make a private reading list. Store books securely. Let a reader view only their own titles, with no integrations in the first version.
+  expected: {ia-row-access: addressed, ss-secrets: missing, ro-backups: partial, cb-payments: missing}

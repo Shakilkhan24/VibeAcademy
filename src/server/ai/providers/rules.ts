@@ -1,5 +1,6 @@
 import "server-only";
 import { APP_TYPES, DECISION_IDS, type AppType, type TraitId } from "@/domain/taxonomy";
+import type { DecisionStatus } from "@/domain/xray/classification";
 import { AiError, type AiProvider, type StructuredRequest, type StructuredResponse } from "../types";
 
 /**
@@ -38,8 +39,25 @@ const APP_TYPE_RULES: [AppType, RegExp][] = [
 ];
 const SOFTWARE = /\b(build|make|create|develop|app|website|site|tool|platform|shop|store|dashboard|bot|game|page|system)\b/i;
 
-/** [addressed, partial] patterns per decision. Deliberately simple and readable; extend with tests. */
-const DECISION_RULES: Record<string, [RegExp, RegExp]> = {
+const paymentProvider = /\b(stripe|paypal|paddle|lemon\s?squeezy)\b/i;
+const paymentIntent = /\b(pay|payments?|checkout|billing)\b/i;
+
+function paymentStatus(prompt: string): DecisionStatus {
+  if (!paymentProvider.test(prompt)) return paymentIntent.test(prompt) ? "partial" : "missing";
+  const confirmsPayment = prompt.split(/[.!?;\n]/).some((sentence) => {
+    const aboutMoney = paymentIntent.test(sentence) || /\b(paid|transaction)\b/i.test(sentence);
+    if (!aboutMoney) return false;
+    const paymentWebhook = /\b(payment|checkout|verified|signed)[- ]webhooks?\b|\bwebhooks?\b.{0,40}\bpaid\b/i;
+    const verifiesMoney = /\b(verif(?:y|ies)|checks?|confirms?) (?:the |each |a )?(?:payments?|transactions?)\b|\b(?:payment|transaction) (?:is |has been )?(?:verified|confirmed)\b/i;
+    const serverCheck = /\bserver(?:[- ]side)?\b/i.test(sentence) && verifiesMoney.test(sentence);
+    return paymentWebhook.test(sentence) || serverCheck;
+  });
+  return confirmsPayment ? "addressed" : "partial";
+}
+
+/** Most decisions use a pair of patterns in addressed, partial order. */
+type Rule = [RegExp, RegExp] | ((prompt: string) => DecisionStatus);
+const DECISION_RULES: Record<string, Rule> = {
   "ps-audience": [/\b(for (small|busy|local|independent) \w+|primary users?|target (users|audience)|so that \w+ can)\b/i, /\b(customers?|users?|people|clients?)\b/i],
   "ps-scope-v1": [/\b(out of scope|not (include|needed)|(v1|mvp|first version) (only|includes)|later version|phase 2)\b/i, /\b(features?|mvp|v1|first version)\b/i],
   "ps-success": [/\b(acceptance criteria|success (metrics?|criteria)|done when)\b/i, /\b(professional|modern|beautiful|perfect)\b/i],
@@ -59,22 +77,22 @@ const DECISION_RULES: Record<string, [RegExp, RegExp]> = {
   "da-model": [/\b(tables?|entities|schema|fields?|relationships?|foreign keys?)\b/i, /\b(orders?|products?|bookings?|posts?)\b/i],
   "da-migrations": [/\bmigrations?\b/i, /\bchange (the )?(tables?|database)\b/i],
   "ia-login": [/\b(google (sign[- ]?in|login|oauth)|magic links?|oauth|clerk|auth0|supabase auth|firebase auth|passkeys?|otp)\b/i, /\b(sign ?-?up|log ?-?in|sign ?-?in|accounts?)\b/i],
-  "ia-row-access": [/\b(row[- ]level security|rls|only (see|access|view) (their|his|her) own|ownership checks?)\b/i, /\b(private|privacy|their (orders|data|profile))\b/i],
+  "ia-row-access": [/\b(row[- ]level security|rls|ownership checks?|only (see|access|view|read|open) (their|his|her) own|(see|access|view|read|open) only (their|his|her) own)\b/i, /\b(private|privacy|their (own dashboard|orders|data|profile))\b/i],
   "ia-roles": [/\b(roles?|permissions?|rbac)\b/i, /\b(admins?|staff|moderators?)\b/i],
-  "ss-secrets": [/\b(env(ironment)? variables?|\.env|secrets? manager)\b/i, /\b(api keys?|stripe|openai|keys?)\b/i],
+  "ss-secrets": [/(?:\benv(?:ironment)? variables?|\B\.env|\bsecrets? manager|\b(?:keys?|tokens?|credentials|secrets?) (?:only )?(?:on (?:the )?server|in (?:a |the )?vault|out of (?:the )?browser))\b/i, /\b(api (keys?|tokens?)|secret keys?|credentials|stripe|paypal|paddle|openai)\b/i],
   "ss-abuse": [/\b(rate[- ]limit\w*|captcha|turnstile|bot protection|throttl\w*)\b/i, /\b(spam|security)\b/i],
   "ss-privacy": [/\b(gdpr|privacy (policy|notice)|delete (their|my|your) (account|data)|data export)\b/i, /\b(privacy|private)\b/i],
   "dc-hosting": [/\b(vercel|netlify|aws|render|fly\.io|railway|heroku|digitalocean|cloudflare|vps|azure|google cloud)\b/i, /\b(host(ed|ing)?|deploy(ed)?|online|live)\b/i],
   "dc-deploy-pipeline": [/\b(ci\/cd|github actions|auto(matic)?[- ]?deploy\w*|pipeline)\b/i, /\bdeploy\w*\b/i],
   "dc-domain": [/\b(https|ssl|custom domain)\b/i, /\b(domain|url)\b/i],
-  "ro-backups": [/\b(backups?|point[- ]in[- ]time|restore)\b/i, /\b(safely stored|never lose)\b/i],
+  "ro-backups": [/\b(backups?|back up|point[- ]in[- ]time|restore|database snapshots?)\b/i, /\b(safely stored|stored securely|store (?:\w+ ){0,3}securely|data is safe|never lose)\b/i],
   "ro-error-tracking": [/\b(sentry|monitoring|alerts?|uptime|error tracking)\b/i, /\b(logs?|analytics)\b/i],
   "ro-logging": [/\b(structured logs?|request ids?|audit logs?|logging)\b/i, /\blogs?\b/i],
   "sp-traffic-spike": [/\b(cach(e|ing)|cdn|load[- ]test\w*|autoscal\w*)\b/i, /\b(scalable|fast|performance|viral)\b/i],
   "sp-media": [/\b(s3|r2|cloudinary|object storage|supabase storage|file size limit)\b/i, /\b(uploads?|images?|photos?|files?)\b/i],
   "sp-slow-work": [/\b(background (jobs?|workers?|tasks?)|queues?|cron)\b/i, /\b(e-?mails?|notifications?|reports?)\b/i],
   "cb-monthly-cost": [/\b(budget|cost estimate|spending limit|per month)\b/i, /\b(cheap|free|low[- ]cost|affordable)\b/i],
-  "cb-payments": [/\bwebhooks?\b/i, /\b(stripe|paypal|paddle|lemon ?squeezy|pay|payments?|checkout)\b/i],
+  "cb-payments": paymentStatus,
   "cb-ai-costs": [/\b(quota|spending cap|usage limits?|per[- ]user limits?)\b/i, /\b(ai|gpt|openai|claude|llm|chat ?bot)\b/i],
 };
 
@@ -88,7 +106,9 @@ export function classifyWithRules(prompt: string) {
   const isSoftwareRequest = SOFTWARE.test(prompt);
 
   const decisions = DECISION_IDS.map((id) => {
-    const [addressed, partial] = DECISION_RULES[id] ?? [/$^/, /$^/];
+    const rule = DECISION_RULES[id];
+    if (typeof rule === "function") return { id, status: rule(prompt) };
+    const [addressed, partial] = rule ?? [/$^/, /$^/];
     const status = addressed.test(prompt) ? "addressed" : partial.test(prompt) ? "partial" : "missing";
     return { id, status };
   });

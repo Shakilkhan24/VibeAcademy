@@ -11,7 +11,7 @@ export * from "./traits";
  * Bump when decisions, their ids, weights, applicability or classifier guidance change.
  * Stored on every X-Ray run and part of the AI cache key, so old results stay explainable.
  */
-export const TAXONOMY_VERSION = 1;
+export const TAXONOMY_VERSION = 2;
 
 export const DECISION_IDS = DECISIONS.map((d) => d.id);
 
