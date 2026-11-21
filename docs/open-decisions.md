@@ -15,5 +15,8 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 | 9 | Privacy policy and terms | Legal requirement before collecting accounts or payments | Plain-language `/privacy` page reflecting actual behaviour | M1 (waitlist) / M2 (accounts) |
 | 10 | Contact address for deletion requests | Waitlist deletion before self-service exists | `/privacy` says it will be given in the launch announcement | M1 |
 | 11 | Lab episode 1 tool and filming | First public proof | Episode YAML says "Lovable or Bolt", status planned | M4 |
-| 12 | Design direction | The look of every page | Current blueprint look (ADR 0009) until [design-brief.md](design-brief.md) is marked ready | M1, step 1 |
-| 13 | First tutorials and their order | What the learning path launches with | None written yet; chapters and depths are defined in product.md | M1 |
+
+## Resolved for M1
+
+- **12. Launch design.** The founder retained the existing blueprint look on 2026-11-21. See the [design brief](design-brief.md).
+- **13. Opening tutorials.** The founder delegated topic and depth selection and requested increasing difficulty. The Dream sequence moves from one user's job to a minimal workflow to a testable build prompt. Editorial review of the drafts is still open.

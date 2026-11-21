@@ -1,68 +1,15 @@
-# Design brief
+# Launch design brief
 
-**Owner:** the founder. **Status:** Draft (change to "Ready for the agent" when it is ready).
+**Owner** The founder. **Status** Ready for the agent.
 
-This is the founder's direction for how SeniorSeat looks and feels. Coding agents read it before any visual work, and it wins over the current look. Where it is silent, the existing design system applies ([design-system.md](design-system.md), [ADR 0009](decisions/0009-design-language.md)). Screenshots of the current look are in [screenshots/](screenshots/).
+On 2026-11-21 the founder chose to keep the existing blueprint design for launch and delegated the Dream lesson sequence and depths, with an easy-to-harder progression.
 
-You don't need to fill in everything. A few honest sentences and two or three reference links per section are enough; delete the prompts in italics as you go.
+## Visual direction
 
-## 1. The feeling in one sentence
+Carry the drawing-sheet grid, cyanotype blue, chalk text, pencil-gold actions and existing typography into the learning path. The home page and tutorial pages share the established [design system](design-system.md) and [ADR 0009](decisions/0009-design-language.md).
 
-*What should a first-time visitor feel in the first five seconds? For example: "a calm, serious workshop where beginners are taken seriously".*
+## Tutorial reading experience
 
-## 2. Keep or change the current blueprint look
+Use the chapter sequence as navigation. Give each lesson its depth, estimated time and review status. Use the existing reading measure for prose, a table of contents with heading links, copy controls for code and prompts, visible callouts and links to the relevant Decision Cards. Keep the lesson and its completion control reachable by keyboard and on a narrow phone. The reader tracks completion on this browser.
 
-*Look at docs/screenshots. What do you want to keep (the cyanotype blue, the floor plan, the drafting feel)? What do you want to change or drop?*
-
-- Keep:
-- Change:
-- Drop:
-
-## 3. References
-
-*Sites, apps or printed things you like, and exactly what you like about each: "the reading width on X", "how Y shows progress".*
-
-| Reference (link) | What to take from it |
-| --- | --- |
-| | |
-
-## 4. Colour and type
-
-*Light, dark or both? Any colours you want or want to avoid? Typefaces you like? If unsure, describe the mood and let the agent propose two options to choose from.*
-
-## 5. Pages, in priority order
-
-*Which pages matter most at launch, and anything specific about each.*
-
-1. Home:
-2. Learning path (`/learn`):
-3. Tutorial page (`/learn/[slug]`):
-4. Prompt X-Ray:
-5. Decision Cards:
-6. Other:
-
-## 6. The tutorial page
-
-*This is the page learners will spend the most time on. Describe how it should work:*
-
-- Reading width, and code blocks (copy button? line numbers?):
-- How depth levels show (tabs, a slider, separate pages?):
-- Progress and "mark as done":
-- Diagrams, images and video:
-- What sits beside the text (table of contents, related cards, nothing?):
-
-## 7. Mobile
-
-*Anything specific about phones? Many learners will read tutorials on a phone.*
-
-## 8. Must not
-
-*Things you never want to see: for example stock photos, emoji in headings, gamified confetti, or dark patterns around the waitlist.*
-
-## 9. Questions for the agent
-
-*Anything you want the agent to propose options for, rather than decide.*
-
----
-
-**How the agent uses this file:** read it fully, propose a short design plan (palette, type, layout, one memorable element), wait for the founder's approval, then implement it in `src/app/globals.css`, the UI primitives and the pages. Update [design-system.md](design-system.md), and add an ADR if the design language changes. Check every changed page in a browser on desktop and mobile before reporting it done.
+Begin the Dream chapter with a person and their goal. Move to a small workflow, then a testable build prompt. Use a single worked example across these drafts so that each lesson builds on the learner's previous decision.
