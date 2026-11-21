@@ -1,4 +1,4 @@
-# Content guide: writing Decision Cards
+# Content guide
 
 Cards are the product's core teaching asset. They live in `content/cards/<slug>.yaml`, are validated by `src/domain/content/card-schema.ts`, and are checked with `pnpm content:check`.
 
@@ -45,3 +45,11 @@ Sentence case. Short sentences. Active voice. No product shilling: name tools as
 ## Lab content
 
 `content/lab/methodology.yaml` defines the rules and the 11 metrics. Episodes in `content/lab/episodes/` cannot carry measurements until `status: published`, and a published episode must have every metric for both twins, `artifactsUrl` and `publishedAt`. Never type a number that was not measured.
+
+## Writing a tutorial with Claude Code
+
+1. Choose the audience, decision, App Life Path chapter and depth. Give Claude Code those choices, your own notes, a worked example and the sources you trust. Use the five depth voices above when describing the audience.
+2. Copy [the template](../content/tutorials/_template.md) to `content/tutorials/<slug>.md`. Set the title, summary, date, estimated reading time, and taxonomy IDs. The chapter sets the broad sequence. An optional positive integer `order` places a tutorial within its chapter. Unnumbered tutorials follow numbered ones, and ties sort by slug.
+3. List required earlier lessons in `prerequisites` and the Decision Cards the lesson covers in `relatedCards`. Both fields take slugs. Start with `status: draft`. The template itself never counts as a lesson.
+4. Ask Claude Code to draft the body at the selected depth. Use Markdown headings for sections, fenced blocks for code and blockquotes for callouts. Name the practical choice, show its trade-offs and finish with a check the learner can run. Cite original sources alongside factual claims and every statistic.
+5. Run every example and the final check yourself. Confirm the links open, the decision matches its cards, and the example works at the stated depth. Run `pnpm content:check` to validate the file and references. The founder marks the lesson `reviewed` after editorial review. Update `updatedAt` on edits and increment `version` when the teaching changes.

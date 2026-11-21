@@ -5,10 +5,12 @@ import { parse } from "yaml";
 import { CardSchema, type Card } from "@/domain/content/card-schema";
 import { EpisodeSchema, MethodologySchema, type Episode, type Methodology } from "@/domain/content/lab-schema";
 import { DECISIONS, DOMAIN_IDS, CHAPTER_IDS } from "@/domain/taxonomy";
+import { checkTutorialLinks, loadTutorials } from "./tutorials";
+import type { TutorialMetadata } from "@/domain/content/tutorial-schema";
 
 /**
- * Content loaders. Content lives as YAML in /content (versioned in Git, reviewed by pull
- * request) and is validated against the schemas in src/domain/content on every load.
+ * Content loaders. Cards and Lab files use YAML. Tutorials use Markdown with frontmatter.
+ * Files in /content are versioned in Git and validated against schemas in src/domain/content.
  * Pages that use it are statically generated, so this runs at build time.
  */
 const CONTENT_DIR = path.join(process.cwd(), "content");
@@ -58,7 +60,7 @@ export async function loadEpisodes(): Promise<Episode[]> {
  * Cross-file rules that a single schema cannot check. Returns problems instead of throwing,
  * so `pnpm content:check` can list them all at once.
  */
-export async function checkContentIntegrity(): Promise<string[]> {
+export async function checkContentIntegrity(tutorials?: readonly TutorialMetadata[]): Promise<string[]> {
   const problems: string[] = [];
   const cards = await loadCards();
   const slugs = new Set(cards.map((c) => c.slug));
@@ -82,5 +84,6 @@ export async function checkContentIntegrity(): Promise<string[]> {
   for (const ep of await loadEpisodes()) {
     if (ep.methodologyVersion > methodology.version) problems.push(`Episode ${ep.slug} uses methodology v${ep.methodologyVersion}, which does not exist yet.`);
   }
+  problems.push(...checkTutorialLinks(tutorials ?? await loadTutorials(), slugs));
   return problems;
 }
