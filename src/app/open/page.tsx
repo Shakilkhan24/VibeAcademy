@@ -46,7 +46,7 @@ export default async function OpenPage() {
         </Notice>
       ) : null}
 
-      <div className="overflow-x-auto border border-line">
+      <div role="region" aria-label="Public metrics" tabIndex={0} className="overflow-x-auto border border-line">
         <table className="w-full min-w-[640px] border-collapse">
           <thead>
             <tr className="border-b border-line text-left text-small">

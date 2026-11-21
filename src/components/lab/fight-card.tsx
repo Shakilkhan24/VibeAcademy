@@ -19,7 +19,7 @@ function format(value: number, unit: string) {
 export function FightCard({ episode, methodology }: { episode: Episode; methodology: Methodology }) {
   const measured = new Map(episode.measurements.map((m) => [m.metric, m]));
   return (
-    <div className="sheet overflow-x-auto">
+    <div role="region" aria-label={`Episode ${episode.number} comparison`} tabIndex={0} className="sheet overflow-x-auto">
       <table className="w-full min-w-[560px] border-collapse text-small">
         <caption className="px-4 pt-4 pb-2 text-left">
           <span className="flex flex-wrap items-center gap-2">

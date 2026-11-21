@@ -19,7 +19,7 @@ export default async function LabPage() {
         runs both through identical tests and publishes every number with its raw output.
       </PageIntro>
 
-      <section aria-labelledby="rules" className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <section aria-labelledby="rules" className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         <div>
           <h2 id="rules" className="text-h2">The rules</h2>
           <ul className="mt-5 space-y-3 text-measure">
@@ -46,7 +46,7 @@ export default async function LabPage() {
 
       <section className="mt-20" aria-labelledby="metrics">
         <h2 id="metrics" className="text-h2">What is measured</h2>
-        <div className="mt-6 overflow-x-auto border border-line">
+        <div role="region" aria-labelledby="metrics" tabIndex={0} className="mt-6 overflow-x-auto border border-line">
           <table className="w-full min-w-[720px] border-collapse text-small">
             <thead>
               <tr className="border-b border-line text-left">
