@@ -54,7 +54,7 @@ SeniorSeat teaches vibe coders to make the engineering decisions a senior engine
 - Zod validates every external input (requests, model output, content files, env).
 - User-facing copy: sentence case, plain words, active voice, no all-caps labels, errors that say what to do next. See [docs/design-system.md](docs/design-system.md).
 - Styling: Tailwind with the tokens in `src/app/globals.css`. Reuse `src/components/ui` primitives before creating new ones.
-- Content: edit YAML in `content/`, follow [docs/content-guide.md](docs/content-guide.md), bump card `version` for substantive changes, run `pnpm content:check`.
+- Content: edit cards and Lab files as YAML and tutorials as Markdown with YAML frontmatter. Follow [docs/content-guide.md](docs/content-guide.md), bump the card or tutorial `version` for substantive changes and run `pnpm content:check`.
 - Commits: small, imperative subject lines ("Add Blueprint decision table").
 
 ## When you are unsure

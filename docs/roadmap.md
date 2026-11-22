@@ -15,11 +15,11 @@ Status key: **Done**, **Next**, **Planned**, **Deferred**, **Awaiting founder** 
 - **Outcome:** a visitor can X-ray a prompt, understand the gaps, get an upgraded prompt, share a score without exposing the prompt, read Decision Cards and join the waitlist.
 - **Verified by:** `pnpm verify` and `pnpm smoke` (see GENERATION_REPORT.md).
 
-## M1: Tutorials website, ready for the first public visitors (Next)
+## M1: Tutorials website, ready for the first public visitors (Awaiting founder)
 
 - **Outcome:** a visitor can follow a learning path of tutorials ordered by the seven App Life Path chapters, read each tutorial at the depth that suits them, track their own progress in the browser, use the rule-based X-Ray and join the waitlist, on a public URL in the founder's chosen design.
 - **Why it matters:** tutorials are what learners come back for, and they cost nothing to serve. Phase 0 validates demand with real visitors before any paid AI or accounts.
-- **Needs first:** the founder's design brief ([design-brief.md](design-brief.md), marked "Ready for the agent"); the founder's list of the first tutorials; a hosting account and a Postgres database for the deploy step.
+- **Implementation status, 2026-11-22.** Steps 1–6 are implemented on `main`. The founder retained the blueprint design and approved an 80% X-Ray agreement target. The three Dream tutorials and five Decision Cards are drafts. The founder chose GitHub delivery for this pass. Public hosting, production Postgres, monitoring and checks against the public URL are pending. See the [verification record](status.md).
 - **Scope, in order:**
   1. **Design pass.** Apply [design-brief.md](design-brief.md) to the tokens in `src/app/globals.css`, the UI primitives and the existing pages. Update [design-system.md](design-system.md). If the brief replaces the blueprint look, supersede [ADR 0009](decisions/0009-design-language.md) with a new ADR. Check every page in a browser on desktop and mobile.
   2. **Tutorial content type.** Tutorials live in `content/tutorials/` as Markdown or MDX with frontmatter validated by Zod in `src/domain/content/`. Suggested fields:
@@ -38,7 +38,7 @@ Status key: **Done**, **Next**, **Planned**, **Deferred**, **Awaiting founder** 
      - A tutorial template in `content/tutorials/_template.md`.
      - A section in [content-guide.md](content-guide.md) on writing tutorials with Claude Code: the depth voices, how to cite sources and how to review.
      - Optionally, a Claude Code slash command in `.claude/commands/` that drafts a tutorial from the template.
-  6. **Rule-based X-Ray quality (no API calls).** Write 20–30 hand-labelled prompts in `tests/fixtures/prompts/` with the expected status of each critical decision. Add a test that measures agreement, and improve the patterns in `src/server/ai/providers/rules.ts` until the founder's quality bar is met (open decision 3). Bump `TAXONOMY_VERSION` when the criteria change.
+  6. **Rule-based X-Ray quality (no API calls).** Write 20–30 hand-labelled prompts in `tests/fixtures/prompts/` with the expected status of each critical decision. Add a test that measures agreement, and improve the patterns in `src/server/ai/providers/rules.ts` until the approved 80% agreement target is met. Bump `TAXONOMY_VERSION` when the criteria change.
   7. **Deploy.** Set up hosting and Postgres, run `pnpm db:migrate` in the deploy pipeline, set production env vars (`AI_PROVIDER=rules`) and a custom domain. Add error tracking (no request bodies) and an external uptime check, and show uptime on `/open`.
   8. **Card review.** The founder reviews the five Decision Cards and flips `status` to `reviewed`.
 - **Success check:**

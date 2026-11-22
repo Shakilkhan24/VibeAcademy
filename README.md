@@ -4,7 +4,9 @@ Vibe like a beginner. Decide like a senior.
 
 SeniorSeat shows vibe coders which engineering decisions their prompts leave to the AI, teaches each decision at the right depth and moment, and proves that better decisions produce better software.
 
-This repository is the Phase 0 foundation for a tutorials-first website: a working Prompt X-Ray (rule-based, no API key needed), five Decision Cards, the Twin Builds Lab foundation, a waitlist and a public transparency page. The next milestone adds the tutorial section in the founder's design ([docs/roadmap.md](docs/roadmap.md)).
+Open `/learn` to follow the seven-chapter learning path. The first chapter, Dream, has three draft tutorials in increasing difficulty. They cover choosing one person and one job, sketching the first workflow, and writing a build prompt with acceptance checks. Readers can mark lessons complete in their browser. Use the tutorial template to add a lesson. [Authoring guide](docs/content-guide.md)
+
+The Prompt X-Ray uses server-side rules and needs no API key. It connects prompt decisions to five draft Decision Cards. The app also includes the Twin Builds Lab foundation, a waitlist and a transparency page. This milestone is available as verified source on GitHub. Editorial review and public deployment are pending. [Milestone status](docs/status.md)
 
 ```bash
 pnpm install

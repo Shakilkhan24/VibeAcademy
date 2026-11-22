@@ -4,7 +4,7 @@ Last updated on 2026-11-22 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
-Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, content check, production build), and `pnpm smoke` passed every check against a production build started with no AI settings. A browser check of the X-Ray result showed the "Rule-based check" label, with no console errors.
+On 2026-11-22, `pnpm verify` passed type checking, lint, all 103 tests, content validation and the production build. All 37 HTTP smoke checks passed against that build using embedded Postgres and the rule-based provider. Chromium checks at 390 px and 1280 px exercised the learning journey, clipboard, saved progress and signup metrics. Editorial review and public deployment are pending. The founder chose GitHub delivery for this pass.
 
 | Area | What exists | Verified by |
 | --- | --- | --- |

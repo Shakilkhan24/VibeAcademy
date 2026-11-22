@@ -7,8 +7,8 @@
 | Domain unit tests | `tests/domain/` | Taxonomy integrity, scoring rules and caps, prompt upgrade, AGENTS.md rendering, classification normalisation | Milliseconds |
 | Server integration tests | `tests/server/` | Gateway (cache, budget, retry, failures, provider isolation), Anthropic request shape (mocked HTTP), X-Ray service (privacy, limits, kill switch, sharing, deletion), waitlist, config rules, `/open` metrics | Real Postgres via PGlite in memory |
 | Route tests | `tests/server/api-routes.test.ts` | Real route handlers: status codes, origin checks, JSON parsing, the full share/delete journey | PGlite |
-| Content tests | `tests/content/` | All YAML valid; cross-links intact; Lab honesty rules | File system |
-| Smoke test | `scripts/smoke.mjs` | The deployed journey over HTTP: pages, X-Ray, sharing, share image, unshare, delete, waitlist, headers | Against a running server |
+| Content tests | `tests/content/` | Card and Lab YAML, tutorial frontmatter, safe Markdown and cross-links | File system |
+| Smoke test | `scripts/smoke.mjs` | The deployed journey over HTTP: the learning path, X-Ray, sharing, share images, unshare, delete, waitlist, signup reporting and headers | Against a running server |
 
 ## Commands
 

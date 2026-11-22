@@ -9,7 +9,7 @@ You are continuing **SeniorSeat**, a platform that teaches vibe coders to make t
 
 ## 1. Where the project stands
 
-**Phase 0 (validate the concept) is implemented and verified.** Exact state, feature by feature: [docs/status.md](docs/status.md).
+**The Phase 0 foundation and M1 tutorial implementation are verified on GitHub.** See the [current status](docs/status.md) for checks and outstanding launch work.
 
 Working now:
 
@@ -17,9 +17,11 @@ Working now:
 - One controlled analysis pathway (`src/server/ai/gateway.ts`). The rule-based check is the default engine; an Anthropic provider with caching, a daily budget and a usage ledger is built but switched off as a deferred placeholder.
 - Deterministic, versioned scoring of 36 decisions across 12 domains (`src/domain/xray/`).
 - Five Decision Cards (drafts awaiting your review) with the Depth Dial, validated by schema.
-- 77 unit and integration tests, a 27-check smoke test, lint and a production build, all passing (details in [GENERATION_REPORT.md](GENERATION_REPORT.md)).
+- A seven-chapter learning path at `/learn`, three draft Dream lessons with related cards and share images, browser-local completion, and a Markdown authoring template.
+- Offline critical-decision evaluation against 24 labelled prompts. The CI threshold is 80%.
+- Type checks, lint, unit and integration tests, content validation, a production build and HTTP smoke checks. See the [verification record](docs/status.md).
 
-Not done yet: the tutorial section (M1), the founder's design pass, a deployment, and measured Lab results. Phase 1 (accounts, Blueprint) is designed but not built. Paid AI analysis is deferred and has never been run against the real API.
+The three tutorials and five cards await editorial review. Hosting, production Postgres and monitoring are deferred at the founder's request. The Lab awaits measured results, accounts and Blueprint are planned for Phase 1, and paid AI remains deferred.
 
 ## 2. Run it
 
@@ -46,10 +48,10 @@ Never report something as working because the code exists. Run it.
 ```
 src/domain/     Pure logic: taxonomy, scoring, prompt upgrade, Build Pack, content schemas. No I/O.
 src/server/     Server only: env config, database, AI gateway and providers, services, security.
-src/content/    Loaders for /content YAML (validated on load).
-src/components/ UI: design system (ui/), layout, X-Ray, cards, lab, waitlist. Never imports server code.
+src/content/    Validated loaders for cards, Lab YAML and Markdown tutorials.
+src/components/ UI: design system (ui/), layout, learning path, X-Ray, cards, lab, waitlist. Never imports server code.
 src/app/        Routes and API handlers: the only place server and UI meet.
-content/        Decision Cards and Lab content as YAML, versioned and reviewed in Git.
+content/        Decision Cards and Lab content as YAML, tutorials as Markdown with YAML frontmatter.
 drizzle/        SQL migrations generated from src/server/db/schema.ts.
 tests/          Vitest: domain, server (against real embedded Postgres), content, API routes.
 lab/            Twin Builds test harness (k6, ZAP, Lighthouse, secret scan). Not yet run.
@@ -69,7 +71,7 @@ ESLint enforces these boundaries. Full picture: [docs/architecture.md](docs/arch
 | Single AI gateway; providers and features are separate seams | [ADR 0004](docs/decisions/0004-ai-gateway.md) |
 | Raw prompts are never stored, logged or returned | [ADR 0005](docs/decisions/0005-prompt-privacy.md) |
 | Rate limits and analytics in Postgres, no extra infrastructure | [ADR 0006](docs/decisions/0006-rate-limits.md), [ADR 0007](docs/decisions/0007-analytics.md) |
-| Content as YAML in Git, validated by Zod, versioned per card | [ADR 0008](docs/decisions/0008-content-as-yaml.md) |
+| Validated YAML for cards and Lab content, Markdown with frontmatter for tutorials | [ADR 0008](docs/decisions/0008-content-as-yaml.md), [ADR 0012](docs/decisions/0012-tutorial-markdown.md) |
 | Cyanotype blueprint design language (until the founder's design brief replaces it) | [ADR 0009](docs/decisions/0009-design-language.md), [docs/design-system.md](docs/design-system.md), [docs/design-brief.md](docs/design-brief.md) |
 | Rule-based X-Ray by default; paid AI deferred | [ADR 0011](docs/decisions/0011-rules-first-ai-deferred.md) |
 
@@ -77,17 +79,14 @@ All ADRs: [docs/decisions/README.md](docs/decisions/README.md).
 
 ## 6. What to do next
 
-**Next milestone: M1, "Tutorials website, ready for the first public visitors".** The full scope is in [docs/roadmap.md](docs/roadmap.md). In short:
+**M1 is awaiting editorial review and public launch.** The founder approved the blueprint design, an easy-to-harder Dream curriculum and an 80% X-Ray agreement target. The implementation and verification records are on GitHub.
 
-1. Apply the founder's design direction from [docs/design-brief.md](docs/design-brief.md). Wait until the brief is marked "Ready for the agent", and propose a plan before you change anything.
-2. Add tutorials as a content type (Markdown or MDX with validated frontmatter), with a `/learn` path ordered by the seven chapters and a tutorial page.
-3. Add progress tracking in the browser, plus a template and guide so the founder can write tutorials with Claude Code.
-4. Improve the rule-based X-Ray with hand-labelled prompt fixtures (no API calls).
-5. Deploy with a real Postgres database, error tracking and uptime monitoring, and get the five draft cards reviewed.
+1. Review the [three Dream tutorials](content/tutorials/) and the [five Decision Cards](content/cards/). Set each item to reviewed after its review is complete.
+2. When the founder resumes public launch, confirm the domain, hosting and Postgres providers, privacy text and deletion contact. Then run the production migrations, configure monitoring and verify the public URL. See the [roadmap](docs/roadmap.md) and [open decisions](docs/open-decisions.md).
 
 **Handing this to a coding agent:** paste-ready prompts for each kind of session (orientation, design pass, the next roadmap step, drafting a tutorial, producing a Lab comparison) are in [docs/agent-prompts.md](docs/agent-prompts.md).
 
-Decisions that need the founder (design direction, first tutorials, brand, vendors, prices, and whether to ever switch on paid AI) are listed in [docs/open-decisions.md](docs/open-decisions.md). Do not silently decide them.
+Decisions that need the founder (brand, vendors, prices, and whether to switch on paid AI) are listed in [docs/open-decisions.md](docs/open-decisions.md). Do not silently decide them.
 
 ## 7. Rules that must never be broken
 
