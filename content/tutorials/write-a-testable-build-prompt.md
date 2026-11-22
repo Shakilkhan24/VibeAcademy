@@ -22,7 +22,7 @@ Write the starting situation, the action and the visible outcome. The words *Giv
 
 ## Work through Saturday
 
-Put the two slips from the previous lesson on a sheet labelled Saturday. Under 10 am, write “Jo · two rye loaves.” Under 11 am, write “Lee · one oat loaf.” Now swap the times on the slips. Both names should move. That gives you a rule the builder can use for the next order too.
+Put the two slips from the previous lesson on a sheet labelled Saturday. Under 10 am, write “Jo · two rye loaves.” Under 11 am, write “Lee · one oat loaf.” If Lee changed the pickup to 10 am, which group would the order move to? Keep the original times for the first check below.
 
 ## Describe an empty day
 

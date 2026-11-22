@@ -4,7 +4,7 @@ SeniorSeat teaches people who build software with AI ("vibe coders") to make the
 
 ## The problem
 
-A vague prompt does not make the AI do less work. It makes the AI decide for you, silently: where data lives, who may see it, where keys go, what happens when things break, what it costs. Vibe-coded apps fail at these silent decisions far more often than at the code itself. Public research supports this: a 2025 scan by Escape of 5,600 public vibe-coded apps found more than 2,000 high-impact vulnerabilities, 400+ exposed secrets and 175 cases of exposed personal data, largely from missing access rules and keys shipped in front-end code.
+A vague prompt leaves the builder to decide where data lives, who may see it, where keys go, what happens when things break and what it costs. In 2025, Escape reported finding more than 2,000 vulnerabilities and over 400 exposed secrets across the more than 5,600 publicly accessible apps it examined. Decisions about access and credentials give learners two concrete things to check in their own apps. [Escape's account of its study](https://escape.tech/blog/methodology-how-we-discovered-vulnerabilities-apps-built-with-vibe-coding/)
 
 ## Philosophy (product-defining)
 

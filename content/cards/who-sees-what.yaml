@@ -1,6 +1,6 @@
 slug: who-sees-what
-version: 1
-updated: "2026-11-18"
+version: 2
+updated: "2026-11-22"
 status: draft
 title: Who can see whose data?
 domain: identity-access
@@ -11,34 +11,34 @@ decisionIds: [ia-row-access, ia-login, ss-privacy]
 question: Can one customer see another customer's orders, messages or profile?
 
 moment: >-
-  The moment you add user accounts. From then on your app holds other people's data, and each
-  person must see only their own.
+  When you add accounts or publish your first shared list. Decide who can read each kind of
+  record, who can change it and which actions require sign-in. Name the sign-in method, such as
+  an email link, and the personal fields you actually need.
 
 ifSilent: >-
-  Many AI-built apps talk to the database straight from the browser using a public key. If access
-  rules are missing, anyone who opens the browser's developer tools can read every row. A 2025
-  scan of 5,600 public vibe-coded apps found more than 2,000 high-impact vulnerabilities, many
-  caused by missing or misconfigured database access rules.
+  An order page may show only the signed-in customer's purchases even though the data service
+  allows a wider read. The rule that makes an order private has to hold where the data is served.
+  On a public directory, the same decision separates a published listing from its owner's private details.
 
 options:
   - key: own-rows-only
     label: Each user sees only their own data
     recommended: true
     summary: >-
-      Every table records an owner, and the database itself refuses to read or write rows that
-      are not yours. Staff get a separate admin role.
+      Each private order records its owner. Database policies limit what signed-in customers can
+      read or change. Give staff a separate role if their work requires wider access.
     pros:
-      - Enforced by the database, so a bug in a page cannot leak data
+      - Ordinary customer queries share the same database rules across pages
       - Works for apps that query the database from the browser
     cons:
       - Every new table needs its own policy
       - Policies need tests, or a typo silently blocks or opens access
-    cost: No extra money.
-    effort: "Medium: one prompt per table, plus a test"
+    cost: Included in Postgres. Budget time to write and maintain the policies.
+    effort: Medium
     promptLine: >-
-      Enable row-level security on every table. A user can read and write only rows where user_id
-      equals their own id; admins are a separate role checked on the server. Add an automated test
-      proving user A cannot read or change user B's data.
+      Enable row-level security on exposed private tables. Limit reads and permitted writes to the
+      signed-in owner, including the ownership of new and updated rows. Test with two ordinary
+      accounts and a signed-out visitor. Give staff only the access their tasks require.
 
   - key: server-checks
     label: All data goes through your own server
@@ -50,12 +50,12 @@ options:
     cons:
       - More code to write and maintain
       - Every endpoint must remember to check ownership
-    cost: No extra money; slightly more hosting.
+    cost: Include API requests and server time in your hosting estimate.
     effort: Medium
     promptLine: >-
-      The browser never queries the database directly. Every API endpoint loads the signed-in user on
-      the server and filters by their id, returning 404 for records they do not own. Add tests for each
-      endpoint using two different users.
+      Route private orders through our API. Take the owner of a new order from the signed-in
+      session. Check ownership on the server before reading, updating or deleting an order.
+      Test the allowed and denied actions with two ordinary accounts.
 
   - key: public-by-design
     label: Public on purpose
@@ -65,8 +65,8 @@ options:
       - Simple when nothing is private
     cons:
       - Easy to add a private field later and forget it is public
-      - Never suitable for orders, messages or contact details
-    cost: No extra money.
+      - Customer orders and private contact details need separate protection
+    cost: Public reads count toward your database or hosting usage.
     effort: Low
     promptLine: >-
       Records in [table] are public to read. Only the author can create, edit or delete their own
@@ -75,11 +75,14 @@ options:
 
 proveIt:
   steps:
-    - Create two test accounts, A and B.
-    - As B, create a private record such as an order, and copy its link or id.
-    - Log in as A and open B's link. Then repeat the app's data request from the browser's developer tools using B's id.
+    - In a test project, list the fields each person may see and the changes they may make. Use two ordinary test accounts and fictional records.
+    - For private orders, run your policy or API tests. The owner can read the order and make an allowed change. The other customer and the signed-out visitor have neither permission.
+    - For a directory, check that a signed-out visitor can read the published fields, private details stay hidden, and only the signed-in author can edit their listing.
+    - Follow your app's deletion process for one test customer. Check that their personal fields are removed as promised and the other account keeps its records.
   passWhen: >-
-    Every attempt by A to read or change B's record fails, both in the page and in the raw request.
+    The tests match every allowed and denied action in your list, including a successful owner
+    change. For a public directory they also confirm what a visitor can read without signing in.
+    The deletion check affects only the test customer's data.
 
 depths:
   story: >-
@@ -87,18 +90,19 @@ depths:
     decides who comes in. Row access is the drawer lock that lets each customer take out only their
     own slips. A front door without drawer locks still lets every customer read everyone's orders.
   practical: >-
-    Logging in is not the same as access control. Tell the AI in plain words that each user must
-    only see and change their own data, and ask for a test that proves it with two accounts. Then
-    run the two-account check yourself before you launch.
+    Write one sentence per kind of record. For example, customers can see their own orders,
+    everyone can read the shop's published menu, and only the shop owner can edit that menu.
+    Give those sentences to the person building and testing the app.
   technical: >-
-    Authentication answers "who are you?"; authorisation answers "what may you do?". In apps where
-    the browser holds a public database key (for example the Supabase anon key), the database must
-    enforce authorisation itself with row-level security policies such as `user_id = auth.uid()`.
+    Authentication establishes identity. Authorisation limits what that identity may do. With
+    Supabase's Data API, grants control table operations and row-level security policies restrict
+    the rows an ordinary client may access. A publishable key identifies the app, and the user's
+    session supplies the signed-in identity.
   engineer: >-
-    Enable row-level security on every table and deny by default. Write separate policies for select,
-    insert, update and delete, and test them with two real user sessions, not the service key, which
-    bypasses them. Keep service keys on the server. In custom endpoints, watch for insecure direct
-    object references: loading a record by id without checking who owns it.
+    Grant each role only the operations it needs. Test reads, inserts, updates and deletes under
+    the same roles the app uses. A Supabase secret key can bypass row-level security when used
+    with its service role. Keep that credential on the server and check authorisation before
+    performing privileged operations.
   senior: >-
     Treat tenant isolation as an invariant, not a feature: enforce it at the lowest layer you control
     and test it in CI so nobody can forget it. Choose the isolation model deliberately (rows, schemas
@@ -108,5 +112,7 @@ depths:
 related: [where-secrets-live, where-data-lives]
 
 sources:
-  - title: "Escape: how we discovered over 2,000 vulnerabilities in apps built with vibe coding platforms (Oct 2025)"
-    url: https://escape.tech/blog/methodology-how-we-discovered-vulnerabilities-apps-built-with-vibe-coding/
+  - title: Supabase row-level security
+    url: https://supabase.com/docs/guides/database/postgres/row-level-security
+  - title: Supabase API keys and their privileges
+    url: https://supabase.com/docs/guides/api/api-keys

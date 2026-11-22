@@ -8,7 +8,9 @@ The Dream drafts and the scope card received an editorial pass on 2026-11-22. Th
 
 The storage card now gives separate checks for a database, a manual inbox or sheet, and a static page. The recovery card checks records on both sides of the chosen recovery point. A local drill restored an embedded Postgres snapshot to a separate instance and verified both the recovered and source records. Hosted point-in-time recovery still requires a provider-specific drill.
 
-On 2026-11-22, `pnpm verify` passed type checking, lint, all 103 tests, content validation and the production build. All 37 HTTP smoke checks passed against that build using embedded Postgres and the rule-based provider. Chromium checks at 390 px and 1280 px exercised the learning journey, clipboard, saved progress and signup metrics. Editorial review and public deployment are pending. The founder chose GitHub delivery for this pass.
+The access card now tests both a private order and a deliberately public listing. The credentials card checks server settings, a vault or provider-designated browser keys according to the option selected. All 15 distinct source URLs in the cards, tutorials and product context opened. The three tutorials await founder approval and the five cards await a second engineer's review and founder sign-off.
+
+On 2026-11-22, `pnpm verify` passed type checking, lint, all 103 tests, content validation and the production build. All 37 HTTP smoke checks passed against that build using embedded Postgres and the rule-based provider. Chromium checks at 390 px and 1280 px exercised all eight draft pages, the combined tutorial prompt, all 15 card prompt lines and all five depths per card. Earlier checks covered saved progress and signup metrics. The founder chose GitHub delivery for this pass and deferred public deployment.
 
 | Area | What exists | Verified by |
 | --- | --- | --- |
