@@ -18,7 +18,7 @@ Engineering record of exactly what SeniorSeat stores. Keep it in sync with `src/
 | `ai_usage` | None (feature, model, tokens, cost, outcome) | Indefinite | n/a |
 | `rate_limits` | HMAC of IP in the key | Pruned after about 2 days | Automatic |
 | `waitlist_entries` | Email, chosen tool, experience, source, consent time | Until launch email + a reasonable period (founder to decide) | On request (manual until accounts exist) |
-| `events` | None (event name, coarse properties) | Indefinite | n/a |
+| `events` | Event name and coarse properties. A new waitlist signup records whether it used the X-Ray link. | Indefinite | n/a |
 
 ## Processors
 

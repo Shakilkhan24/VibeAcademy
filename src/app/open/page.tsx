@@ -29,6 +29,8 @@ export default async function OpenPage() {
     { label: "Average cost of a paid AI call", value: m.avgCostPerPaidCallUsd === null ? "No paid calls yet" : usd(m.avgCostPerPaidCallUsd), how: "This month's AI spend divided by calls that cost money." },
     { label: "Daily AI spending cap", value: usd(m.dailyBudgetUsd), how: "Analysis pauses until 00:00 UTC once this is reached." },
     { label: "Waitlist", value: m.waitlistCount.toLocaleString("en-US"), how: "People who asked to be emailed at launch." },
+    { label: "Waitlist sign-ups per day", value: m.waitlistSignupsPerDay.toLocaleString("en-US", { maximumFractionDigits: 2 }), how: "New sign-up events in the last 30 days divided by 30. A repeat submission from the same email counts once." },
+    { label: "Waitlist sign-ups per 100 X-Rays", value: m.xraySignupsPerHundredRuns?.toLocaleString("en-US", { maximumFractionDigits: 1 }) ?? "Unavailable", how: "Sign-ups from the X-Ray result link per 100 completed checks in the same 30 days. This needs at least one check and source information for every sign-up." },
   ];
 
   return (

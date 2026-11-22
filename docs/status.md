@@ -1,6 +1,6 @@
 # Project status
 
-Last updated on 2026-11-21 during M1 tutorial development. Update this file in the same change as the work it describes.
+Last updated on 2026-11-22 during M1 verification. Update this file in the same change as the work it describes.
 
 ## Implemented and verified
 
@@ -23,7 +23,7 @@ Re-verified on 2026-11-18 after ADR 0011: `pnpm verify` passed (77 tests, conten
 | Security | Security headers, same-origin checks, JSON size limits, Zod validation, rate limits, production config guards | Route tests, smoke test |
 | Decision Cards | Schema with the 8 parts, 5 cards (all `draft`), Depth Dial (keyboard accessible, remembered), App Life Path page | Content tests, `pnpm content:check`, browser run |
 | Twin Builds Lab | Methodology (11 metrics), episode schema that forbids unpublished numbers, episode 1 planned, fight card that shows "Not measured yet" | Content tests |
-| `/open` | Live counts, cache hit rate, AI spend, average cost per paid call, budget cap, waitlist size | Integration test, smoke test |
+| `/open` | Live counts, cache hit rate, AI spend, average cost per paid call, budget cap and waitlist size. First-party events give the rolling 30-day signup pace and signups from the X-Ray link per 100 completed checks. | Integration tests cover duplicates, missing denominators, older unattributed events and the reporting window. The production smoke test reads the metrics on `/open`. |
 | Waitlist | Email, tool, experience, consent; no enumeration; rate-limited | Integration tests, smoke test |
 | Tooling | TypeScript strict, ESLint with boundary rules, Vitest, content check, migrations, smoke script, CI workflow | Local verification and the GitHub Actions verify job passed. The secret scan uses a finding-specific exception for the historical smoke-test fixture. |
 

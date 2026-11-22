@@ -1,7 +1,7 @@
 import "server-only";
-import { and, count, eq, gte, isNotNull, min, sql } from "drizzle-orm";
+import { and, between, count, eq, gte, inArray, isNotNull, min, sql } from "drizzle-orm";
 import type { AppContext } from "../context";
-import { aiUsage, waitlistEntries, xrayRuns } from "../db/schema";
+import { aiUsage, events, waitlistEntries, xrayRuns } from "../db/schema";
 
 /**
  * Numbers for the public /open page. Everything here is computed live from the database;
@@ -21,6 +21,8 @@ export interface OpenMetrics {
   avgCostPerPaidCallUsd: number | null;
   dailyBudgetUsd: number;
   waitlistCount: number;
+  waitlistSignupsPerDay: number;
+  xraySignupsPerHundredRuns: number | null;
 }
 
 export async function getOpenMetrics(ctx: AppContext): Promise<OpenMetrics> {
@@ -48,6 +50,12 @@ export async function getOpenMetrics(ctx: AppContext): Promise<OpenMetrics> {
     .from(aiUsage)
     .where(and(gte(aiUsage.createdAt, monthStart)));
   const [waitlist] = await db.select({ n: count() }).from(waitlistEntries);
+  const [funnel] = await db.select({
+    checks: sql`count(*) filter (where ${events.name} = 'xray_completed')`.mapWith(Number),
+    signups: sql`count(*) filter (where ${events.name} = 'waitlist_joined')`.mapWith(Number),
+    fromXray: sql`count(*) filter (where ${events.name} = 'waitlist_joined' and ${events.props}->>'fromXray' = 'true')`.mapWith(Number),
+    unattributed: sql`count(*) filter (where ${events.name} = 'waitlist_joined' and ${events.props}->>'fromXray' is null)`.mapWith(Number),
+  }).from(events).where(and(between(events.createdAt, since30, now), inArray(events.name, ["xray_completed", "waitlist_joined"])));
 
   const requests = Number(usage?.requests ?? 0);
   const hits = Number(usage?.hits ?? 0);
@@ -69,5 +77,7 @@ export async function getOpenMetrics(ctx: AppContext): Promise<OpenMetrics> {
     avgCostPerPaidCallUsd: paidCalls > 0 ? micro / paidCalls / 1_000_000 : null,
     dailyBudgetUsd: ctx.config.ai.dailyBudgetMicroUsd / 1_000_000,
     waitlistCount: Number(waitlist?.n ?? 0),
+    waitlistSignupsPerDay: (funnel?.signups ?? 0) / 30,
+    xraySignupsPerHundredRuns: funnel && funnel.checks > 0 && funnel.unattributed === 0 ? 100 * funnel.fromXray / funnel.checks : null,
   };
 }

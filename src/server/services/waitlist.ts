@@ -40,6 +40,12 @@ export async function joinWaitlist(ctx: AppContext, input: { body: unknown; clie
     .onConflictDoNothing({ target: waitlistEntries.email })
     .returning({ id: waitlistEntries.id });
 
-  if (inserted.length > 0) await recordEvent(ctx.db, "waitlist_joined", { tool: tool ?? null, experience: experience ?? null });
+  if (inserted.length > 0) {
+    await recordEvent(ctx.db, "waitlist_joined", {
+      tool: tool ?? null,
+      experience: experience ?? null,
+      fromXray: source === "xray",
+    });
+  }
   return { ok: true };
 }

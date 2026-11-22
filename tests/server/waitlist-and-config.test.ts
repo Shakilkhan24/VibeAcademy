@@ -10,7 +10,7 @@ import { SHOP_PROMPT } from "../support/fixtures";
 describe("joinWaitlist", () => {
   it("stores a normalised email once and answers identically for duplicates", async () => {
     const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
-    const body = { email: "  Ada@Example.COM ", tool: "lovable", experience: "no-code", consent: true };
+    const body = { email: "  Ada@Example.COM ", tool: "lovable", experience: "no-code", source: "private-campaign-tag", consent: true };
     expect(await joinWaitlist(ctx, { body, clientIp: "1.1.1.1" })).toEqual({ ok: true });
     expect(await joinWaitlist(ctx, { body, clientIp: "1.1.1.1" })).toEqual({ ok: true });
     const rows = await ctx.db.select().from(waitlistEntries);
@@ -18,6 +18,8 @@ describe("joinWaitlist", () => {
     expect(rows[0]?.email).toBe("ada@example.com");
     const evs = await ctx.db.select().from(events);
     expect(evs).toHaveLength(1);
+    expect(evs[0]?.props).toMatchObject({ fromXray: false });
+    expect(JSON.stringify(evs)).not.toContain("private-campaign-tag");
     expect(JSON.stringify(evs)).not.toContain("ada@");
   });
 
@@ -54,6 +56,28 @@ describe("loadConfig", () => {
 });
 
 describe("getOpenMetrics", () => {
+  it("computes signup rates from recent events and counts an email only once", async () => {
+    const now = new Date(Date.now() + 60_000);
+    const ctx = await createTestContext({ now: () => now });
+    const body = { email: "learner@example.com", source: "xray", consent: true };
+    await joinWaitlist(ctx, { body, clientIp: "1" });
+    await joinWaitlist(ctx, { body, clientIp: "1" });
+    await joinWaitlist(ctx, { body: { ...body, email: "other@example.com", source: "home" }, clientIp: "2" });
+    expect((await getOpenMetrics(ctx)).xraySignupsPerHundredRuns).toBeNull();
+    await ctx.db.insert(events).values([
+      { id: "check-1", name: "xray_completed" }, { id: "check-2", name: "xray_completed" },
+      { id: "old-signup", name: "waitlist_joined", createdAt: new Date(now.getTime() - 31 * 86_400_000) },
+      { id: "failed-check", name: "xray_failed" },
+    ]);
+    const metrics = await getOpenMetrics(ctx);
+    expect(metrics.waitlistSignupsPerDay).toBeCloseTo(2 / 30);
+    expect(metrics.xraySignupsPerHundredRuns).toBe(50);
+    await ctx.db.insert(events).values({ id: "unattributed", name: "waitlist_joined" });
+    const legacy = await getOpenMetrics(ctx);
+    expect(legacy.waitlistSignupsPerDay).toBeCloseTo(3 / 30);
+    expect(legacy.xraySignupsPerHundredRuns).toBeNull();
+  });
+
   it("reports live counts and spend from the ledger", async () => {
     const { provider } = fakeAnthropic();
     const ctx = await createTestContext({ provider });

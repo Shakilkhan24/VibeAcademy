@@ -100,6 +100,7 @@ check("waitlist sign-up", wl.res.status === 201, `status ${wl.res.status}`);
 
 const open = await get("/open");
 check("/open counts the X-Ray run", /Prompt X-Rays run/.test(open.text));
+check("/open reports event-based signup rates", open.text.includes("Waitlist sign-ups per day") && open.text.includes("Waitlist sign-ups per 100 X-Rays"));
 
 console.info(failures === 0 ? "\nAll smoke checks passed." : `\n${failures} smoke check(s) failed.`);
 process.exit(failures === 0 ? 0 : 1);
