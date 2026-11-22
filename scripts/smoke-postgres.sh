@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Exercise the production build against a fresh database owned by this run.
+set -euo pipefail
+
+export NODE_ENV=production AI_PROVIDER=rules NEXT_TELEMETRY_DISABLED=1
+export HASH_SECRET POSTGRES_PASSWORD DATABASE_URL BASE_URL NEXT_PUBLIC_SITE_URL
+HASH_SECRET=$(openssl rand -hex 32)
+POSTGRES_PASSWORD=$(openssl rand -hex 32)
+container=$(docker run --detach --rm --publish 127.0.0.1::5432 \
+  --env POSTGRES_PASSWORD --env POSTGRES_DB=seniorseat_ci postgres:17-alpine)
+server_pid=
+cleanup() {
+  if [[ -n "$server_pid" ]]; then
+    kill "$server_pid" 2>/dev/null || true
+    wait "$server_pid" 2>/dev/null || true
+  fi
+  docker rm --force --volumes "$container" >/dev/null
+}
+trap cleanup EXIT
+
+db_address=$(docker port "$container" 5432/tcp)
+DATABASE_URL="postgresql://postgres:$POSTGRES_PASSWORD@$db_address/seniorseat_ci"
+unset POSTGRES_PASSWORD
+for _ in {1..30}; do
+  if docker exec "$container" pg_isready -q -h 127.0.0.1 -U postgres -d seniorseat_ci; then break; fi
+  sleep 1
+done
+docker exec "$container" pg_isready -h 127.0.0.1 -U postgres -d seniorseat_ci
+
+# Ask the OS for a free loopback port so local or concurrent runs can coexist.
+port=$(node -e '
+  const server = require("node:net").createServer();
+  server.listen(0, "127.0.0.1", () => {
+    console.log(server.address().port);
+    server.close();
+  });
+')
+BASE_URL="http://127.0.0.1:$port"
+NEXT_PUBLIC_SITE_URL="$BASE_URL"
+node_modules/.bin/next start -H 127.0.0.1 -p "$port" &
+server_pid=$!
+for _ in {1..30}; do
+  kill -0 "$server_pid"
+  if status=$(curl --silent --max-time 3 --output /dev/null --write-out '%{http_code}' "$BASE_URL/api/health"); then break; fi
+  sleep 1
+done
+if [[ "$status" != 503 ]]; then
+  echo "Expected HTTP 503 before migration, received $status." >&2
+  exit 1
+fi
+
+pnpm db:migrate
+pnpm smoke
+signup_ids() {
+  docker exec "$container" psql -XAt -v ON_ERROR_STOP=1 -U postgres -d seniorseat_ci \
+    -c 'select id from waitlist_entries order by id'
+}
+before=$(signup_ids)
+pnpm db:migrate
+after=$(signup_ids)
+if [[ -z "$before" || "$before" != "$after" ]]; then
+  echo "Expected the smoke-test signup to survive a repeated migration." >&2
+  exit 1
+fi
+echo "PostgreSQL readiness, migrations and signup persistence passed."

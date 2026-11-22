@@ -37,10 +37,16 @@ jobs:
           NEXT_TELEMETRY_DISABLED: "1"
         run: |
           # Throwaway value for this run only, so no secret-like literal lives in the repo.
-          export HASH_SECRET="$(openssl rand -hex 32)"
-          pnpm start -p 3000 &
-          for i in $(seq 1 30); do curl -sf http://localhost:3000/api/health && break; sleep 1; done
-          BASE_URL=http://localhost:3000 pnpm smoke
+          HASH_SECRET=$(openssl rand -hex 32)
+          export HASH_SECRET
+          node_modules/.bin/next start -H 127.0.0.1 -p 3000 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --show-error --retry 30 --retry-delay 1 --retry-connrefused \
+            --output /dev/null http://127.0.0.1:3000/api/health
+          BASE_URL=http://127.0.0.1:3000 pnpm smoke
+      - name: Verify migrations and the production journey on PostgreSQL 17
+        run: pnpm smoke:postgres
 
   secrets:
     runs-on: ubuntu-latest

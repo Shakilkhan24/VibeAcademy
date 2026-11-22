@@ -17,6 +17,12 @@ pnpm test            # all Vitest suites
 pnpm verify          # typecheck + lint + tests + content check + build
 ```
 
+With Docker running, use `pnpm build && pnpm smoke:postgres` to test the production driver.
+The command starts a disposable PostgreSQL 17 database on loopback. It checks for HTTP 503
+before the first migration, runs the HTTP journey after migration, then reapplies the migrations
+and checks that the same signup is still present. It removes the test server and database on exit.
+GitHub Actions runs this alongside the embedded database checks.
+
 Smoke test against a production build locally:
 
 ```bash

@@ -20,6 +20,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node --conditions=react-server --import tsx scripts/migrate.ts",
     "smoke": "node scripts/smoke.mjs",
+    "smoke:postgres": "bash scripts/smoke-postgres.sh",
     "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm content:check && pnpm build"
   },
   "dependencies": {

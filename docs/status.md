@@ -10,7 +10,7 @@ The storage card now gives separate checks for a database, a manual inbox or she
 
 The access card now tests both a private order and a deliberately public listing. The credentials card checks server settings, a vault or provider-designated browser keys according to the option selected. All 15 distinct source URLs in the cards, tutorials and product context opened. The five cards are drafts pending a second engineer's review.
 
-On 2026-11-22, `pnpm verify` passed type checking, lint, all 103 tests, content validation and the production build. All 37 HTTP smoke checks passed against that build using embedded Postgres and the rule-based provider. Chromium checks at 390 px and 1280 px exercised all eight draft pages, the combined tutorial prompt, all 15 card prompt lines and all five depths per card. Earlier checks covered saved progress and signup metrics. The founder chose GitHub delivery for this pass and deferred public deployment.
+On 2026-11-22, `pnpm verify` passed type checking, lint, all 104 tests, content validation and the production build. The production journey passed 38 HTTP checks with the rule-based provider on both embedded Postgres and a disposable PostgreSQL 17 server. The PostgreSQL run also checked readiness before migration and preserved the signup across a second migration. Chromium checks at 390 px and 1280 px verified the reviewed labels on the learning path and all three readers. Earlier checks covered all eight learning pages, clipboard, completion and signup metrics. The founder chose GitHub delivery for this pass and deferred public deployment.
 
 | Area | What exists | Verified by |
 | --- | --- | --- |
