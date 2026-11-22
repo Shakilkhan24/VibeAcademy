@@ -1,6 +1,6 @@
 slug: where-data-lives
-version: 1
-updated: "2026-11-18"
+version: 2
+updated: "2026-11-22"
 status: draft
 title: Where does your data live?
 domain: data
@@ -29,7 +29,7 @@ options:
       with clear links between them.
     pros:
       - Fits most apps with users, orders, bookings and payments
-      - Transactions keep money and stock counts consistent
+      - A transaction can save an order and its stock change together
       - Reporting with SQL and a very large ecosystem
     cons:
       - Tables need some design up front
@@ -51,37 +51,39 @@ options:
     cons:
       - Relationships and reports get harder as data grows
       - Easy to duplicate data and let the copies drift apart
-    cost: Free tiers exist; costs grow with reads and writes, so busy pages can get expensive.
+    cost: Check how the provider charges for storage, queries and network traffic.
     effort: Low to start, higher later
     promptLine: >-
-      Database: [Firestore / MongoDB Atlas]. Document the shape of each collection in SPEC.md, avoid
-      duplicating data that changes, and add an index for every query the app runs.
+      Use [Firestore / MongoDB Atlas]. Document the collections and the queries each screen needs.
+      Check which indexes already exist and add the ones those queries need.
 
   - key: no-server-data
-    label: No saved server data yet
+    label: Start without an app database
     summary: >-
-      Keep version 1 free of server data: a static site, a form that emails you, or a
-      spreadsheet you update by hand.
+      A static page can answer a question without collecting anything. If you take requests by
+      email or in a spreadsheet, that inbox or sheet becomes the place you keep customer records.
     pros:
-      - Nothing to secure, back up or pay for
-      - The fastest way to test demand
+      - No app database to set up
+      - You can try the workflow with tools you already use
     cons:
-      - Cannot support logins, carts or order history
-      - Manual work grows with every customer
-    cost: Free.
+      - A busy inbox or sheet can be hard to keep in order
+      - Someone must manage access, retention and recovery for any saved requests
+    cost: Depends on your site, email or spreadsheet plan.
     effort: Low
     promptLine: >-
-      No database in version 1. Store nothing on a server; send form submissions to [my email / a
-      spreadsheet]. Do not add a database or user accounts without asking me.
+      Use no app database in version 1. Choose one path in SPEC.md. For a static page, collect
+      no requests. For a manual workflow, use [inbox or sheet], record the fields we need and
+      name the person responsible for access and cleanup.
 
 proveIt:
   steps:
-    - Create a test record in your app, for example an order.
-    - Close the browser, open the app on a different device and look for the record.
-    - Find the same record in your database provider's dashboard.
+    - Write down the destination and fields you chose, or the information a visitor can get without submitting anything.
+    - For a database, save a fictional order. Reopen the app as its owner in a fresh browser session and find the same order in the database.
+    - For an inbox or sheet, take a fictional request through the usual steps. Have the person who handles requests find it and read the fields back.
+    - For a static page, complete the visitor's task. Check the page and its configuration for any form or integration that collects requests.
   passWhen: >-
-    The record appears on the second device and in the database dashboard, and you can name the
-    plan your database is on and where its backups are kept.
+    The saved order can be retrieved from the chosen destination with the expected fields. On the
+    static path the visitor gets their answer and the page has no request collection configured.
 
 depths:
   story: >-
@@ -89,9 +91,9 @@ depths:
     wash your hands. A ledger in a locked cabinet (a database) keeps every order, and you can count
     them at the end of the month.
   practical: >-
-    Tell the AI exactly where data should be saved and on which service. For most apps with users
-    and orders, say: managed Postgres on Supabase or Neon. Then check that you can see your records
-    in that service's dashboard. If you cannot find them, the AI probably saved them somewhere temporary.
+    Ask who needs a record tomorrow and what they will look up. A baker might need the customer's
+    name, bread, quantity and pickup time in a shared order book. A visitor looking up the shop's
+    opening hours can finish without leaving a record.
   technical: >-
     Relational databases such as Postgres and MySQL store rows in tables linked by keys, and
     enforce rules with constraints and transactions. Document databases store nested records and
@@ -109,3 +111,9 @@ depths:
     limits under serverless load, and a migration path that lets the schema evolve without downtime.
 
 related: [backups-and-restore, who-sees-what]
+
+sources:
+  - title: MDN Web Storage API
+    url: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API
+  - title: Indexes in Cloud Firestore
+    url: https://firebase.google.com/docs/firestore/query-data/indexing

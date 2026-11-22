@@ -1,6 +1,6 @@
 slug: backups-and-restore
-version: 1
-updated: "2026-11-18"
+version: 2
+updated: "2026-11-22"
 status: draft
 title: What if your data disappears?
 domain: reliability-operations
@@ -27,33 +27,33 @@ options:
       Use your database provider's automatic backups and point-in-time recovery, which can restore
       the database to a moment just before the mistake.
     pros:
-      - No code to write; the provider runs it
+      - The provider runs backup and log collection
       - Recovers from mistakes, not only from hardware failures
     cons:
       - Usually needs a paid plan
       - Only as good as your last tested restore
-    cost: Typically included in paid database plans.
+    cost: Check the plan's recovery window, backup charges and cost of a restored instance.
     effort: Low
     promptLine: >-
-      Use a database plan with automatic daily backups and point-in-time recovery. Write the restore
-      steps in RUNBOOK.md and test a restore into a separate database before launch.
+      Enable managed backups and point-in-time recovery. Record the recovery window and the
+      latest restorable time in RUNBOOK.md. Practise restoring to a chosen time in a new instance.
 
   - key: scheduled-exports
     label: Scheduled exports you control
     summary: >-
-      A scheduled job exports the database, for example with pg_dump, to separate storage such as
-      Amazon S3 or Cloudflare R2, and keeps copies for a set number of days.
+      A scheduled job exports the database to separate storage and keeps copies for a set number
+      of days. For Postgres, pg_dump takes a consistent snapshot of one database.
     pros:
-      - Works with any plan or provider
-      - Copies live outside the database provider
+      - You choose where to keep copies and how long to keep them
+      - A Postgres dump can be restored to another compatible Postgres instance
     cons:
       - You maintain the job and must notice when it fails
       - A restore loses everything since the last export
     cost: Low storage costs for small apps.
     effort: Medium
     promptLine: >-
-      Run a nightly encrypted pg_dump of the database to [S3 / R2] and keep 30 days of copies. Alert me
-      when a backup fails, and write and test the restore steps.
+      Schedule a Postgres dump at an interval that fits our loss target. Encrypt the stored copy,
+      set a retention period and alert us on a missed export. Test restoring it into an empty database.
 
   - key: both
     label: Both, for important data
@@ -61,8 +61,7 @@ options:
       Managed point-in-time recovery for quick fixes, plus independent exports in case you lose
       access to the provider account itself.
     pros:
-      - Survives provider outages and account problems
-      - Meets most customer and compliance expectations
+      - Gives you a second recovery path if the database account is unavailable
     cons:
       - Two systems to monitor
       - More setup time
@@ -74,12 +73,14 @@ options:
 
 proveIt:
   steps:
-    - Create a separate copy of your database, such as a branch or a new instance.
-    - Restore last night's backup into it, following only your written steps.
-    - Time it, and check that a recent test record is present.
+    - Use a practice database with fictional orders. Set two limits before starting, one for lost work and one for time to reopen the app.
+    - Save order A and record the time. Take an export, or choose a point after A for managed recovery. Wait for the export to finish or the provider to confirm that point is restorable.
+    - Save order B after that recovery point. Note the time of the pretend interruption and start a timer.
+    - Follow the runbook. Import the export into an empty database, or ask the provider to restore the selected time to a new instance. Open a test app against the restored destination. If you chose both methods, test each separately.
   passWhen: >-
-    You restore a backup into a separate database using only your written steps, the recent record
-    is there, and you know how many minutes it took.
+    The restored app shows A and has no B. The practice source still has both. Record the gap
+    from the recovery point to the pretend interruption and the elapsed time until the restored
+    app works. The plan meets your targets if both times fit the limits you set.
 
 depths:
   story: >-
@@ -87,19 +88,19 @@ depths:
     A backup is the second copy in another building, and a restore drill is checking that the second
     copy actually opens.
   practical: >-
-    Ask your database provider, or the AI, three questions: are backups on, how far back can I
-    restore, and what are the steps? Then do one practice restore into a copy before launch. A backup
-    you have never restored is a hope, not a plan.
+    Check your provider's settings to see when the last backup succeeded and which dates you can
+    recover. Follow the restore instructions in a practice environment. Open the recovered order
+    list before you stop the timer.
   technical: >-
-    Two numbers describe a backup plan. RPO (recovery point objective) is how much recent data you can
-    afford to lose; RTO (recovery time objective) is how long you can be down. Daily backups mean an
-    RPO of up to a day. Point-in-time recovery replays the database's write-ahead log to restore to
-    almost any moment.
+    Your recovery point objective (RPO) sets how much recent work you can afford to lose.
+    Your recovery time objective (RTO) sets how long the service can be unavailable. A missed
+    daily export can leave a gap longer than a day. Postgres point-in-time recovery needs a base
+    backup and an unbroken series of archived log records through the chosen time.
   engineer: >-
     Enable point-in-time recovery, keep logical dumps in separate storage with retention and
     encryption, and monitor the backup jobs. Restore into an isolated instance on a schedule and check
-    row counts and recent records. Take a snapshot before risky migrations, and write the restore
-    procedure as a runbook someone else could follow.
+    records on both sides of the recovery point. A single pg_dump does not include cluster roles
+    or files in a separate upload service. Include the dependencies your app needs in the recovery drill.
   senior: >-
     Backups are defined by tested restores, not by settings. Set RPO and RTO from business impact, keep
     at least one copy outside the primary provider account to survive compromise or lockout, and
@@ -107,3 +108,11 @@ depths:
     place: least-privilege database roles, deletion protection and reviewed production changes.
 
 related: [where-data-lives, where-secrets-live]
+
+sources:
+  - title: PostgreSQL SQL dumps
+    url: https://www.postgresql.org/docs/current/backup-dump.html
+  - title: PostgreSQL continuous archiving and point-in-time recovery
+    url: https://www.postgresql.org/docs/current/continuous-archiving.html
+  - title: AWS guidance on testing backup recovery
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_periodic_recovery_testing_data.html
