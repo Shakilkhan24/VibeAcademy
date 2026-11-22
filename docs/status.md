@@ -4,6 +4,8 @@ Last updated on 2026-11-22 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
+The Dream drafts and the scope card received an editorial pass on 2026-11-22. The bakery exercise now supplies two complete orders, a copyable build prompt with both acceptance checks, and a third order for the learner to try. The scope card includes a test for two-sided products. These texts await founder sign-off.
+
 On 2026-11-22, `pnpm verify` passed type checking, lint, all 103 tests, content validation and the production build. All 37 HTTP smoke checks passed against that build using embedded Postgres and the rule-based provider. Chromium checks at 390 px and 1280 px exercised the learning journey, clipboard, saved progress and signup metrics. Editorial review and public deployment are pending. The founder chose GitHub delivery for this pass.
 
 | Area | What exists | Verified by |

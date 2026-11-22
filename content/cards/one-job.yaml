@@ -1,6 +1,6 @@
 slug: one-job
-version: 1
-updated: "2026-11-18"
+version: 2
+updated: "2026-11-22"
 status: draft
 title: Who is it for, and what is the one job?
 domain: product-scope
@@ -15,9 +15,8 @@ moment: >-
   or by its guess if you skip it.
 
 ifSilent: >-
-  The AI imagines a generic user and builds every feature it associates with your topic:
-  sign-up, dashboards, settings, a blog. You get a wide, shallow app that does nothing
-  especially well, and each later prompt pulls it in a new direction.
+  Ask for a bakery app and you might get a shop, a recipe book or a dashboard. A builder
+  could finish any of those while the baker still has to sort tomorrow's pickups by hand.
 
 options:
   - key: one-user-one-job
@@ -33,7 +32,7 @@ options:
     cons:
       - You say no to good ideas for now
       - Secondary users wait for version 2
-    cost: No money. About 20 minutes of thinking.
+    cost: You can sketch the job on paper and test it with someone who does it.
     effort: Low
     promptLine: >-
       Primary user: [who, e.g. busy parents ordering weekly meals]. The one job: [e.g. place a
@@ -47,9 +46,9 @@ options:
       Only choose this when the product is useless without both.
     pros:
       - Necessary when value only exists with both sides
-      - Avoids rebuilding permissions later
+      - Makes the handoff between roles visible in the first test
     cons:
-      - Roughly doubles screens, roles and access rules
+      - Each side needs screens and access rules, and the handoff needs testing
       - Much harder to test, launch and support
     cost: No money up front; more moderation and support work later.
     effort: High
@@ -61,14 +60,14 @@ options:
     label: A clickable prototype first
     summary: >-
       Do not build the real app yet. Ask the AI for a clickable prototype with fake data and
-      test the idea with five people who fit your user.
+      watch people who do the job try it.
     pros:
-      - The cheapest way to learn what users want
-      - No database, logins or bills to manage
+      - Lets you try different screens using sample data
+      - Can be tested before you set up accounts or a database
     cons:
       - Not a real product; you will rebuild it
       - Easy to mistake a demo for a launch
-    cost: Free on most AI builders.
+    cost: Paper takes basic supplies. A clickable tool may charge for sharing or collaboration.
     effort: Low
     promptLine: >-
       Build a clickable prototype only: no real accounts, payments or database, and use fake sample
@@ -76,12 +75,12 @@ options:
 
 proveIt:
   steps:
-    - "Write your one-job sentence: [who] can [job] in [time or number of steps]."
-    - Ask someone who fits that description to do the job in your app without help.
-    - Note every moment they hesitate or ask a question.
+    - Name the person, the task and what a finished result looks like.
+    - Give someone who does that job a realistic example to try on paper, in the prototype or in the app. For a two-sided product, give the second participant the result of the first participant's task.
+    - Watch where each person stops or asks for help. Write down what they actually produced at the end.
   passWhen: >-
-    A person who fits your primary user completes the one job without help, and every screen
-    they touched was needed for that job.
+    Each participant reaches the result you described without coaching. If the job needs two sides,
+    the second person can use what the first person produced.
 
 depths:
   story: >-
@@ -108,3 +107,9 @@ depths:
     sides, cut each side's job to the minimum and solve getting both sides on board before adding features.
 
 related: [where-data-lives]
+
+sources:
+  - title: Learning about users and their needs, GOV.UK Service Manual
+    url: https://www.gov.uk/service-manual/user-research/start-by-learning-user-needs
+  - title: Making prototypes, GOV.UK Service Manual
+    url: https://www.gov.uk/service-manual/design/making-prototypes

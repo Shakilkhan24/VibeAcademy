@@ -3,8 +3,8 @@ slug: choose-one-job
 title: Choose one person and one job
 summary: Turn an app idea into a sentence someone can recognise from their own day.
 status: draft
-version: 1
-updatedAt: 2026-11-21
+version: 2
+updatedAt: 2026-11-22
 chapter: dream
 order: 1
 level: story
@@ -24,7 +24,7 @@ You could offer Maya a bakery app. She could reasonably expect recipes, a shop, 
 
 ## Write a sentence Maya would recognise
 
-Write down who is doing the work, when they do it and what they need by the end. For this bakery, a useful first sentence is “On Friday evening, Maya needs a list of Saturday pickups grouped by time so she can pack the right bags.”
+Write down who is doing the work, when they do it and what they need by the end. For this bakery, try “On Friday evening, Maya needs to know which breads to pack for each Saturday pickup.” A list grouped by pickup time is one way to help her. You'll sketch it in the next lesson.
 
 Try the same exercise with your idea. Pick someone you could actually speak to. If you're building for yourself, describe the last time you did the job. The GOV.UK Service Manual gives further guidance on interviewing likely users and checking your assumptions. [Learning about users and their needs](https://www.gov.uk/service-manual/user-research/start-by-learning-user-needs)
 
@@ -32,4 +32,4 @@ Try the same exercise with your idea. Pick someone you could actually speak to. 
 
 Read your sentence to the person. Ask them to describe a recent occasion when it would have helped. Listen for a correction. Perhaps the baker needs the list early Saturday, after the last orders come in. Change your sentence to match their answer.
 
-Keep that sentence. You will use it to decide what belongs in the first version. If you haven't spoken to the person yet, write down the part you still need to check.
+Keep the sentence and the example the person gave you. If you haven't spoken to them yet, save the sentence as a guess and write down one question you could ask. You can sketch a first version using either, as long as you know which details came from the person.

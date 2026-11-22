@@ -3,8 +3,8 @@ slug: sketch-the-first-workflow
 title: Sketch the smallest useful workflow
 summary: Draw a beginning, an action and an observable finish. Decide which requests can wait.
 status: draft
-version: 1
-updatedAt: 2026-11-21
+version: 2
+updatedAt: 2026-11-22
 chapter: dream
 order: 2
 level: practical
@@ -16,13 +16,13 @@ relatedCards: [one-job]
 
 ## Walk one order through the bakery
 
-Start with Maya's job sentence. On paper, write a sample order on a slip. Jo wants two rye loaves on Saturday at ten. Another customer, Lee, will pick up one loaf at eleven.
+Start with Maya's job sentence. Make two paper order slips. On one, write “Jo, two rye loaves, Saturday at 10 am.” On the other, write “Lee, one oat loaf, Saturday at 11 am.”
 
-A workflow is the set of actions that gets someone from their starting situation to a useful result. Give Maya both slips. If you only draw a form, she can enter every order and still have to make her packing list by hand.
+A workflow is the set of actions that gets someone from their starting situation to a useful result. Play the baker and use both slips. If you only draw a form, you can enter every order and still have to make the packing list by hand.
 
 ## Draw the beginning, action and finish
 
-1. **Beginning.** Maya has an order with a name, an item, a quantity and a pickup time.
+1. **Beginning.** Maya has an order with a customer name, bread, quantity, pickup day and time.
 2. **Action.** Maya adds the order and opens the pickup list for Saturday.
 3. **Finish.** She can point to the ten o'clock group and say which bread belongs to Jo.
 
@@ -35,7 +35,8 @@ Online payments could help Maya later. Taking a payment does nothing to group to
 Write down what you are keeping and one thing you are setting aside. Here is the instruction Maya can give her builder.
 
 ```text
-Build a way for the baker to enter an order and see a day's pickup list grouped by time.
+Build a way for the baker to enter an order with a name, bread, quantity, pickup day and time.
+Let the baker choose a day and see its orders grouped by pickup time.
 Keep payment at the counter for this version.
 ```
 
