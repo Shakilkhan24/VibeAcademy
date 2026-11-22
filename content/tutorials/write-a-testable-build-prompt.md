@@ -2,7 +2,7 @@
 slug: write-a-testable-build-prompt
 title: Write a build prompt you can test
 summary: Specify what should happen in one ordinary case and one empty case, then check both outcomes.
-status: draft
+status: reviewed
 version: 2
 updatedAt: 2026-11-22
 chapter: dream

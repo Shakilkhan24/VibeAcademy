@@ -2,7 +2,7 @@
 slug: choose-one-job
 title: Choose one person and one job
 summary: Turn an app idea into a sentence someone can recognise from their own day.
-status: draft
+status: reviewed
 version: 2
 updatedAt: 2026-11-22
 chapter: dream

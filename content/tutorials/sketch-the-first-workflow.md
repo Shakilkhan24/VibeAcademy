@@ -2,7 +2,7 @@
 slug: sketch-the-first-workflow
 title: Sketch the smallest useful workflow
 summary: Draw a beginning, an action and an observable finish. Decide which requests can wait.
-status: draft
+status: reviewed
 version: 2
 updatedAt: 2026-11-22
 chapter: dream

@@ -4,21 +4,21 @@ Last updated on 2026-11-22 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
-The Dream drafts and the scope card received an editorial pass on 2026-11-22. The bakery exercise now supplies two complete orders, a copyable build prompt with both acceptance checks, and a third order for the learner to try. The scope card includes a test for two-sided products. These texts await founder sign-off.
+The founder approved the three Dream tutorials for the initial chapter on 2026-11-22. Their review status appears on the learning path and each lesson. The bakery exercise now supplies two complete orders, a copyable build prompt with both acceptance checks, and a third order for the learner to try. The scope card includes a test for two-sided products.
 
 The storage card now gives separate checks for a database, a manual inbox or sheet, and a static page. The recovery card checks records on both sides of the chosen recovery point. A local drill restored an embedded Postgres snapshot to a separate instance and verified both the recovered and source records. Hosted point-in-time recovery still requires a provider-specific drill.
 
-The access card now tests both a private order and a deliberately public listing. The credentials card checks server settings, a vault or provider-designated browser keys according to the option selected. All 15 distinct source URLs in the cards, tutorials and product context opened. The three tutorials await founder approval and the five cards await a second engineer's review and founder sign-off.
+The access card now tests both a private order and a deliberately public listing. The credentials card checks server settings, a vault or provider-designated browser keys according to the option selected. All 15 distinct source URLs in the cards, tutorials and product context opened. The five cards are drafts pending a second engineer's review.
 
 On 2026-11-22, `pnpm verify` passed type checking, lint, all 103 tests, content validation and the production build. All 37 HTTP smoke checks passed against that build using embedded Postgres and the rule-based provider. Chromium checks at 390 px and 1280 px exercised all eight draft pages, the combined tutorial prompt, all 15 card prompt lines and all five depths per card. Earlier checks covered saved progress and signup metrics. The founder chose GitHub delivery for this pass and deferred public deployment.
 
 | Area | What exists | Verified by |
 | --- | --- | --- |
 | Tutorial format | Markdown with typed YAML frontmatter, shared taxonomy IDs, and HTML escaped in lesson bodies ([ADR 0012](decisions/0012-tutorial-markdown.md)) | Tutorial format tests cover metadata, delimiters, code examples and link handling |
-| Learning path and reader | Home and navigation link to `/learn`. All seven chapters appear in order. Three Dream drafts have reader pages with contents, prerequisite and Decision Card links, copyable examples, callouts and adjacent lessons. The sitemap and share images cover the new routes. | Content tests and production smoke checks cover reader pages, missing slugs, sitemap and share images. |
+| Learning path and reader | Home and navigation link to `/learn`. All seven chapters appear in order. Three reviewed Dream lessons have reader pages with contents, prerequisite and Decision Card links, copyable examples, callouts and adjacent lessons. The sitemap and share images cover the new routes. | Content tests and production smoke checks cover reader pages, missing slugs, sitemap and share images. |
 | Accessibility | The Lab and transparency tables support keyboard scrolling inside the page width. | Chromium desktop and mobile journey checks and axe WCAG A/AA checks on the learning path and main pages |
 | Tutorial progress | Visitors can mark and unmark lessons. The learning path shows completed lessons and the total. Separate browser storage keys allow open tabs to update different lessons independently. | Production smoke test plus Chromium checks for reloads, cross-tab updates and unavailable storage |
-| Tutorial library and authoring | The loader orders lessons by chapter and the founder's optional sequence. The content checker validates prerequisite chains and related cards. [Template](../content/tutorials/_template.md) and [authoring guide](content-guide.md) are ready. Three draft Dream lessons cover a user and job (Story), the first workflow (Practical), and a testable prompt (Technical). | Content tests exercise real files, the template, ordering, invalid filenames and broken links. `pnpm content:check` reports lesson counts by review state. |
+| Tutorial library and authoring | The loader orders lessons by chapter and the founder's optional sequence. The content checker validates prerequisite chains and related cards. [Template](../content/tutorials/_template.md) and [authoring guide](content-guide.md) are ready. Three reviewed Dream lessons cover a user and job (Story), the first workflow (Practical), and a testable prompt (Technical). | Content tests exercise real files, the template, ordering, invalid filenames and broken links. `pnpm content:check` reports lesson counts by review state. |
 | Landing page | Hero with X-Ray launcher, ghost floor plan, silent-decision examples, how it works (with honest availability tags), card list, Lab teaser, waitlist | Production build, smoke test, screenshots |
 | Prompt X-Ray | Prompt input (20–4,000 chars), analysis, score on a band scale with critical cap, 12-domain floor plan, top 3 risks, upgraded prompt (assembled in the browser), AGENTS.md starter download, all-decisions list, "Rule-based check" label on every result | Unit, integration and route tests; smoke test; browser run |
 | Sharing | Opt-in share link via owner token, public summary page without prompt or app type, Open Graph image, unshare, delete | Integration tests, smoke test |
@@ -43,7 +43,7 @@ On 2026-11-22, `pnpm verify` passed type checking, lint, all 103 tests, content 
 
 ## Planned (designed, not built)
 
-M1 tutorial review and launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
+M1 card review and launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
 
 ## Deferred on purpose
 
@@ -58,7 +58,7 @@ M1 tutorial review and launch ([roadmap.md](roadmap.md)). Then accounts and auth
 
 ## Awaiting founder
 
-See [open-decisions.md](open-decisions.md): review of the three draft tutorials, brand name confirmation, card review, auth choice, email provider, payments provider and prices, hosting account, legal privacy policy.
+See [open-decisions.md](open-decisions.md): brand name confirmation, card review, auth choice, email provider, payments provider and prices, hosting account, legal privacy policy.
 
 ## Known limitations
 

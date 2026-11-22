@@ -46,7 +46,7 @@ export default async function LearnPage() {
                           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-small text-chalk-dim">
                             <span>{DEPTHS.find((depth) => depth.id === lesson.level)?.name}</span>
                             <span>{lesson.estimatedMinutes} min</span>
-                            {lesson.status === "draft" && <Tag tone="dashed">Draft</Tag>}
+                            <Tag tone={lesson.status === "draft" ? "dashed" : "plain"}>{lesson.status === "draft" ? "Draft" : "Reviewed"}</Tag>
                             <CompletionLabel slug={lesson.slug} />
                           </div>
                           <h3 className="mt-2 text-h3"><Link href={`/learn/${lesson.slug}`} className="underline decoration-line-strong hover:decoration-pencil">{lesson.title}</Link></h3>

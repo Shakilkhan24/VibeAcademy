@@ -52,6 +52,8 @@ for (const [path, mustContain] of [
 
 const health = await get("/api/health");
 const lesson = await get("/learn/choose-one-job");
+const path = await get("/learn");
+check("the Dream review status appears on the learning path and reader", path.text.includes(">Reviewed<") && lesson.text.includes(">Reviewed<"));
 check("reader has a completion control", lesson.text.includes("Mark as done"));
 const learningMap = await get("/sitemap.xml");
 check("sitemap includes the tutorial reader", learningMap.text.includes("/learn/write-a-testable-build-prompt"));

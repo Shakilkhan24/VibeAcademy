@@ -20,4 +20,4 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 - **3. X-Ray quality.** The founder set an 80% minimum agreement target for the four critical decisions across 20–30 hand-labelled prompts on 2026-11-21. The offline test runs in CI.
 
 - **12. Launch design.** The founder retained the existing blueprint look on 2026-11-21. See the [design brief](design-brief.md).
-- **13. Opening tutorials.** The founder delegated topic and depth selection and requested increasing difficulty. The Dream sequence moves from one user's job to a minimal workflow to a testable build prompt. Editorial review of the drafts is still open.
+- **13. Opening tutorials.** The founder delegated topic and depth selection and requested increasing difficulty. The Dream sequence moves from one user's job to a minimal workflow to a testable build prompt. The founder approved the three opening lessons for the initial chapter on 2026-11-22.
