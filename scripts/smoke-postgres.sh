@@ -9,11 +9,13 @@ POSTGRES_PASSWORD=$(openssl rand -hex 32)
 container=$(docker run --detach --rm --publish 127.0.0.1::5432 \
   --env POSTGRES_PASSWORD --env POSTGRES_DB=seniorseat_ci postgres:17-alpine)
 server_pid=
+server_stderr=
 cleanup() {
   if [[ -n "$server_pid" ]]; then
     kill "$server_pid" 2>/dev/null || true
     wait "$server_pid" 2>/dev/null || true
   fi
+  if [[ -n "$server_stderr" ]]; then rm -f "$server_stderr"; fi
   docker rm --force --volumes "$container" >/dev/null
 }
 trap cleanup EXIT
@@ -37,7 +39,8 @@ port=$(node -e '
 ')
 BASE_URL="http://127.0.0.1:$port"
 NEXT_PUBLIC_SITE_URL="$BASE_URL"
-node_modules/.bin/next start -H 127.0.0.1 -p "$port" &
+server_stderr=$(mktemp)
+node_modules/.bin/next start -H 127.0.0.1 -p "$port" 2>"$server_stderr" &
 server_pid=$!
 for _ in {1..30}; do
   kill -0 "$server_pid"
@@ -48,6 +51,19 @@ if [[ "$status" != 503 ]]; then
   echo "Expected HTTP 503 before migration, received $status." >&2
   exit 1
 fi
+
+# Exercise the framework's render-error hook on the same unmigrated database.
+curl --silent --show-error --max-time 15 --output /dev/null "$BASE_URL/x/SmokeShareCheck42?note=smoke-query-marker"
+if ! grep -F '"event":"api_failure"' "$server_stderr" | grep -F '"code":"not_ready"' >/dev/null ||
+   ! grep -F '"event":"server_request_failure"' "$server_stderr" | grep -F '"area":"x"' >/dev/null; then
+  echo "Expected readiness and shared-page failure records in server stderr." >&2
+  exit 1
+fi
+if grep -F -e 'SmokeShareCheck42' -e 'smoke-query-marker' "$server_stderr" >/dev/null; then
+  echo "Server stderr included part of the synthetic visitor URL." >&2
+  exit 1
+fi
+echo "Readiness and shared-page failures produced records without the synthetic URL."
 
 pnpm db:migrate
 pnpm smoke

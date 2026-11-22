@@ -10,7 +10,7 @@ The storage card now gives separate checks for a database, a manual inbox or she
 
 The access card now tests both a private order and a deliberately public listing. The credentials card checks server settings, a vault or provider-designated browser keys according to the option selected. All 15 distinct source URLs in the cards, tutorials and product context opened. The five cards are drafts pending a second engineer's review.
 
-On 2026-11-22, `pnpm verify` passed type checking, lint, all 104 tests, content validation and the production build. The production journey passed 38 HTTP checks with the rule-based provider on both embedded Postgres and a disposable PostgreSQL 17 server. The PostgreSQL run also checked readiness before migration and preserved the signup across a second migration. Chromium checks at 390 px and 1280 px verified the reviewed labels on the learning path and all three readers. Earlier checks covered all eight learning pages, clipboard, completion and signup metrics. The founder chose GitHub delivery for this pass and deferred public deployment.
+On 2026-11-22, `pnpm verify` passed type checking, lint, all 112 tests, content validation and the production build. The production journey passed 38 HTTP checks with the rule-based provider on both embedded Postgres and a disposable PostgreSQL 17 server. The PostgreSQL run also checked failure reporting before migration and preserved the signup across a second migration. Chromium checks at 390 px and 1280 px verified the reviewed labels on the learning path and all three readers. Earlier checks covered all eight learning pages, clipboard, completion and signup metrics. The founder chose GitHub delivery for this pass and deferred public deployment.
 
 | Area | What exists | Verified by |
 | --- | --- | --- |
@@ -33,6 +33,7 @@ On 2026-11-22, `pnpm verify` passed type checking, lint, all 104 tests, content 
 | Waitlist | Email, tool, experience, consent; no enumeration; rate-limited | Integration tests, smoke test |
 | Database readiness | `/api/health` checks that the application role can read all six Phase 0 tables without fetching any rows. An inaccessible table makes the endpoint return 503. | Route tests cover a migrated database and a reachable database missing the waitlist table. |
 | API error tracking | API failures with a 5xx status produce a structured server log identifying the operation, status and code. A failed analytics write records its event name and lets the request finish. | Regression tests exercise an unavailable waitlist table, an unavailable analytics table, a paused X-Ray, readiness failure and invalid input. |
+| Server request error tracking | Uncaught request failures produce a server log with the route kind and site area. | The production PostgreSQL test exercises a failed shared-result lookup and checks server stderr for the failure record and the absence of the visitor's share slug and query string. |
 | Tooling | TypeScript strict, ESLint with boundary rules, Vitest, content check, migrations, smoke script, CI workflow | Local verification and the GitHub Actions verify job passed. The secret scan uses a finding-specific exception for the historical smoke-test fixture. |
 
 ## Partially implemented

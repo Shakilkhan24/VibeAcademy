@@ -22,7 +22,9 @@ Engineering record of exactly what SeniorSeat stores. Keep it in sync with `src/
 
 ## Application failure logs
 
-A server-side API failure produces one JSON line on standard error with the UTC time, a fixed handler name, HTTP status and error code. A failed analytics write records the time and the event name. These records omit exception text, SQL parameters, request URLs, headers and bodies. The application writes them directly to standard error so that a database outage can still be reported. Log retention will depend on the host chosen for public launch.
+A server-side API failure produces one JSON line on standard error with the UTC time, a fixed handler name, HTTP status and error code. A failed analytics write records the time and the event name. For uncaught request failures, the Next.js hook records the time, the route kind and a fixed site area such as `learn` or `x`. A shared-result lookup replaces database exceptions before they reach the page renderer because those exceptions can contain the share slug. [Next.js request error hook](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation#onrequesterror-optional)
+
+The application writes these records directly to standard error so a database outage can still be reported. They omit exception text, SQL parameters, request URLs, headers and bodies. The hosting provider's access logs, framework diagnostics and retention settings also need review at deployment.
 
 ## Processors
 

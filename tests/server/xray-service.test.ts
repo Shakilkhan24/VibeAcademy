@@ -86,6 +86,14 @@ describe("runXRay", () => {
 });
 
 describe("sharing and deletion", () => {
+  it("keeps share slugs out of exceptions passed to the page renderer", async () => {
+    const ctx = await createTestContext();
+    await ctx.db.execute(sql`alter table xray_runs rename to unavailable_runs`);
+    const read = getSharedSummary(ctx, "exampleShare123");
+    await expect(read).rejects.toThrow(/^Could not load the shared X-Ray\.$/);
+    await expect(read).rejects.not.toHaveProperty("cause");
+  });
+
   it("shares only with the owner token, and the shared summary has no prompt-derived detail", async () => {
     const ctx = await createTestContext({ env: { AI_PROVIDER: "rules" } });
     const r = await runXRay(ctx, { prompt: SHOP_PROMPT, clientIp: IP });

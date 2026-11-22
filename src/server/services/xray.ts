@@ -191,7 +191,10 @@ export async function deleteRun(ctx: AppContext, input: unknown): Promise<void> 
 
 export async function getSharedSummary(ctx: AppContext, slug: string): Promise<XRaySharedSummary | null> {
   if (!/^[a-zA-Z0-9]{6,20}$/.test(slug)) return null;
-  const [run] = await ctx.db.select().from(xrayRuns).where(eq(xrayRuns.shareSlug, slug)).limit(1);
+  // The framework logs uncaught render errors. A driver exception can contain the bound share slug.
+  const [run] = await ctx.db.select().from(xrayRuns).where(eq(xrayRuns.shareSlug, slug)).limit(1).catch(() => {
+    throw new Error("Could not load the shared X-Ray.");
+  });
   if (!run) return null;
   return {
     score: run.score,

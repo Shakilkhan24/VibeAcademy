@@ -18,8 +18,10 @@ pnpm verify          # typecheck + lint + tests + content check + build
 ```
 
 With Docker running, use `pnpm build && pnpm smoke:postgres` to test the production driver.
-The command starts a disposable PostgreSQL 17 database on loopback. It checks for HTTP 503
-before the first migration, runs the HTTP journey after migration, then reapplies the migrations
+The command starts a disposable PostgreSQL 17 database on loopback. Before migration it checks
+for HTTP 503 on the readiness endpoint and exercises a shared-page failure. It checks server
+stderr for both failure records and for any accidental inclusion of the synthetic share slug or
+query string. It runs the HTTP journey after migration, then reapplies the migrations
 and checks that the same signup is still present. It removes the test server and database on exit.
 GitHub Actions runs this alongside the embedded database checks.
 
