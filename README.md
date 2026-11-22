@@ -6,7 +6,7 @@ SeniorSeat shows vibe coders which engineering decisions their prompts leave to 
 
 Open `/learn` to follow the seven-chapter learning path. The first chapter, Dream, has three reviewed tutorials in increasing difficulty. They cover choosing one person and one job, sketching the first workflow, and writing a build prompt with acceptance checks. Readers can mark lessons complete in their browser. Use the tutorial template to add a lesson. [Authoring guide](docs/content-guide.md)
 
-The Prompt X-Ray uses server-side rules and needs no API key. It connects prompt decisions to five draft Decision Cards. The app also includes the Twin Builds Lab foundation, a waitlist and a transparency page. This milestone is available as verified source on GitHub. The cards await engineering review, and public deployment is deferred. [Milestone status](docs/status.md)
+The Prompt X-Ray uses server-side rules and needs no API key. It connects prompt decisions to five Decision Cards approved for the initial release as drafts. The app also includes the Twin Builds Lab foundation, a waitlist and a transparency page. This milestone is available as verified source on GitHub. Public deployment is deferred. [Milestone status](docs/status.md)
 
 ```bash
 pnpm install

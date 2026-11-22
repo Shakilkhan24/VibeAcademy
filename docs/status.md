@@ -8,7 +8,7 @@ The founder approved the three Dream tutorials for the initial chapter on 2026-1
 
 The storage card now gives separate checks for a database, a manual inbox or sheet, and a static page. The recovery card checks records on both sides of the chosen recovery point. A local drill restored an embedded Postgres snapshot to a separate instance and verified both the recovered and source records. Hosted point-in-time recovery still requires a provider-specific drill.
 
-The access card now tests both a private order and a deliberately public listing. The credentials card checks server settings, a vault or provider-designated browser keys according to the option selected. All 15 distinct source URLs in the cards, tutorials and product context opened. The five cards are drafts pending a second engineer's review.
+The access card now tests both a private order and a deliberately public listing. The credentials card checks server settings, a vault or provider-designated browser keys according to the option selected. All 15 distinct source URLs in the cards, tutorials and product context opened. The founder approved all five cards for the initial release as drafts. Readers can open them from `/cards`.
 
 On 2026-11-22, `pnpm verify` passed type checking, lint, all 112 tests, content validation and the production build. The production journey passed 38 HTTP checks with the rule-based provider on both embedded Postgres and a disposable PostgreSQL 17 server. The PostgreSQL run also checked failure reporting before migration and preserved the signup across a second migration. Chromium checks at 390 px and 1280 px verified the reviewed labels on the learning path and all three readers. Earlier checks covered all eight learning pages, clipboard, completion and signup metrics. The founder chose GitHub delivery for this pass and deferred public deployment.
 
@@ -46,7 +46,7 @@ On 2026-11-22, `pnpm verify` passed type checking, lint, all 112 tests, content 
 
 ## Planned (designed, not built)
 
-M1 card review and launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
+M1 public launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
 
 ## Deferred on purpose
 
@@ -61,7 +61,7 @@ M1 card review and launch ([roadmap.md](roadmap.md)). Then accounts and authoris
 
 ## Awaiting founder
 
-See [open-decisions.md](open-decisions.md): brand name confirmation, card review, auth choice, email provider, payments provider and prices, hosting account, legal privacy policy.
+See [open-decisions.md](open-decisions.md): brand name confirmation, auth choice, email provider, payments provider and prices, hosting account, legal privacy policy.
 
 ## Known limitations
 

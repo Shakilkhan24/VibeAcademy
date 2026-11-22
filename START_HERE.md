@@ -16,12 +16,12 @@ Working now:
 - Landing page, Prompt X-Ray with results, shareable results (no prompt ever shown), share image, waitlist, Twin Builds Lab foundation, `/open` transparency page, privacy page.
 - One controlled analysis pathway (`src/server/ai/gateway.ts`). The rule-based check is the default engine; an Anthropic provider with caching, a daily budget and a usage ledger is built but switched off as a deferred placeholder.
 - Deterministic, versioned scoring of 36 decisions across 12 domains (`src/domain/xray/`).
-- Five Decision Cards (drafts awaiting your review) with the Depth Dial, validated by schema.
+- Five Decision Cards at `/cards`, each with a Depth Dial and a Draft label. The founder approved all five for the initial release.
 - A seven-chapter learning path at `/learn`, three reviewed Dream lessons with related cards and share images, browser-local completion, and a Markdown authoring template.
 - Offline critical-decision evaluation against 24 labelled prompts. The CI threshold is 80%.
 - Type checks, lint, unit and integration tests, content validation, a production build and HTTP smoke checks. See the [verification record](docs/status.md).
 
-The founder approved the Dream tutorials. The five cards await engineering review. Hosting, production Postgres and monitoring are deferred at the founder's request. The Lab awaits measured results, accounts and Blueprint are planned for Phase 1, and paid AI remains deferred.
+The founder approved the Dream tutorials. Hosting, production Postgres and monitoring are deferred at the founder's request. The Lab awaits measured results, accounts and Blueprint are planned for Phase 1, and paid AI remains deferred.
 
 ## 2. Run it
 
@@ -79,10 +79,9 @@ All ADRs: [docs/decisions/README.md](docs/decisions/README.md).
 
 ## 6. What to do next
 
-**M1 is awaiting card review and public launch.** The founder approved the blueprint design, an easy-to-harder Dream curriculum and an 80% X-Ray agreement target. The implementation and verification records are on GitHub.
+**Public launch is deferred.** The founder approved the blueprint design, an easy-to-harder Dream curriculum and an 80% X-Ray agreement target. The implementation and verification records are on GitHub.
 
-1. Complete the engineering review of the [five Decision Cards](content/cards/). Set each card to reviewed after its review is complete.
-2. When the founder resumes public launch, confirm the domain, hosting and Postgres providers, privacy text and deletion contact. Then run the production migrations, configure monitoring and verify the public URL. See the [roadmap](docs/roadmap.md) and [open decisions](docs/open-decisions.md).
+When the founder resumes public launch, confirm the domain, hosting and Postgres providers, privacy text and deletion contact. Then run the production migrations, configure monitoring and verify the public URL. See the [roadmap](docs/roadmap.md) and [open decisions](docs/open-decisions.md).
 
 **Handing this to a coding agent:** paste-ready prompts for each kind of session (orientation, design pass, the next roadmap step, drafting a tutorial, producing a Lab comparison) are in [docs/agent-prompts.md](docs/agent-prompts.md).
 
