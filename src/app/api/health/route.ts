@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { getAppContext } from "@/server/context";
 import { aiCache, aiUsage, events, rateLimits, waitlistEntries, xrayRuns } from "@/server/db/schema";
-import { json } from "@/server/http";
+import { json, reportApiFailure } from "@/server/http";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,6 +16,7 @@ export async function GET() {
     `);
     return json({ ok: true, database: "up", analysis: ctx.ai.providerName, features: ctx.config.features });
   } catch {
+    reportApiFailure("GET /api/health", 503, "not_ready");
     return json({ ok: false, database: "down" }, 503);
   }
 }

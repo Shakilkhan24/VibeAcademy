@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import * as context from "@/server/context";
 import { createTestContext } from "../support/test-context";
 import { SHOP_PROMPT } from "../support/fixtures";
@@ -10,6 +10,7 @@ import { SHOP_PROMPT } from "../support/fixtures";
  */
 const ENV = { NODE_ENV: "test", AI_PROVIDER: "rules", PGLITE_DATA_DIR: "memory://", HASH_SECRET: "route-test-secret-123", XRAY_MINUTE_LIMIT: "20", XRAY_DAILY_LIMIT: "50" };
 const saved: Record<string, string | undefined> = {};
+afterEach(() => vi.restoreAllMocks());
 
 beforeAll(() => {
   for (const [k, v] of Object.entries(ENV)) {
@@ -64,17 +65,66 @@ describe("API routes", () => {
 
   it("rejects non-JSON and invalid input with clear messages", async () => {
     const xray = await import("@/app/api/xray/route");
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
     const notJson = new Request("http://localhost:3000/api", { method: "POST", headers: { "content-type": "text/plain", host: "localhost:3000" }, body: "hi" });
     expect((await xray.POST(notJson)).status).toBe(400);
     const short = await xray.POST(req("POST", { prompt: "hi" }));
     expect(short.status).toBe(400);
     expect((await short.json()).error.message).toMatch(/at least 20 characters/);
+    expect(log).not.toHaveBeenCalled();
+  });
+
+  it("reports a paused X-Ray by its service code", async () => {
+    const xray = await import("@/app/api/xray/route");
+    const ctx = await createTestContext({ env: { FEATURE_XRAY: "off" } });
+    vi.spyOn(context, "getAppContext").mockResolvedValueOnce(ctx);
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    const res = await xray.POST(req("POST", { prompt: SHOP_PROMPT }));
+    expect(res.status).toBe(503);
+    expect(log).toHaveBeenCalledExactlyOnceWith(expect.any(String));
+    expect(JSON.parse(log.mock.calls[0]![0])).toEqual({
+      event: "api_failure", operation: "POST /api/xray", status: 503, code: "feature_disabled", timestamp: expect.any(String),
+    });
   });
 
   it("accepts a waitlist sign-up", async () => {
     const waitlist = await import("@/app/api/waitlist/route");
     const res = await waitlist.POST(req("POST", { email: "route@example.com", consent: true }));
     expect(res.status).toBe(201);
+  });
+
+  it("reports a failed signup without including the database error or the email", async () => {
+    const waitlist = await import("@/app/api/waitlist/route");
+    const isolated = await createTestContext();
+    await isolated.db.execute(sql`alter table waitlist_entries rename to unavailable_waitlist`);
+    vi.spyOn(context, "getAppContext").mockResolvedValueOnce(isolated);
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    const email = "private-log-check@example.com";
+    const res = await waitlist.POST(req("POST", { email, consent: true }));
+
+    expect(res.status).toBe(500);
+    expect(await res.text()).not.toContain(email);
+    expect(log.mock.calls.flat().join(" ")).not.toContain(email);
+    expect(log).toHaveBeenCalledExactlyOnceWith(expect.any(String));
+    expect(JSON.parse(log.mock.calls[0]![0])).toEqual({
+      event: "api_failure", operation: "POST /api/waitlist", status: 500, code: "internal", timestamp: expect.any(String),
+    });
+  });
+
+  it("keeps a successful signup when its analytics write fails and logs only the event name and time", async () => {
+    const waitlist = await import("@/app/api/waitlist/route");
+    const isolated = await createTestContext();
+    await isolated.db.execute(sql`alter table events rename to unavailable_events`);
+    vi.spyOn(context, "getAppContext").mockResolvedValueOnce(isolated);
+    const log = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const res = await waitlist.POST(req("POST", { email: "analytics-check@example.com", consent: true, tool: "replit" }));
+
+    expect(res.status).toBe(201);
+    expect(log.mock.calls.flat().join(" ")).not.toContain("replit");
+    expect(log).toHaveBeenCalledExactlyOnceWith(expect.any(String));
+    expect(JSON.parse(log.mock.calls[0]![0])).toEqual({
+      event: "analytics_write_failure", name: "waitlist_joined", timestamp: expect.any(String),
+    });
   });
 
   it("reports health", async () => {
@@ -88,13 +138,14 @@ describe("API routes", () => {
     const health = await import("@/app/api/health/route");
     const isolated = await createTestContext();
     await isolated.db.execute(sql`alter table waitlist_entries rename to pending_migration`);
-    const getContext = vi.spyOn(context, "getAppContext").mockResolvedValueOnce(isolated);
-    try {
-      const res = await health.GET();
-      expect(res.status).toBe(503);
-      expect(await res.json()).toEqual({ ok: false, database: "down" });
-    } finally {
-      getContext.mockRestore();
-    }
+    vi.spyOn(context, "getAppContext").mockResolvedValueOnce(isolated);
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    const res = await health.GET();
+    expect(res.status).toBe(503);
+    expect(await res.json()).toEqual({ ok: false, database: "down" });
+    expect(log).toHaveBeenCalledExactlyOnceWith(expect.any(String));
+    expect(JSON.parse(log.mock.calls[0]![0])).toEqual({
+      event: "api_failure", operation: "GET /api/health", status: 503, code: "not_ready", timestamp: expect.any(String),
+    });
   });
 });

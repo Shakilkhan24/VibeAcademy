@@ -1,6 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import { ServiceError } from "./services/errors";
+import { ServiceError, type ServiceErrorCode } from "./services/errors";
 
 const NO_STORE = { "Cache-Control": "no-store" };
 export const MAX_JSON_BYTES = 16 * 1024;
@@ -9,13 +9,26 @@ export function json(data: unknown, status = 200, headers: Record<string, string
   return NextResponse.json(data, { status, headers: { ...NO_STORE, ...headers } });
 }
 
-export function errorJson(error: unknown) {
+type ApiOperation =
+  | "POST /api/xray"
+  | "DELETE /api/xray"
+  | "POST /api/xray/share"
+  | "DELETE /api/xray/share"
+  | "POST /api/waitlist"
+  | "GET /api/health";
+
+/** Use handler constants here. Database and provider exceptions can contain request data. */
+export function reportApiFailure(operation: ApiOperation, status: number, code: ServiceErrorCode | "internal" | "not_ready") {
+  console.error(JSON.stringify({ event: "api_failure", timestamp: new Date().toISOString(), operation, status, code }));
+}
+
+export function errorJson(error: unknown, operation: ApiOperation) {
   if (error instanceof ServiceError) {
+    if (error.status >= 500) reportApiFailure(operation, error.status, error.code);
     const headers: Record<string, string> = error.retryAfterSeconds ? { "Retry-After": String(error.retryAfterSeconds) } : {};
     return json({ error: { code: error.code, message: error.message } }, error.status, headers);
   }
-  // Unknown errors: log a message (never request bodies), answer generically.
-  console.error("[api] unexpected error:", error instanceof Error ? error.message : error);
+  reportApiFailure(operation, 500, "internal");
   return json({ error: { code: "internal", message: "Something went wrong on our side. Try again in a minute." } }, 500);
 }
 

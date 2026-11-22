@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const result = await runXRay(ctx, { prompt: body?.prompt, clientIp: clientIp(req) });
     return json(result, 201);
   } catch (error) {
-    return errorJson(error);
+    return errorJson(error, "POST /api/xray");
   }
 }
 
@@ -26,6 +26,6 @@ export async function DELETE(req: Request) {
     await deleteRun(ctx, await readJson(req));
     return json({ ok: true });
   } catch (error) {
-    return errorJson(error);
+    return errorJson(error, "DELETE /api/xray");
   }
 }

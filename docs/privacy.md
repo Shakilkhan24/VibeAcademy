@@ -20,6 +20,10 @@ Engineering record of exactly what SeniorSeat stores. Keep it in sync with `src/
 | `waitlist_entries` | Email, chosen tool, experience, source, consent time | Until launch email + a reasonable period (founder to decide) | On request (manual until accounts exist) |
 | `events` | Event name and coarse properties. A new waitlist signup records whether it used the X-Ray link. | Indefinite | n/a |
 
+## Application failure logs
+
+A server-side API failure produces one JSON line on standard error with the UTC time, a fixed handler name, HTTP status and error code. A failed analytics write records the time and the event name. These records omit exception text, SQL parameters, request URLs, headers and bodies. The application writes them directly to standard error so that a database outage can still be reported. Log retention will depend on the host chosen for public launch.
+
 ## Processors
 
 Tutorial completion is stored locally by lesson slug using the browser's local storage. The reader keeps an in-memory fallback when storage is unavailable. Marking a lesson incomplete removes its completion record. The server receives no completion events.

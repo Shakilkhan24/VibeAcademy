@@ -20,8 +20,8 @@ export type EventProps = Record<string, string | number | boolean | null>;
 export async function recordEvent(db: Db, name: EventName, props: EventProps = {}): Promise<void> {
   try {
     await db.insert(events).values({ id: randomUUID(), name, props });
-  } catch (error) {
+  } catch {
     // Analytics must never break a user-facing request.
-    console.warn(`[events] failed to record ${name}:`, error instanceof Error ? error.message : error);
+    console.warn(JSON.stringify({ event: "analytics_write_failure", timestamp: new Date().toISOString(), name }));
   }
 }

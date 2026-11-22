@@ -11,6 +11,6 @@ export async function POST(req: Request) {
     const ctx = await getAppContext();
     return json(await joinWaitlist(ctx, { body: await readJson(req), clientIp: clientIp(req) }), 201);
   } catch (error) {
-    return errorJson(error);
+    return errorJson(error, "POST /api/waitlist");
   }
 }

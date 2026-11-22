@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     const ctx = await getAppContext();
     return json(await shareRun(ctx, await readJson(req)));
   } catch (error) {
-    return errorJson(error);
+    return errorJson(error, "POST /api/xray/share");
   }
 }
 
@@ -24,6 +24,6 @@ export async function DELETE(req: Request) {
     await unshareRun(ctx, await readJson(req));
     return json({ ok: true });
   } catch (error) {
-    return errorJson(error);
+    return errorJson(error, "DELETE /api/xray/share");
   }
 }

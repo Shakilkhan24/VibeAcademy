@@ -32,6 +32,7 @@ On 2026-11-22, `pnpm verify` passed type checking, lint, all 104 tests, content 
 | `/open` | Live counts, cache hit rate, AI spend, average cost per paid call, budget cap and waitlist size. First-party events give the rolling 30-day signup pace and signups from the X-Ray link per 100 completed checks. | Integration tests cover duplicates, missing denominators, older unattributed events and the reporting window. The production smoke test reads the metrics on `/open`. |
 | Waitlist | Email, tool, experience, consent; no enumeration; rate-limited | Integration tests, smoke test |
 | Database readiness | `/api/health` checks that the application role can read all six Phase 0 tables without fetching any rows. An inaccessible table makes the endpoint return 503. | Route tests cover a migrated database and a reachable database missing the waitlist table. |
+| API error tracking | API failures with a 5xx status produce a structured server log identifying the operation, status and code. A failed analytics write records its event name and lets the request finish. | Regression tests exercise an unavailable waitlist table, an unavailable analytics table, a paused X-Ray, readiness failure and invalid input. |
 | Tooling | TypeScript strict, ESLint with boundary rules, Vitest, content check, migrations, smoke script, CI workflow | Local verification and the GitHub Actions verify job passed. The secret scan uses a finding-specific exception for the historical smoke-test fixture. |
 
 ## Partially implemented
