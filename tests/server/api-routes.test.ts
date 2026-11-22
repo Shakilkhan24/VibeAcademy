@@ -1,4 +1,7 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { sql } from "drizzle-orm";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import * as context from "@/server/context";
+import { createTestContext } from "../support/test-context";
 import { SHOP_PROMPT } from "../support/fixtures";
 
 /**
@@ -79,5 +82,19 @@ describe("API routes", () => {
     const res = await health.GET();
     expect(res.status).toBe(200);
     expect(await res.json()).toMatchObject({ ok: true, database: "up", analysis: "rules" });
+  });
+
+  it("returns 503 if a required table is missing from a reachable database", async () => {
+    const health = await import("@/app/api/health/route");
+    const isolated = await createTestContext();
+    await isolated.db.execute(sql`alter table waitlist_entries rename to pending_migration`);
+    const getContext = vi.spyOn(context, "getAppContext").mockResolvedValueOnce(isolated);
+    try {
+      const res = await health.GET();
+      expect(res.status).toBe(503);
+      expect(await res.json()).toEqual({ ok: false, database: "down" });
+    } finally {
+      getContext.mockRestore();
+    }
   });
 });
