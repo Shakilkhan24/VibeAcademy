@@ -50,7 +50,7 @@ it, assumptions you made, and anything that needs my decision.
 
 ## 4. Write a tutorial (you author, the agent drafts)
 
-Use this once the tutorial content type exists (M1 step 2).
+In Claude Code, use `/draft-tutorial` followed by your brief. For another coding agent, use the prompt below. [Authoring guide](content-guide.md)
 
 ```text
 Draft a tutorial from content/tutorials/_template.md following docs/content-guide.md.

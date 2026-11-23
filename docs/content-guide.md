@@ -48,6 +48,14 @@ Sentence case. Short sentences. Active voice. No product shilling: name tools as
 
 ## Writing a tutorial with Claude Code
 
+Open Claude Code in the repository and run `/draft-tutorial` with the learner, topic, chapter, depth and your teaching notes.
+
+```text
+/draft-tutorial For a first-time builder, draft a Practical lesson in the Blueprint chapter on choosing what a pickup order needs to store. Use Maya’s bakery. Have the reader check whether two sample orders contain enough information to pack both pickups.
+```
+
+The command uses the template and checks the new draft with `pnpm content:check`. Open the local reader path it returns to review the lesson. [Draft command](../.claude/commands/draft-tutorial.md)
+
 1. Choose the audience, decision, App Life Path chapter and depth. Give Claude Code those choices, your own notes, a worked example and the sources you trust. Use the five depth voices above when describing the audience.
 2. Copy [the template](../content/tutorials/_template.md) to `content/tutorials/<slug>.md`. Set the title, summary, date, estimated reading time, and taxonomy IDs. The chapter sets the broad sequence. An optional positive integer `order` places a tutorial within its chapter. Unnumbered tutorials follow numbered ones, and ties sort by slug.
 3. List required earlier lessons in `prerequisites` and the Decision Cards the lesson covers in `relatedCards`. Both fields take slugs. Start with `status: draft`. The template itself never counts as a lesson.

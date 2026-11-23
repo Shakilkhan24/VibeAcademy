@@ -1,8 +1,10 @@
 # Project status
 
-Last updated on 2026-11-22 during M1 verification. Update this file in the same change as the work it describes.
+Last updated on 2026-11-23 during M1 verification. Update this file in the same change as the work it describes.
 
 ## Implemented and verified
+
+The founder can start a lesson in Claude Code with `/draft-tutorial` and a teaching brief. The command uses the existing template, saves a draft and runs the content checker. Claude Code 2.1.268 recognised the project command and expanded a sample brief in a local test. A separate template-based draft with a prerequisite and a related card passed `pnpm content:check` in a temporary copy of the library. [Example brief](content-guide.md#writing-a-tutorial-with-claude-code)
 
 The founder approved the three Dream tutorials for the initial chapter on 2026-11-22. Their review status appears on the learning path and each lesson. The bakery exercise now supplies two complete orders, a copyable build prompt with both acceptance checks, and a third order for the learner to try. The scope card includes a test for two-sided products.
 

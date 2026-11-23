@@ -37,7 +37,7 @@ Status key: **Done**, **Next**, **Planned**, **Deferred**, **Awaiting founder** 
   5. **Authoring workflow for the founder.**
      - A tutorial template in `content/tutorials/_template.md`.
      - A section in [content-guide.md](content-guide.md) on writing tutorials with Claude Code: the depth voices, how to cite sources and how to review.
-     - Optionally, a Claude Code slash command in `.claude/commands/` that drafts a tutorial from the template.
+     - The [`/draft-tutorial` command](../.claude/commands/draft-tutorial.md) starts a draft from the template using the founder's brief.
   6. **Rule-based X-Ray quality (no API calls).** Write 20–30 hand-labelled prompts in `tests/fixtures/prompts/` with the expected status of each critical decision. Add a test that measures agreement, and improve the patterns in `src/server/ai/providers/rules.ts` until the approved 80% agreement target is met. Bump `TAXONOMY_VERSION` when the criteria change.
   7. **Deploy.** Set up hosting and Postgres, run `pnpm db:migrate` in the deploy pipeline, set production env vars (`AI_PROVIDER=rules`) and a custom domain. Add error tracking (no request bodies) and an external uptime check, and show uptime on `/open`.
   8. **Launch cards.** Include the five Decision Cards with their Draft labels. Update each card’s review status when a second engineer checks it.
