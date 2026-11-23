@@ -21,7 +21,7 @@ export const WaitlistSchema = z.object({
 
 /**
  * Always answers the same way for new and existing emails, so the form cannot be used to
- * discover who signed up. Double opt-in arrives with the email provider (roadmap M3).
+ * discover who signed up. The founder deferred double opt-in until deployment.
  */
 export async function joinWaitlist(ctx: AppContext, input: { body: unknown; clientIp: string }): Promise<{ ok: true }> {
   if (!ctx.config.features.waitlist) throw new ServiceError("feature_disabled", "The waitlist is closed right now.");

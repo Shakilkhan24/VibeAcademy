@@ -17,9 +17,24 @@ Engineering record of exactly what VibeAcademy stores. Keep it in sync with `src
 | `ai_cache` | Classification JSON keyed by prompt HMAC | 30 days (expires) | Expiry; manual purge possible |
 | `ai_usage` | None (feature, model, tokens, cost, outcome) | Indefinite | n/a |
 | `rate_limits` | HMAC of IP in the key | Pruned after about 2 days | Automatic |
-| `waitlist_entries` | Email, chosen tool, experience, source, consent time | Until launch email + a reasonable period (founder to decide) | On request (manual until accounts exist) |
+| `waitlist_entries` | Email, chosen tool, experience, source, consent time | Until launch email + a reasonable period (founder to decide) | On a verified request using the procedure below |
 | `lesson_feedback` | Yes/Not yet, optional private comment (500 characters), and a submission-specific event key. No IP, rate-limit key or account reference. | No automatic expiry | Maintainers can delete a response by its event key |
 | `events` | Lesson events contain the slug and version. Other events use coarse properties. A new waitlist signup records whether it used the X-Ray link. | Indefinite | n/a |
+
+## Delete a waitlist signup
+
+1. Receive the deletion request at `automateanything2@gmail.com`. Confirm control of the address on the request. Send a confirmation to the exact address being removed and wait for a reply before changing the database. Keep the address and correspondence in the private mailbox.
+2. Connect to the intended database using your configured PostgreSQL service. Check its identity with `psql -X -d service=vibeacademy -c '\conninfo'`. Substitute the service name for the environment you intend to operate. The operator needs permission to read the email and delete a waitlist row, insert an event and read its returned date.
+3. From the repository root, run the following with a PostgreSQL 17 client in a private terminal. Enter the verified address at the prompt. The script binds it as a query parameter. The address stays out of the command line and shell history.
+
+   ```bash
+   psql -X -d service=vibeacademy -f scripts/delete-waitlist-entry.sql
+   ```
+
+4. One returned UTC date confirms deletion of the matching signup, including its consent and optional survey answers. Zero rows means the address is already absent. Deletion and the audit entry commit in one statement. If the connection drops before a result arrives, reconnect and retry the same verified address.
+5. Confirm to the requester that the address is absent from the active waitlist. The script logs a `waitlist_deleted` event with the UTC date, a new random event ID and empty properties. Keep the address, row ID and correspondence out of any separate deletion log. Earlier aggregate signup events have no email or signup ID.
+
+The lookup uses the stored lowercase address and trims surrounding spaces. A repeat request creates no additional deletion event. When configuring the hosting provider, check database parameter logging and backup retention separately. A restored backup can contain older signups. [Operator script](../scripts/delete-waitlist-entry.sql) · [PostgreSQL 17 psql commands](https://www.postgresql.org/docs/17/app-psql.html)
 
 ## Application failure logs
 
@@ -38,6 +53,6 @@ Feedback comments stay in the private table. The public query returns completion
 
 ## Before public launch
 
-- A reviewed privacy policy and terms (open decision 9).
-- A published contact for deletion requests (open decision 10).
+- Publish the reviewed privacy policy and terms when the founder supplies the source text.
+- Choose the waitlist email provider at deployment. The founder deferred double opt-in until then.
 - Re-run the prompt-leak test against a copy of production data.

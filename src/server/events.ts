@@ -14,6 +14,7 @@ export type EventName =
   | "xray_unshared"
   | "xray_deleted"
   | "waitlist_joined"
+  | "waitlist_deleted"
   | "lesson_completed"
   | "lesson_feedback";
 

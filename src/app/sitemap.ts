@@ -6,7 +6,7 @@ const site = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").repla
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [cards, episodes, tutorials] = await Promise.all([loadCards(), loadEpisodes(), loadTutorials()]);
-  const pages = ["", "/learn", "/xray", "/cards", "/lab", "/open", "/waitlist", "/privacy"];
+  const pages = ["", "/learn", "/xray", "/cards", "/lab", "/open", "/waitlist", "/privacy", "/terms"];
   return [
     ...pages.map((p) => ({ url: `${site}${p}` })),
     ...tutorials.map((t) => ({ url: `${site}/learn/${t.slug}`, lastModified: t.updatedAt })),
