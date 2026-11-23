@@ -4,6 +4,8 @@ Last updated on 2026-11-23 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
+The blueprint grid now repeats down the full document, and the footer reaches the bottom of short pages. Chromium checks at 390 px and 1280 px covered the learning path, a tutorial, Cards, Lab, Open, a generated X-Ray result, Privacy and a 404. All 16 captures showed grid lines through the final eight pixels and no horizontal overflow. Before the fix, the learning path lost its grid after the first viewport and the 404 footer left a 33 px gap on mobile and a 177 px gap on desktop. [Before and after screenshots](screenshots/issue-1/)
+
 The founder can start a lesson in Claude Code with `/draft-tutorial` and a teaching brief. The command uses the existing template, saves a draft and runs the content checker. Claude Code 2.1.268 recognised the project command and expanded a sample brief in a local test. A separate template-based draft with a prerequisite and a related card passed `pnpm content:check` in a temporary copy of the library. [Example brief](content-guide.md#writing-a-tutorial-with-claude-code)
 
 The founder approved the three Dream tutorials for the initial chapter on 2026-11-22. Their review status appears on the learning path and each lesson. The bakery exercise now supplies two complete orders, a copyable build prompt with both acceptance checks, and a third order for the learner to try. The scope card includes a test for two-sided products.
