@@ -6,7 +6,7 @@ VibeAcademy shows vibe coders which engineering decisions their prompts leave to
 
 Open `/learn` to follow the seven-chapter learning path. Dream has three reviewed tutorials on choosing one person and one job, sketching the first workflow, and writing a testable build prompt. Blueprint continues the bakery example with three draft lessons on storing orders, deciding who can see or change them, and recording those rules in a spec. First Build adds three reviewed lessons on keeping a service key private, testing order ownership and confirming a payment. Readers can mark lessons complete in their browser. [Authoring guide](docs/content-guide.md)
 
-The Prompt X-Ray uses server-side rules and needs no API key. It connects prompt decisions to six draft Decision Cards. The first five were approved for the initial release. The new card covers when to mark an order paid. The app also includes the Twin Builds Lab foundation, a waitlist and a transparency page. This milestone is available as verified source on GitHub. Public deployment is deferred. [Milestone status](docs/status.md)
+The Prompt X-Ray uses server-side rules and needs no API key. It connects prompt decisions to eleven draft Decision Cards. Readers can choose a sign-in method, plan a monthly budget, decide what to log and check when an order is paid. The app also includes the Twin Builds Lab foundation, a waitlist and a transparency page. This milestone is available as verified source on GitHub. Public deployment is deferred. [Milestone status](docs/status.md)
 
 ```bash
 pnpm install

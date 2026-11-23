@@ -16,7 +16,7 @@ Working now:
 - Landing page, Prompt X-Ray with results, shareable results (no prompt ever shown), share image, waitlist, Twin Builds Lab foundation, `/open` transparency page, privacy page.
 - One controlled analysis pathway (`src/server/ai/gateway.ts`). The rule-based check is the default engine; an Anthropic provider with caching, a daily budget and a usage ledger is built but switched off as a deferred placeholder.
 - Deterministic, versioned scoring of 36 decisions across 12 domains (`src/domain/xray/`).
-- Six Decision Cards at `/cards`, each with a Depth Dial and a Draft label. The sixth covers payment confirmation.
+- Eleven Decision Cards at `/cards`, each with a Depth Dial and a Draft label. The latest additions cover a written spec, sign-in and sessions, logging, rate limits and monthly costs.
 - A seven-chapter learning path at `/learn`, three reviewed Dream lessons, three draft Blueprint lessons and three reviewed First Build lessons with related cards and share images, browser-local completion, and a Markdown authoring template.
 - Offline critical-decision evaluation against 24 labelled prompts. The CI threshold is 80%.
 - Type checks, lint, unit and integration tests, content validation, a production build and HTTP smoke checks. See the [verification record](docs/status.md).

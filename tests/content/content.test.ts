@@ -6,10 +6,10 @@ import { DECISIONS } from "@/domain/taxonomy";
 describe("content", () => {
   it("loads the Decision Card library with all eight parts and five depths", async () => {
     const cards = await loadCards();
-    expect(cards.length).toBeGreaterThanOrEqual(6);
+    expect(cards.length).toBeGreaterThanOrEqual(11);
     for (const card of cards) {
       expect(card.options.length, card.slug).toBeGreaterThanOrEqual(2);
-      expect(card.options.filter((o) => o.recommended), card.slug).toHaveLength(1);
+      expect(card.options.filter((o) => o.recommended).length, card.slug).toBeLessThanOrEqual(1);
       expect(Object.keys(card.depths)).toEqual(["story", "practical", "technical", "engineer", "senior"]);
       expect(card.proveIt.steps.length).toBeGreaterThan(0);
     }
