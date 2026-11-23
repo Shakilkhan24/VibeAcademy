@@ -81,7 +81,7 @@ export default async function HomePage() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 id="cards-heading" className="text-h2">Decision Cards</h2>
-              <p className="mt-2 max-w-[56ch] text-chalk-dim">Five cards so far, one for each early chapter of an app&rsquo;s life. Each explains one decision at five depths, from an everyday story to senior trade-offs.</p>
+              <p className="mt-2 max-w-[56ch] text-chalk-dim">Choose from {cards.length} cards. Each explains a decision at five depths, from an everyday story to senior trade-offs.</p>
             </div>
             <ButtonLink href="/cards" variant="secondary">See the App Life Path</ButtonLink>
           </div>

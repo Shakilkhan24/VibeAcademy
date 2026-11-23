@@ -4,9 +4,9 @@ import { EpisodeSchema } from "@/domain/content/lab-schema";
 import { DECISIONS } from "@/domain/taxonomy";
 
 describe("content", () => {
-  it("loads five valid Decision Cards with all eight parts and five depths", async () => {
+  it("loads the Decision Card library with all eight parts and five depths", async () => {
     const cards = await loadCards();
-    expect(cards).toHaveLength(5);
+    expect(cards.length).toBeGreaterThanOrEqual(6);
     for (const card of cards) {
       expect(card.options.length, card.slug).toBeGreaterThanOrEqual(2);
       expect(card.options.filter((o) => o.recommended), card.slug).toHaveLength(1);
@@ -21,7 +21,7 @@ describe("content", () => {
   });
 
   it("links every critical decision to a card", () => {
-    for (const d of DECISIONS.filter((d) => d.critical && d.id !== "cb-payments")) {
+    for (const d of DECISIONS.filter((d) => d.critical)) {
       expect(d.cardSlug, d.id).toBeTruthy();
     }
   });
