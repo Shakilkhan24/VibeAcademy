@@ -1,13 +1,16 @@
 import "server-only";
 import { and, between, count, eq, gte, inArray, isNotNull, min, sql } from "drizzle-orm";
 import type { AppContext } from "../context";
-import { aiUsage, events, waitlistEntries, xrayRuns } from "../db/schema";
+import { aiUsage, events, lessonFeedback, waitlistEntries, xrayRuns } from "../db/schema";
 
 /**
  * Numbers for the public /open page. Everything here is computed live from the database;
  * nothing is typed in by hand. Metrics we cannot measure yet are reported as null.
  */
+export const MIN_LESSON_RESPONSES = 10;
+
 export interface OpenMetrics {
+  lessons: { slug: string; completions: number; responses: number; helpfulRate: number }[];
   generatedAt: string;
   analysisMode: "ai" | "rules" | "disabled";
   firstRunAt: string | null;
@@ -57,6 +60,17 @@ export async function getOpenMetrics(ctx: AppContext): Promise<OpenMetrics> {
     unattributed: sql`count(*) filter (where ${events.name} = 'waitlist_joined' and ${events.props}->>'fromXray' is null)`.mapWith(Number),
   }).from(events).where(and(between(events.createdAt, since30, now), inArray(events.name, ["xray_completed", "waitlist_joined"])));
 
+  const lessonSlug = sql<string>`${events.props}->>'slug'`;
+  const responses = count(lessonFeedback.eventId);
+  const lessons = await db.select({
+    slug: lessonSlug,
+    completions: sql`count(*) filter (where ${events.name} = 'lesson_completed')`.mapWith(Number),
+    responses,
+    helpfulRate: sql`avg(${lessonFeedback.helpful}::int)`.mapWith(Number),
+  }).from(events).leftJoin(lessonFeedback, eq(lessonFeedback.eventId, events.id))
+    .where(inArray(events.name, ["lesson_completed", "lesson_feedback"]))
+    .groupBy(lessonSlug).having(gte(responses, MIN_LESSON_RESPONSES)).orderBy(lessonSlug);
+
   const requests = Number(usage?.requests ?? 0);
   const hits = Number(usage?.hits ?? 0);
   const micro = Number(spend?.micro ?? 0);
@@ -64,6 +78,7 @@ export async function getOpenMetrics(ctx: AppContext): Promise<OpenMetrics> {
   const provider = ctx.ai.providerName;
 
   return {
+    lessons,
     generatedAt: now.toISOString(),
     analysisMode: provider === "anthropic" ? "ai" : provider,
     firstRunAt: runs?.first ? new Date(runs.first).toISOString() : null,

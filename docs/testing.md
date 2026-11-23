@@ -9,7 +9,7 @@
 | Route tests | `tests/server/api-routes.test.ts` | Real route handlers: status codes, origin checks, JSON parsing, the full share/delete journey | PGlite |
 | Content tests | `tests/content/` | Card and Lab YAML, tutorial frontmatter, safe Markdown and cross-links | File system |
 | Smoke test | `scripts/smoke.mjs` | The deployed journey over HTTP: the learning path, X-Ray, sharing, share images, unshare, delete, waitlist, signup reporting and headers | Against a running server |
-| Chromium journeys and accessibility | `tests/browser/` | X-Ray sharing and revocation, lesson completion across tabs, clipboard, keyboard Depth Dial and signup. Axe checks the home, learning path, lesson, X-Ray and card index for serious and critical findings. | Production server at 390 px and 1280 px |
+| Chromium journeys and accessibility | `tests/browser/` | X-Ray sharing and revocation, lesson completion across tabs, clipboard, keyboard Depth Dial, signup and private feedback with a retry. Axe checks the home, learning path, lesson, X-Ray and card index for serious and critical findings. | Production server at 390 px and 1280 px |
 
 ## Commands
 

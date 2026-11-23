@@ -28,6 +28,26 @@ function toggle(slug: string) {
     unsaved.set(slug, done);
   }
   window.dispatchEvent(new Event(change));
+  return done;
+}
+
+// Keep the submission ID scoped to a single lesson version, including across re-marks.
+const completionIds = new Map<string, string>();
+async function reportCompletion(slug: string, version: number) {
+  const key = `vibeacademy:completion:${slug}:${version}`;
+  let id = completionIds.get(key);
+  if (!id) {
+    id = crypto.randomUUID();
+    try {
+      id = window.localStorage.getItem(key) || id;
+      window.localStorage.setItem(key, id);
+    } catch { /* The same tab can still recognise a repeated mark. */ }
+    completionIds.set(key, id);
+  }
+  await fetch("/api/lessons/activity", {
+    method: "POST", headers: { "content-type": "application/json" }, keepalive: true,
+    body: JSON.stringify({ kind: "completed", slug, version, submissionId: id }),
+  });
 }
 
 function subscribe(notify: () => void) {
@@ -46,14 +66,16 @@ function useDone(slug: string) {
   return useSyncExternalStore(subscribe, () => isDone(slug), () => false);
 }
 
-export function LessonCompletion({ slug }: { slug: string }) {
+export function LessonCompletion({ slug, version }: { slug: string; version: number }) {
   const done = useDone(slug);
   return (
     <div className="mt-8 flex flex-wrap items-center gap-4">
-      <Button variant={done ? "secondary" : "primary"} onClick={() => toggle(slug)}>
+      <Button variant={done ? "secondary" : "primary"} onClick={() => {
+        if (toggle(slug)) void reportCompletion(slug, version).catch(() => { /* Local progress works offline. */ });
+      }}>
         {done ? "Mark as incomplete" : "Mark as done"}
       </Button>
-      <span className="text-small text-chalk-dim" role="status">{done ? "Lesson completed on this browser." : "Progress stays in this browser."}</span>
+      <span className="text-small text-chalk-dim" role="status">{done ? "Lesson marked complete in this browser." : "This browser saves your checklist. We count completion marks."}</span>
     </div>
   );
 }

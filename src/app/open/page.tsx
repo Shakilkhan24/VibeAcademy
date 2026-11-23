@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAppContext } from "@/server/context";
-import { getOpenMetrics } from "@/server/services/open-metrics";
+import { loadTutorials } from "@/content/tutorials";
+import { getOpenMetrics, MIN_LESSON_RESPONSES } from "@/server/services/open-metrics";
 import { Container, PageIntro } from "@/components/layout/page-intro";
 import { Notice } from "@/components/ui/notice";
 
@@ -18,6 +19,7 @@ export default async function OpenPage() {
   const ctx = await getAppContext();
   const m = await getOpenMetrics(ctx);
 
+  const titles = new Map(m.lessons.length ? (await loadTutorials()).map((lesson) => [lesson.slug, lesson.title] as const) : []);
   const rows: { label: string; value: string; how: string }[] = [
     { label: "Prompt X-Rays run", value: m.xrayTotal.toLocaleString("en-US"), how: m.firstRunAt ? `Stored analyses since ${m.firstRunAt.slice(0, 10)}. Results deleted by their owners are not counted.` : "None yet." },
     { label: "X-Rays in the last 30 days", value: m.xrayLast30Days.toLocaleString("en-US"), how: "Count of stored analyses created in the last 30 days." },
@@ -68,6 +70,25 @@ export default async function OpenPage() {
           </tbody>
         </table>
       </div>
+
+      <section aria-labelledby="lesson-feedback" className="mt-12">
+        <h2 id="lesson-feedback" className="text-h2">Lesson feedback</h2>
+        <p className="mt-2 max-w-prose text-chalk-dim">
+          Figures appear after {MIN_LESSON_RESPONSES} responses to a lesson, across all versions. The helpful rate is the share of responses marked Yes.
+        </p>
+        {m.lessons.length === 0 ? (
+          <p className="mt-4 text-small">No lesson has reached that threshold yet.</p>
+        ) : (
+          <ul className="mt-4 divide-y divide-line border-y border-line">
+            {m.lessons.map((lesson) => (
+              <li key={lesson.slug} className="grid gap-1 py-3 sm:grid-cols-2">
+                <span className="font-medium">{titles.get(lesson.slug) ?? lesson.slug}</span>
+                <span>{lesson.completions} completion {lesson.completions === 1 ? "mark" : "marks"} · {pct(lesson.helpfulRate)} helpful ({lesson.responses} responses)</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="mt-12 grid gap-6 md:grid-cols-2">
         <div>

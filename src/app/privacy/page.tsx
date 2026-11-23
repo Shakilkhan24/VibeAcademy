@@ -35,6 +35,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-h2">Your learning progress</h2>
           <p className="mt-4 text-chalk-dim">This browser remembers which tutorials you mark as done. You can mark a lesson as incomplete or clear the stored data for this site to remove your progress.</p>
+          <p className="mt-3 text-chalk-dim">Marking a lesson done also sends its short name and version so we can count completions. An optional Yes or Not yet response tells us whether the lesson helped. Your written comment stays private to the team. The public numbers appear after a lesson receives ten responses.</p>
         </section>
         <section>
           <h2 className="text-h2">Your visit and your email</h2>
