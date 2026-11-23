@@ -82,7 +82,7 @@ What the tests cover, by file:
 ## Assumptions made
 
 - English-first, global audience (per the founder's instruction to remove locale-specific content).
-- "SeniorSeat" is the working brand; it appears in a small number of places.
+- “SeniorSeat” was the working name during generation. The founder selected VibeAcademy on 2026-11-23. Screenshots from this session show the original name. [Brand decision](docs/open-decisions.md#resolved-for-m1)
 - The deployment sits behind a proxy that sets `x-forwarded-for` (true for Vercel, Render, Fly.io and Cloudflare).
 - Default limits: 3 X-Rays per minute and 8 per day per visitor; daily AI budget $2. All configurable by environment variables.
 - The five cards are drafts written for expert review. Their facts are general engineering knowledge; the one statistic used (the Escape scan) is cited on the card.

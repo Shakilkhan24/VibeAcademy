@@ -59,7 +59,7 @@ export function WaitlistForm({ source }: { source?: string }) {
   if (status === "done") {
     return (
       <Notice tone="success" title="You're on the list">
-        We will email you once, when SeniorSeat opens. Nothing else.
+        We will email you once, when VibeAcademy opens. Nothing else.
       </Notice>
     );
   }
@@ -87,7 +87,7 @@ export function WaitlistForm({ source }: { source?: string }) {
         </div>
       </div>
       <Checkbox id="wl-consent" name="consent" required>
-        Email me when SeniorSeat opens. I can ask for my email to be deleted at any time.
+        Email me when VibeAcademy opens. I can ask for my email to be deleted at any time.
       </Checkbox>
       <div>
         <Button type="submit" disabled={status === "busy"}>

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 /**
  * Twin Builds Lab content. The same idea is built twice (Twin A: a typical beginner prompt;
- * Twin B: a SeniorSeat Blueprint) and both face identical tests.
+ * Twin B: a VibeAcademy Blueprint) and both face identical tests.
  *
  * Honesty rule (enforced here): an episode cannot be "published" without a measured value
  * for every required metric for BOTH twins, plus a link to the raw artifacts. The site never

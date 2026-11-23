@@ -11,10 +11,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "SeniorSeat: decide like a senior", template: "%s | SeniorSeat" },
+  title: { default: "VibeAcademy: decide like a senior", template: "%s | VibeAcademy" },
   description:
-    "Every prompt hides engineering decisions. SeniorSeat shows vibe coders which ones they left to the AI, and how to make them.",
-  openGraph: { siteName: "SeniorSeat", type: "website" },
+    "Every prompt hides engineering decisions. VibeAcademy shows vibe coders which ones they left to the AI, and how to make them.",
+  openGraph: { siteName: "VibeAcademy", type: "website" },
 };
 
 export const viewport: Viewport = { themeColor: "#0f2d4e", colorScheme: "dark" };

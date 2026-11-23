@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const lesson = (await loadTutorials()).find((item) => item.slug === slug);
   if (!lesson) notFound();
-  return { title: lesson.title, description: lesson.summary, openGraph: { type: "article", title: lesson.title, description: lesson.summary } };
+  return { title: lesson.title, description: lesson.summary, openGraph: { type: "article", siteName: "VibeAcademy", title: lesson.title, description: lesson.summary } };
 }
 
 export default async function TutorialPage({ params }: Props) {

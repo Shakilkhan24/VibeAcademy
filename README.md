@@ -1,8 +1,8 @@
-# SeniorSeat
+# VibeAcademy
 
 Vibe like a beginner. Decide like a senior.
 
-SeniorSeat shows vibe coders which engineering decisions their prompts leave to the AI, teaches each decision at the right depth and moment, and proves that better decisions produce better software.
+VibeAcademy shows vibe coders which engineering decisions their prompts leave to the AI, teaches each decision at the right depth and moment, and proves that better decisions produce better software.
 
 Open `/learn` to follow the seven-chapter learning path. The first chapter, Dream, has three reviewed tutorials in increasing difficulty. They cover choosing one person and one job, sketching the first workflow, and writing a build prompt with acceptance checks. Readers can mark lessons complete in their browser. Use the tutorial template to add a lesson. [Authoring guide](docs/content-guide.md)
 

@@ -63,7 +63,7 @@ export function SharePanel({ runId, ownerToken, onDeleted }: { runId: string; ow
       <div>
         <h3 className="text-h3">Delete this result</h3>
         <p className="mt-2 text-small text-chalk-dim">
-          We keep the score and coverage (never the prompt) to improve SeniorSeat. You can remove it now.
+          We keep the score and coverage (never the prompt) to improve VibeAcademy. You can remove it now.
         </p>
         <div className="mt-4">
           <Button

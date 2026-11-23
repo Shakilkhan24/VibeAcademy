@@ -16,7 +16,7 @@ export const WaitlistSchema = z.object({
   tool: z.enum(WAITLIST_TOOLS).optional(),
   experience: z.enum(WAITLIST_EXPERIENCE).optional(),
   source: z.string().max(40).regex(/^[a-z0-9-]*$/).optional(),
-  consent: z.literal(true, { error: "Tick the box so we can email you when SeniorSeat opens." }),
+  consent: z.literal(true, { error: "Tick the box so we can email you when VibeAcademy opens." }),
 });
 
 /**

@@ -1,9 +1,9 @@
 # START HERE
 
-You are continuing **SeniorSeat**, a platform that teaches vibe coders to make the engineering decisions a senior engineer makes, while AI does the typing. This file is the entry point for any person or AI agent picking up the project. Read it fully before changing anything.
+You are continuing **VibeAcademy**, a platform that teaches vibe coders to make the engineering decisions a senior engineer makes, while AI does the typing. This file is the entry point for any person or AI agent picking up the project. Read it fully before changing anything.
 
 *Tagline:* Vibe like a beginner. Decide like a senior.
-*Core idea:* every vague prompt silently hands dozens of engineering decisions to the AI. SeniorSeat reveals them (Prompt X-Ray), teaches them (tutorials and Decision Cards at five depths), turns them into a spec (Blueprint and Build Pack) and proves the difference (Twin Builds Lab, Reality Check).
+*Core idea:* every vague prompt silently hands dozens of engineering decisions to the AI. VibeAcademy reveals them (Prompt X-Ray), teaches them (tutorials and Decision Cards at five depths), turns them into a spec (Blueprint and Build Pack) and proves the difference (Twin Builds Lab, Reality Check).
 
 *Current direction:* a **tutorials-first website**. Nothing in the product calls a paid AI API. The founder writes tutorials and Lab comparisons offline with Claude Code, and the Prompt X-Ray runs on a rule-based check ([ADR 0011](docs/decisions/0011-rules-first-ai-deferred.md)).
 
@@ -85,7 +85,7 @@ When the founder resumes public launch, confirm the domain, hosting and Postgres
 
 **Handing this to a coding agent:** paste-ready prompts for each kind of session (orientation, design pass, the next roadmap step, drafting a tutorial, producing a Lab comparison) are in [docs/agent-prompts.md](docs/agent-prompts.md).
 
-Decisions that need the founder (brand, vendors, prices, and whether to switch on paid AI) are listed in [docs/open-decisions.md](docs/open-decisions.md). Do not silently decide them.
+Decisions that need the founder (vendors, prices, and whether to switch on paid AI) are listed in [docs/open-decisions.md](docs/open-decisions.md). Do not silently decide them.
 
 ## 7. Rules that must never be broken
 

@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const band = SCORE_BANDS.find((b) => b.id === summary.band)?.label ?? "";
   return {
     title: `A Prompt X-Ray: ${summary.score}/100`,
-    description: `${band}. ${summary.silentCount} decisions left to the AI. Run your own free Prompt X-Ray on SeniorSeat.`,
+    description: `${band}. ${summary.silentCount} decisions left to the AI. Run your own free Prompt X-Ray on VibeAcademy.`,
     robots: { index: false, follow: true },
   };
 }
@@ -48,7 +48,7 @@ export default async function SharedXRayPage({ params }: Props) {
 
       {summary.mode === "rules" ? (
         <Notice tone="caveat" title="Rule-based check" className="mb-10">
-          This result came from SeniorSeat&rsquo;s rule-based check (keyword rules), not from AI analysis.
+          This result came from VibeAcademy&rsquo;s rule-based check (keyword rules), not from AI analysis.
         </Notice>
       ) : null}
 

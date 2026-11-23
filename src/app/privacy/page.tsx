@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container, PageIntro } from "@/components/layout/page-intro";
 
-export const metadata: Metadata = { title: "Privacy", description: "What SeniorSeat stores, what it never stores, and how to delete it." };
+export const metadata: Metadata = { title: "Privacy", description: "What VibeAcademy stores, what it never stores, and how to delete it." };
 
 /**
  * Plain-language privacy summary of what the code actually does. Keep it in sync with
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-h2">Your X-Ray result</h2>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-chalk-dim">
-            <li>We store the score, which decisions were made, the kind of app and the coverage per domain, to improve SeniorSeat.</li>
+            <li>We store the score, which decisions were made, the kind of app and the coverage per domain, to improve VibeAcademy.</li>
             <li>Sharing is off until you create a share link. A shared page shows the score, coverage and top risks only.</li>
             <li>You can stop sharing or delete the result from the result page at any time.</li>
           </ul>
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
           <ul className="mt-4 list-disc space-y-2 pl-5 text-chalk-dim">
             <li>Your IP address is turned into a keyed fingerprint to enforce fair-use limits. We do not store the address itself.</li>
             <li>No advertising or third-party tracking cookies. Product analytics are counted in our own database, without personal data.</li>
-            <li>If you join the waitlist we store your email and the answers you chose, and use them only to tell you when SeniorSeat opens. To have them deleted before self-service deletion arrives, email the address given in the launch announcement.</li>
+            <li>If you join the waitlist we store your email and the answers you chose, and use them only to tell you when VibeAcademy opens. To have them deleted before self-service deletion arrives, email the address given in the launch announcement.</li>
           </ul>
         </section>
       </div>

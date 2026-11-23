@@ -1,6 +1,6 @@
 # Architecture
 
-SeniorSeat is one Next.js application with strict internal boundaries, one Postgres schema, and one controlled pathway to AI models. It is sized for a solo founder working with AI agents: cheap to run, simple to deploy, easy to reason about.
+VibeAcademy is one Next.js application with strict internal boundaries, one Postgres schema, and one controlled pathway to AI models. It is sized for a solo founder working with AI agents: cheap to run, simple to deploy, easy to reason about.
 
 ## Layers and boundaries
 

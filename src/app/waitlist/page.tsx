@@ -4,7 +4,7 @@ import { WaitlistForm } from "@/components/waitlist/waitlist-form";
 
 export const metadata: Metadata = {
   title: "Join the waitlist",
-  description: "Be first in when SeniorSeat's learning path, Blueprints and Build Packs open.",
+  description: "Be first in when VibeAcademy's learning path, Blueprints and Build Packs open.",
 };
 
 type Props = { searchParams: Promise<{ source?: string }> };

@@ -13,8 +13,8 @@ const NAV = [
 export function SiteHeader() {
   return (
     <header className="border-b border-line">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-8 gap-y-3 px-5 py-4 sm:px-8">
-        <Link href="/" className="text-chalk no-underline" aria-label="SeniorSeat home">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-4 gap-y-3 px-5 py-4 sm:gap-x-8 sm:px-8">
+        <Link href="/" className="text-chalk no-underline" aria-label="VibeAcademy home">
           <Wordmark />
         </Link>
         <nav aria-label="Main" className="order-3 w-full sm:order-none sm:w-auto">

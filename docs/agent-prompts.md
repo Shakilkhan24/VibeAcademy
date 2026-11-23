@@ -88,5 +88,5 @@ These belong to you, so the agent should only bring them to you with options:
 
 - the design brief;
 - tutorial topics and reviewing the drafts;
-- everything in `docs/open-decisions.md` (brand, prices, payments, auth, vendors, legal text);
+- everything in `docs/open-decisions.md` (prices, payments, auth, vendors, legal text);
 - whether to switch on any paid AI feature.

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Open numbers",
-  description: "SeniorSeat's live usage, AI spend and limits, computed from the production database.",
+  description: "VibeAcademy's live usage, AI spend and limits, computed from the production database.",
 };
 
 const usd = (n: number) => (n === 0 ? "$0" : n < 0.01 ? `$${n.toFixed(5)}` : `$${n.toFixed(2)}`);
@@ -36,7 +36,7 @@ export default async function OpenPage() {
   return (
     <Container>
       <PageIntro title="Open numbers">
-        SeniorSeat teaches people to measure what they build, so we publish what we measure. Every figure below is computed live from our own
+        VibeAcademy teaches people to measure what they build, so we publish what we measure. Every figure below is computed live from our own
         database when you load the page.
       </PageIntro>
 

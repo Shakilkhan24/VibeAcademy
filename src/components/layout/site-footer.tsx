@@ -8,7 +8,7 @@ import { SCORING_VERSION } from "@/domain/xray/scoring";
  */
 export function SiteFooter() {
   const cells: [string, string][] = [
-    ["Project", "SeniorSeat"],
+    ["Project", "VibeAcademy"],
     ["Stage", "Phase 0, pre-launch"],
     ["Decision taxonomy", `v${TAXONOMY_VERSION}`],
     ["Scoring rules", `v${SCORING_VERSION}`],

@@ -22,7 +22,7 @@ export default async function HomePage() {
           <p className="text-small text-chalk-dim">Vibe like a beginner. Decide like a senior.</p>
           <h1 className="mt-4 max-w-[21ch] text-h1">Every prompt hides decisions. Make them before the AI does.</h1>
           <p className="mt-6 max-w-[60ch] text-chalk-dim">
-            SeniorSeat shows you which engineering decisions your prompt leaves to the AI, and teaches each one at your level, at the moment your app
+            VibeAcademy shows you which engineering decisions your prompt leaves to the AI, and teaches each one at your level, at the moment your app
             needs it. Start with the Dream tutorials or try a prompt of your own.
           </p>
           <ButtonLink href="/learn" className="mt-6">Explore the learning path</ButtonLink>
@@ -59,7 +59,7 @@ export default async function HomePage() {
 
       <Container>
         <section className="py-20" aria-labelledby="how-heading">
-          <h2 id="how-heading" className="max-w-[24ch] text-h2">How SeniorSeat turns a vibe into a plan</h2>
+          <h2 id="how-heading" className="max-w-[24ch] text-h2">How VibeAcademy turns a vibe into a plan</h2>
           <ol className="mt-10 grid gap-px border border-line bg-line md:grid-cols-4">
             {[
               { title: "X-ray the prompt", body: `See which of ${DECISIONS.length} decisions your prompt makes, which it skips, and which will hurt first.`, now: true },
@@ -102,7 +102,7 @@ export default async function HomePage() {
           <div>
             <h2 id="lab-heading" className="text-h2">Same idea. Built twice. Tested the same way.</h2>
             <p className="mt-4 text-chalk-dim text-measure">
-              In the Twin Builds Lab, one app is built from a typical beginner prompt and again from a SeniorSeat Blueprint. Both face identical load,
+              In the Twin Builds Lab, one app is built from a typical beginner prompt and again from a VibeAcademy Blueprint. Both face identical load,
               security, recovery and cost tests, and every number links to raw output.
             </p>
             <div className="mt-6">

@@ -4,7 +4,7 @@ Outcome-based milestones in dependency order. Each one opens only when the one b
 
 Status key: **Done**, **Next**, **Planned**, **Deferred**, **Awaiting founder** (see [open-decisions.md](open-decisions.md)).
 
-**Direction change (2026-11-18, [ADR 0011](decisions/0011-rules-first-ai-deferred.md)).** SeniorSeat is built as a tutorials-first website. Nothing in the product calls a paid AI API for now:
+**Direction change (2026-11-18, [ADR 0011](decisions/0011-rules-first-ai-deferred.md)).** VibeAcademy is built as a tutorials-first website. Nothing in the product calls a paid AI API for now:
 
 - The Prompt X-Ray runs on the rule-based check.
 - Tutorials and Lab comparisons are written by the founder offline, with Claude Code and the founder's own instructions, and published as content files.
@@ -97,7 +97,7 @@ Status key: **Done**, **Next**, **Planned**, **Deferred**, **Awaiting founder** 
 
 ## M6: Senior ecosystem (Deferred, Phase 3)
 
-The SeniorSeat agent skill and MCP server, depth 5 across the library, certificates, team and campus plans, and the AWS migration as public content.
+The VibeAcademy agent skill and MCP server, depth 5 across the library, certificates, team and campus plans, and the AWS migration as public content.
 
 ## Later: AI features (Deferred)
 

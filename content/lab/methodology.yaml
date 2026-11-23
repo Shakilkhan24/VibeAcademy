@@ -1,9 +1,9 @@
 version: 1
-updated: "2026-11-18"
+updated: "2026-11-23"
 
 rules:
   - Both twins are built by the same person, in the same tool, from the same idea, in the same week.
-  - Twin A starts from a prompt written the way a typical beginner writes one. Twin B starts from a SeniorSeat Blueprint. Both are published in full.
+  - Twin A starts from a prompt written the way a typical beginner writes one. Twin B starts from a VibeAcademy Blueprint. Both are published in full.
   - Both twins face identical tests, run by the scripts in the repository's lab/ folder, against live deployments.
   - Every published number links to the raw test output. If Twin A wins a metric, that result is published too.
   - Sponsors never choose the idea, the tool, the tests or the results.

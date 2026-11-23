@@ -221,7 +221,7 @@ function Workbench({ hydrated }: { hydrated: boolean }) {
           <section className="mt-16 sheet p-6 sm:p-8">
             <h2 className="text-h2">Learn to make these decisions yourself</h2>
             <p className="mt-3 max-w-[60ch] text-chalk-dim">
-              SeniorSeat turns each decision into a short card at your level, then builds the spec your AI tool follows. Join the waitlist to get
+              VibeAcademy turns each decision into a short card at your level, then builds the spec your AI tool follows. Join the waitlist to get
               in first.
             </p>
             <div className="mt-6">
