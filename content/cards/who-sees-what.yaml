@@ -1,12 +1,12 @@
 slug: who-sees-what
-version: 2
-updated: "2026-11-22"
+version: 3
+updated: "2026-11-23"
 status: draft
 title: Who can see whose data?
 domain: identity-access
 chapter: first-build
 minRank: builder
-decisionIds: [ia-row-access, ia-login, ss-privacy]
+decisionIds: [ia-row-access, ss-privacy]
 
 question: Can one customer see another customer's orders, messages or profile?
 
@@ -109,7 +109,7 @@ depths:
     or separate databases per customer) based on compliance needs and blast radius, and keep an audit
     log of staff access to customer data.
 
-related: [where-secrets-live, where-data-lives]
+related: [choose-a-sign-in-method, where-secrets-live, where-data-lives]
 
 sources:
   - title: Supabase row-level security

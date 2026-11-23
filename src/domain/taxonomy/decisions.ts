@@ -86,6 +86,7 @@ export const DECISIONS: readonly Decision[] = [
     promptLine: "Before coding, write SPEC.md and AGENTS.md with these decisions, and read them at the start of every session.",
     addressedWhen: "Asks for or references a persistent spec, requirements document, AGENTS.md, rules file or similar.",
     partialWhen: "Asks the AI to 'plan first' without a persistent written artefact.",
+    cardSlug: "keep-a-build-spec",
   },
   {
     id: "pl-task-breakdown",
@@ -288,7 +289,7 @@ export const DECISIONS: readonly Decision[] = [
     promptLine: "Authentication: use [auth provider] with [email link / Google / passkeys]. Never store or handle passwords ourselves.",
     addressedWhen: "Names the login method or provider (Google sign-in, magic link, Supabase Auth, Clerk, Auth0, passkeys).",
     partialWhen: "Says users can sign up or log in without saying how.",
-    cardSlug: "who-sees-what",
+    cardSlug: "choose-a-sign-in-method",
   },
   {
     id: "ia-row-access",

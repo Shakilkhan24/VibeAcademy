@@ -1,0 +1,53 @@
+slug: keep-a-build-spec
+version: 1
+updated: "2026-11-23"
+status: draft
+title: Where will the builder find the agreed spec?
+domain: planning-specs
+chapter: blueprint
+minRank: prompter
+decisionIds: [pl-spec-file]
+
+question: If Maya hands the bakery project to someone tomorrow, where can they find the pickup rules she approved?
+moment: Save the first agreement as soon as a second build session or a second person will need it.
+ifSilent: A chat about Saturday pickups can settle who may change an order without leaving that rule anywhere the next builder will look. The next version might let Jo change a pickup time after Maya has packed her bag.
+
+options:
+  - key: repo-spec
+    label: Keep the spec beside the code
+    recommended: true
+    summary: Write the standing decisions and examples in SPEC.md. Point the builder to it from the project's instructions.
+    pros: [A change to a rule can be reviewed alongside the code and check that implement it.]
+    cons: [Someone must keep the file readable as more rules accumulate.]
+    cost: Uses the project's existing repository.
+    effort: Start with the job, its boundary and a worked example.
+    promptLine: Read SPEC.md before editing. Record [agreed rule] and [observable check] there. If a request conflicts with the spec, ask me which rule to change.
+  - key: issue-spec
+    label: Keep the current feature spec in a tracked issue
+    summary: Put the decision, its owner and acceptance examples in an issue that Maya and the builder can both read. Link to it from the repository.
+    pros: [Maya can discuss a change beside the example it affects.]
+    cons: [A builder needs access to the issue and a durable pointer after it closes.]
+    cost: Uses an issue tracker shared with the builder.
+    effort: Name one authoritative issue per feature and link any replacement.
+    promptLine: Use [issue link] as the spec for this feature. Link it from the project instructions. Record approved changes beside the original acceptance examples.
+
+proveIt:
+  steps:
+    - Record that only Maya may move a pickup time. Include a worked example where Jo asks for a later pickup and the order stays put until Maya agrees.
+    - Give another reader the project instructions and no chat history. Ask who may move the pickup and where they found the answer.
+    - Add an approved change to the chosen spec and repeat the handoff with the updated example.
+  passWhen: The reader finds the current rule through the project instructions and predicts the order's time before and after Maya acts.
+
+depths:
+  story: The spec is the bakery's working recipe. A note in yesterday's conversation cannot help the person opening the shop tomorrow unless they know where to find it.
+  practical: Write one real choice and one example a reader can check. Maya might write that Jo can see her pickup and must call the counter to change it.
+  technical: An acceptance example states a starting condition, an action and an observable result. Link it to the rule it demonstrates.
+  engineer: Review a changed requirement with the corresponding test. A reader should be able to trace a failed check back to a specific decision.
+  senior: Give each standing rule an owner. When the baker changes the policy, replace the active rule and keep the reason in version history or the issue discussion.
+
+related: [one-job, where-data-lives, who-sees-what]
+sources:
+  - title: Cucumber reference for examples and scenarios
+    url: https://cucumber.io/docs/gherkin/reference/
+  - title: GitHub guide to tracking work in issues
+    url: https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues
