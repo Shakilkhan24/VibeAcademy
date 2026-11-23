@@ -1,10 +1,10 @@
-# AGENTS.md: SeniorSeat
+# AGENTS.md: VibeAcademy
 
 Instructions for any AI coding agent (and human) working in this repository. Start with [START_HERE.md](START_HERE.md) if you have not read it. For anything visual, [docs/design-brief.md](docs/design-brief.md) is the founder's direction and wins over the current look.
 
 ## What this product is
 
-SeniorSeat teaches vibe coders to make the engineering decisions a senior engineer makes. Its philosophy is in [docs/product.md](docs/product.md): teach decisions, not tools; at the right depth; at the right moment; and prove that better decisions produce better software. SeniorSeat is itself built that way: decide first, record the decision, then let AI build.
+VibeAcademy teaches vibe coders to make the engineering decisions a senior engineer makes. Its philosophy is in [docs/product.md](docs/product.md): teach decisions, not tools; at the right depth; at the right moment; and prove that better decisions produce better software. VibeAcademy is itself built that way: decide first, record the decision, then let AI build.
 
 ## Commands
 

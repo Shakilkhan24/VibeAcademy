@@ -3,7 +3,7 @@ import { loadTutorials } from "@/content/tutorials";
 import { DEPTHS, getChapter } from "@/domain/taxonomy";
 import { learningImage } from "../_share-image";
 
-export const alt = "A SeniorSeat tutorial";
+export const alt = "A VibeAcademy tutorial";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

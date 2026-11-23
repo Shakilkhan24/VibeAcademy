@@ -18,6 +18,7 @@ On 2026-11-22, `pnpm verify` passed type checking, lint, all 112 tests, content 
 
 | Area | What exists | Verified by |
 | --- | --- | --- |
+| Brand | The founder chose VibeAcademy on 2026-11-23. Pages, share images, generated prompts and starter files use that spelling. The earlier SeniorSeat name remains in historical records and screenshots, browser storage and events, process cache keys, the CI scratch directory and the smoke-test database name. | Chromium checked 12 routes at 390 px and 1280 px, including a shared result. Existing completion, depth and X-Ray state carried over. The production smoke test covers the home link and tutorial share metadata. [Brand decision and availability checks](open-decisions.md#resolved-for-m1) |
 | Tutorial format | Markdown with typed YAML frontmatter, shared taxonomy IDs, and HTML escaped in lesson bodies ([ADR 0012](decisions/0012-tutorial-markdown.md)) | Tutorial format tests cover metadata, delimiters, code examples and link handling |
 | Learning path and reader | Home and navigation link to `/learn`. All seven chapters appear in order. Three reviewed Dream lessons have reader pages with contents, prerequisite and Decision Card links, copyable examples, callouts and adjacent lessons. The sitemap and share images cover the new routes. | Content tests and production smoke checks cover reader pages, missing slugs, sitemap and share images. |
 | Accessibility | The Lab and transparency tables support keyboard scrolling inside the page width. | Chromium desktop and mobile journey checks and axe WCAG A/AA checks on the learning path and main pages |
@@ -65,7 +66,7 @@ M1 public launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (AD
 
 ## Awaiting founder
 
-See [open-decisions.md](open-decisions.md): brand name confirmation, auth choice, email provider, payments provider and prices, hosting account, legal privacy policy.
+See [open-decisions.md](open-decisions.md): launch domain, auth choice, email provider, payments provider and prices, hosting account, legal privacy policy.
 
 ## Known limitations
 

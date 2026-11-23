@@ -11,7 +11,7 @@ describe("tutorial library", () => {
   let directory: string;
   let root: string;
   beforeEach(async () => {
-    root = await mkdtemp(path.join(tmpdir(), "seniorseat-lessons-"));
+    root = await mkdtemp(path.join(tmpdir(), "vibeacademy-lessons-"));
     directory = path.join(root, "content", "tutorials");
     await mkdir(directory, { recursive: true });
     vi.spyOn(process, "cwd").mockReturnValue(root);

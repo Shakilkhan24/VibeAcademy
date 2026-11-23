@@ -1,6 +1,6 @@
 # Privacy: data inventory
 
-Engineering record of exactly what SeniorSeat stores. Keep it in sync with `src/server/db/schema.ts` and the public `/privacy` page. Any change that stores new personal data or anything derived from prompt text needs an ADR (see ADR 0005).
+Engineering record of exactly what VibeAcademy stores. Keep it in sync with `src/server/db/schema.ts` and the public `/privacy` page. Any change that stores new personal data or anything derived from prompt text needs an ADR (see ADR 0005).
 
 ## What is never stored
 

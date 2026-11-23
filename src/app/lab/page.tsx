@@ -6,7 +6,7 @@ import { FightCard } from "@/components/lab/fight-card";
 
 export const metadata: Metadata = {
   title: "Twin Builds Lab",
-  description: "The same app built twice, from a beginner prompt and from a SeniorSeat Blueprint, and tested the same way.",
+  description: "The same app built twice, from a beginner prompt and from a VibeAcademy Blueprint, and tested the same way.",
 };
 
 export default async function LabPage() {
@@ -15,7 +15,7 @@ export default async function LabPage() {
   return (
     <Container>
       <PageIntro title="Same idea, built twice, tested the same way">
-        Claims about better software are cheap. The Lab builds one app from a typical beginner prompt and again from a SeniorSeat Blueprint, then
+        Claims about better software are cheap. The Lab builds one app from a typical beginner prompt and again from a VibeAcademy Blueprint, then
         runs both through identical tests and publishes every number with its raw output.
       </PageIntro>
 

@@ -1,8 +1,8 @@
 {
-  "name": "seniorseat",
+  "name": "vibeacademy",
   "version": "0.1.0",
   "private": true,
-  "description": "SeniorSeat: teaches vibe coders to make the decisions a senior engineer makes. Phase 0 foundation.",
+  "description": "VibeAcademy: teaches vibe coders to make the decisions a senior engineer makes. Phase 0 foundation.",
   "type": "module",
   "packageManager": "pnpm@10.28.0",
   "engines": {

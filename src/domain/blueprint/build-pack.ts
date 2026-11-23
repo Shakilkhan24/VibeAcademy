@@ -64,8 +64,8 @@ export function renderAgentsMd(input: BuildPackInput): string {
   out.push("");
   out.push(
     input.source === "xray"
-      ? `Starter generated from a SeniorSeat Prompt X-Ray on ${date} (taxonomy v${input.taxonomyVersion}). It is yours: edit it, then keep it in the root of your repository so every AI session reads it first.`
-      : `Generated from your SeniorSeat Blueprint on ${date} (taxonomy v${input.taxonomyVersion}).`,
+      ? `Starter generated from a VibeAcademy Prompt X-Ray on ${date} (taxonomy v${input.taxonomyVersion}). It is yours: edit it, then keep it in the root of your repository so every AI session reads it first.`
+      : `Generated from your VibeAcademy Blueprint on ${date} (taxonomy v${input.taxonomyVersion}).`,
   );
   out.push("");
   out.push("## Product");

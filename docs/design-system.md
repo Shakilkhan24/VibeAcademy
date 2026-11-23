@@ -1,6 +1,6 @@
 # Design system
 
-SeniorSeat looks like an engineer's drawing sheet: chalk lines on cyanotype blue. Decisions you have made are drawn in pencil; critical gaps are marked in redline. The design should feel calm, technical and approachable, never like a generic SaaS dashboard.
+VibeAcademy looks like an engineer's drawing sheet: chalk lines on cyanotype blue. Decisions you have made are drawn in pencil; critical gaps are marked in redline. The design should feel calm, technical and approachable, never like a generic SaaS dashboard.
 
 ## Principles
 

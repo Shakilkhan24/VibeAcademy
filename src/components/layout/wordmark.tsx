@@ -7,7 +7,7 @@ export function Wordmark({ className }: { className?: string }) {
         <path d="M5 4v15" fill="none" stroke="#f2c14e" strokeWidth="1.5" />
         <path d="M3.5 4h3M3.5 19h3" fill="none" stroke="#f2c14e" strokeWidth="1.5" />
       </svg>
-      <span className="ml-2 font-display text-[1.15rem] font-[680] tracking-tight [font-stretch:122%]">SeniorSeat</span>
+      <span className="ml-2 font-display text-[1.15rem] font-[680] tracking-tight [font-stretch:122%]">VibeAcademy</span>
     </span>
   );
 }

@@ -9,7 +9,7 @@ import type { ScoreResult } from "./scoring";
  * No AI is involved: it costs nothing, it never invents requirements, and it never rewrites
  * the learner's words.
  */
-export const UPGRADE_VERSION = 1;
+export const UPGRADE_VERSION = 2;
 
 export interface UpgradeLine {
   decisionId: string;
@@ -27,7 +27,7 @@ export interface PromptUpgrade {
 }
 
 export const UPGRADE_HEADER =
-  "Decisions for this build (added by a SeniorSeat X-Ray; replace anything in [brackets] with your choice):";
+  "Decisions for this build (added by a VibeAcademy X-Ray; replace anything in [brackets] with your choice):";
 
 export function buildUpgradeLines(score: ScoreResult): UpgradeLine[] {
   const lines: UpgradeLine[] = [];

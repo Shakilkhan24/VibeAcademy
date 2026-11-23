@@ -4,7 +4,6 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 
 | # | Decision | Why it matters | Provisional choice in the code | Needed by |
 | --- | --- | --- | --- | --- |
-| 1 | Final brand name (SeniorSeat is provisional) | Domain, trademark, social handles, share images | "SeniorSeat" everywhere; name lives in a handful of components and metadata | Before public launch (M1) |
 | 4 | Whether and when to switch on AI features, and the daily budget | Paid API spend | Off: rule-based check only (ADR 0011). `AI_DAILY_BUDGET_USD=2` applies only once switched on | Later (deferred) |
 | 5 | Hosting and database vendors | Cost, region, data residency | Recommended: Vercel + Neon (or Supabase Postgres); not provisioned | M1 |
 | 6 | Email provider (double opt-in, magic links) | Vendor, deliverability, cost | None; waitlist stores consented emails without confirmation | M1/M2 |
@@ -16,6 +15,9 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 
 ## Resolved for M1
 
+- **1. Brand.** On 2026-11-23 the founder chose **VibeAcademy**. The repository stays at `Shakilkhan24/VibeAcademy`. The public launch domain and social accounts are still to be selected. [Issue #3](https://github.com/Shakilkhan24/VibeAcademy/issues/3)
+  - Registry lookups on that date showed registrations for all four exact-name domains checked. [vibeacademy.com](https://rdap.verisign.com/com/v1/domain/vibeacademy.com) · [vibeacademy.org](https://rdap.publicinterestregistry.org/rdap/domain/vibeacademy.org) · [vibeacademy.dev](https://pubapi.registry.google/rdap/domain/vibeacademy.dev) · [vibeacademy.app](https://pubapi.registry.google/rdap/domain/vibeacademy.app)
+  - The exact handle already resolves on GitHub and YouTube. Bluesky returned `HandleNotFound` for `vibeacademy.bsky.social`. Availability at signup is unconfirmed. [GitHub](https://github.com/vibeacademy) · [YouTube](https://www.youtube.com/@VibeAcademy) · [Bluesky handle lookup](https://bsky.social/xrpc/com.atproto.identity.resolveHandle?handle=vibeacademy.bsky.social)
 - **2. Decision Cards.** On 2026-11-22 the founder approved including all five current cards in the initial release as drafts. Each card can be marked `reviewed` after a second engineer checks it.
 - **3. X-Ray quality.** The founder set an 80% minimum agreement target for the four critical decisions across 20–30 hand-labelled prompts on 2026-11-21. The offline test runs in CI.
 

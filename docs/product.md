@@ -1,6 +1,6 @@
 # Product context
 
-SeniorSeat teaches people who build software with AI ("vibe coders") to make the engineering decisions a senior engineer makes. The AI writes the code; the learner makes the calls.
+VibeAcademy teaches people who build software with AI ("vibe coders") to make the engineering decisions a senior engineer makes. The AI writes the code; the learner makes the calls.
 
 ## The problem
 
@@ -50,7 +50,7 @@ These are fixed concepts. Changing them needs the founder and an ADR.
 | Crash Theater | Simulated production incidents. | 1 (one scenario), 2 |
 | Reality Check | Passive, ownership-verified scan of a learner's live app; the Reality Score. | 2 |
 | Senior in the Seat | AI mentor grounded in the card library. Deferred with the other paid-AI features. | Later |
-| SeniorSeat agent skill | The curriculum inside the learner's coding tool. | 3 |
+| VibeAcademy agent skill | The curriculum inside the learner's coding tool. | 3 |
 
 Tutorials, the X-Ray, the cards and the Build Pack share one taxonomy (a tutorial lists the decisions it covers): every X-Ray finding links to a decision, every decision to a card, every card option to a prompt line, and every prompt line can enter a Blueprint. Keep that chain intact.
 

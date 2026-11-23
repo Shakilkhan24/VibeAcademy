@@ -71,6 +71,6 @@ describe("renderAgentsMd", () => {
     expect(getDecision(input.open[0]!)!.critical).toBe(true);
     const md = renderAgentsMd(input);
     expect(md).toContain("Database: Postgres on Neon, in Frankfurt.");
-    expect(md).toContain("Generated from your SeniorSeat Blueprint");
+    expect(md).toContain("Generated from your VibeAcademy Blueprint");
   });
 });

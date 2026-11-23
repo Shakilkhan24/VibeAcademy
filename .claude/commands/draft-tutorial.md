@@ -1,5 +1,5 @@
 ---
-description: Draft one SeniorSeat tutorial from the founder’s brief and validate it for the learning path.
+description: Draft one VibeAcademy tutorial from the founder’s brief and validate it for the learning path.
 argument-hint: "[topic, audience, chapter, depth and teaching notes]"
 disable-model-invocation: true
 ---

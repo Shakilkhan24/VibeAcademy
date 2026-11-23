@@ -66,6 +66,8 @@ for (const url of ["/learn/opengraph-image", "/learn/choose-one-job/opengraph-im
 check("health endpoint", health.res.status === 200 && JSON.parse(health.text).ok === true, health.text);
 
 const home = await get("/");
+check("home link uses the confirmed brand", home.text.includes('aria-label="VibeAcademy home"'));
+check("lesson share metadata includes the confirmed site name", lesson.text.includes('property="og:site_name" content="VibeAcademy"'));
 for (const h of ["content-security-policy", "x-content-type-options", "x-frame-options", "referrer-policy"]) {
   check(`security header ${h}`, Boolean(home.res.headers.get(h)));
 }
