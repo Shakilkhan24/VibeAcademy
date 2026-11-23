@@ -9,6 +9,7 @@
 | Route tests | `tests/server/api-routes.test.ts` | Real route handlers: status codes, origin checks, JSON parsing, the full share/delete journey | PGlite |
 | Content tests | `tests/content/` | Card and Lab YAML, tutorial frontmatter, safe Markdown and cross-links | File system |
 | Smoke test | `scripts/smoke.mjs` | The deployed journey over HTTP: the learning path, X-Ray, sharing, share images, unshare, delete, waitlist, signup reporting and headers | Against a running server |
+| Chromium journeys and accessibility | `tests/browser/` | X-Ray sharing and revocation, lesson completion across tabs, clipboard, keyboard Depth Dial and signup. Axe checks the home, learning path, lesson, X-Ray and card index for serious and critical findings. | Production server at 390 px and 1280 px |
 
 ## Commands
 
@@ -16,6 +17,16 @@
 pnpm test            # all Vitest suites
 pnpm verify          # typecheck + lint + tests + content check + build
 ```
+
+For the browser suite, run the following from the repository root:
+
+```bash
+pnpm exec playwright install --with-deps --only-shell chromium
+pnpm build
+pnpm test:browser
+```
+
+Playwright starts a production server at `127.0.0.1:3170` with a fresh in-memory database. Each test gets its own browser context. To reuse a running **test** server, set `BASE_URL` to its origin and start that server with the same `NEXT_PUBLIC_SITE_URL` so share links open on it. The suite creates synthetic signups and X-Rays. In CI the HTTP smoke and Playwright suites share a production server in the five-minute `browser` job. Failed tests retain a trace in `test-results/`.
 
 With Docker running, use `pnpm build && pnpm smoke:postgres` to test the production driver.
 The command starts a disposable PostgreSQL 17 database on loopback. Before migration it checks
