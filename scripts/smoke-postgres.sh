@@ -108,4 +108,4 @@ if [[ -n "$retry_date" || "$(audit_count)" != 1 ]]; then
   echo "Repeating the deletion should leave the audit count unchanged." >&2
   exit 1
 fi
-echo "Verified waitlist deletion, date-only audit and retry in $((SECONDS - started)) seconds."
+echo "Verified waitlist deletion, date-only audit and retry in $((SECONDS - started))s."

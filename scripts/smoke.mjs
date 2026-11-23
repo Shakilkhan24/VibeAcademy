@@ -56,10 +56,15 @@ for (const [path, mustContain] of [
   ["/open", "Open numbers"],
   ["/waitlist", "Get in first"],
   ["/privacy", "What we keep"],
+  ["/terms", "Terms of use"],
   ["/sitemap.xml", "/cards/one-job"],
 ]) {
   const { res, text } = await get(path);
   check(`GET ${path}`, res.status === 200 && text.includes(mustContain), `status ${res.status}`);
+  if (res.headers.get("content-type")?.includes("text/html")) {
+    const footers = text.match(/<footer\b[^>]*>[\s\S]*?<\/footer>/g) ?? [];
+    check(`Privacy and Terms in the footer on ${path}`, footers.some((footer) => footer.includes('href="/privacy"') && footer.includes('href="/terms"')));
+  }
 }
 
 const health = await get("/api/health");

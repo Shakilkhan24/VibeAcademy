@@ -6,6 +6,8 @@ Last updated on 2026-11-23 during M1 verification. Update this file in the same 
 
 A PostgreSQL 17 rehearsal created a synthetic waitlist signup, removed it by its verified address and recorded its UTC deletion date with empty event properties. The control signup survived and retrying the request added no second audit event. The database portion finished in under ten seconds locally. [Waitlist deletion procedure](privacy.md#delete-a-waitlist-signup)
 
+The shared footer includes Privacy and Terms. Chromium followed both links at 390 px and 1280 px. All 120 unit and integration tests and 24 browser checks passed, and the HTTP smoke test found both links on all 26 HTML pages it exercises.
+
 Each lesson accepts a Yes or Not yet vote and an optional private comment. The reader can still mark lessons complete locally when offline. The server counts accepted completion marks and feedback responses across lesson versions. On `/open`, each lesson’s completion count and helpful rate appear after its tenth response. [Privacy inventory](privacy.md) · [Reporting decision](decisions/0013-lesson-feedback.md)
 
 For issue #10, `pnpm verify` passed 120 tests and the production build. All 22 browser checks and the PostgreSQL 17 migration and smoke checks passed. A disposable database with nine synthetic responses kept the lesson hidden. A tenth vote made the expected completion count and helpful rate visible at 390 px and 1280 px. Neither private fixture comment appeared in the public response.
@@ -98,4 +100,4 @@ See [open-decisions.md](open-decisions.md): launch domain, auth choice, email pr
 - X-Ray and waitlist rate limits each use a shared bucket by default. Enable per-visitor limits with `TRUST_PROXY=on` once the origin accepts traffic only from a proxy that replaces client-supplied IP headers.
 - The live HTTP header grade for issue #7 is pending the first public deployment. Run Mozilla HTTP Observatory against the launch HTTPS origin, then record the date, grade and report link here.
 - PGlite is development-only and single-process.
-- The privacy page is a plain-language summary, not a lawyer-reviewed policy.
+- The footer links to the privacy summary and terms page. Both pages identify the pending launch review. Issue #8 still needs the reviewed documents, a monitored deletion mailbox and the founder’s decision on double opt-in.

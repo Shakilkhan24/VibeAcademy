@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Privacy", description: "What VibeAca
 
 /**
  * Plain-language privacy summary of what the code actually does. Keep it in sync with
- * docs/privacy.md. A lawyer-reviewed policy is required before public launch (roadmap M3).
+ * docs/privacy.md. The founder will provide the reviewed policy before public launch (issue #8).
  */
 export default function PrivacyPage() {
   return (
@@ -42,8 +42,12 @@ export default function PrivacyPage() {
           <ul className="mt-4 list-disc space-y-2 pl-5 text-chalk-dim">
             <li>Your IP address is turned into a keyed fingerprint to enforce fair-use limits. We do not store the address itself.</li>
             <li>No advertising or third-party tracking cookies. Product analytics are counted in our own database, without personal data.</li>
-            <li>If you join the waitlist we store your email and the answers you chose, and use them only to tell you when VibeAcademy opens. To have them deleted before self-service deletion arrives, email the address given in the launch announcement.</li>
+            <li>If you join the waitlist we store your email and the answers you chose, and use them only to tell you when VibeAcademy opens. The team can remove a signup after confirming control of the email address. We’ll publish the deletion contact here before public launch.</li>
           </ul>
+        </section>
+        <section>
+          <h2 className="text-h2">Privacy policy</h2>
+          <p className="mt-4 text-chalk-dim">The sections above describe how this preview handles data. The privacy policy for public launch is pending review.</p>
         </section>
       </div>
     </Container>

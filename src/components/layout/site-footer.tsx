@@ -20,6 +20,7 @@ export function SiteFooter() {
           <p className="text-chalk">Vibe like a beginner. Decide like a senior.</p>
           <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
             <li><Link href="/privacy" className="hover:text-chalk">Privacy</Link></li>
+            <li><Link href="/terms" className="hover:text-chalk">Terms</Link></li>
             <li><Link href="/open" className="hover:text-chalk">Open numbers</Link></li>
             <li><Link href="/lab" className="hover:text-chalk">How the Lab tests</Link></li>
           </ul>
