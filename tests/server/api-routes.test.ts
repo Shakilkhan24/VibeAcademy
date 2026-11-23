@@ -28,7 +28,7 @@ afterAll(() => {
 function req(method: string, body: unknown, headers: Record<string, string> = {}) {
   return new Request("http://localhost:3000/api", {
     method,
-    headers: { "content-type": "application/json", host: "localhost:3000", "x-forwarded-for": "192.0.2.10", ...headers },
+    headers: { "content-type": "application/json", host: "localhost:3000", ...headers },
     body: JSON.stringify(body),
   });
 }
@@ -54,6 +54,30 @@ describe("API routes", () => {
     expect((await share.DELETE(req("DELETE", owner))).status).toBe(200);
     expect((await xray.DELETE(req("DELETE", owner))).status).toBe(200);
     expect((await xray.DELETE(req("DELETE", owner))).status).toBe(404);
+  });
+
+  it.each([
+    { trustProxy: "off", nextStatus: 429 },
+    { trustProxy: "on", nextStatus: 201 },
+  ])("applies X-Ray and waitlist IP limits with TRUST_PROXY=$trustProxy", async ({ trustProxy, nextStatus }) => {
+    const xray = await import("@/app/api/xray/route");
+    const waitlist = await import("@/app/api/waitlist/route");
+    const ctx = await createTestContext({
+      env: { TRUST_PROXY: trustProxy, XRAY_MINUTE_LIMIT: "1" },
+      now: () => new Date("2026-01-01T12:00:00Z"),
+    });
+    ctx.config.limits.waitlistPerHour = 1;
+    vi.spyOn(context, "getAppContext").mockResolvedValue(ctx);
+
+    const routes = [
+      { post: xray.POST, body: { prompt: SHOP_PROMPT } },
+      { post: waitlist.POST, body: { email: "limits@example.com", consent: true } },
+    ];
+    for (const { post, body } of routes) {
+      expect((await post(req("POST", body))).status).toBe(201);
+      expect((await post(req("POST", body, { "x-forwarded-for": "192.0.2.10" }))).status).toBe(nextStatus);
+      expect((await post(req("POST", body, { "x-real-ip": "192.0.2.20" }))).status).toBe(nextStatus);
+    }
   });
 
   it("rejects cross-site requests", async () => {

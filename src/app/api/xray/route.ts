@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     assertSameOrigin(req);
     const body = (await readJson(req)) as { prompt?: unknown };
     const ctx = await getAppContext();
-    const result = await runXRay(ctx, { prompt: body?.prompt, clientIp: clientIp(req) });
+    const result = await runXRay(ctx, { prompt: body?.prompt, clientIp: clientIp(req, ctx.config.trustProxy) });
     return json(result, 201);
   } catch (error) {
     return errorJson(error, "POST /api/xray");

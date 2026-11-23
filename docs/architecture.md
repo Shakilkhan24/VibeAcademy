@@ -132,5 +132,5 @@ Also link `xray_runs.user_id` (nullable) so signed-in learners can keep their X-
 - App: Vercel or any Node 22 host (Render, Fly.io, Railway). `pnpm build && pnpm start`.
 - Database: Neon or Supabase Postgres. Set `DATABASE_URL` (pooled connection), run `pnpm db:migrate` on each deploy.
 - Required env in production: `HASH_SECRET`, `DATABASE_URL`, `NEXT_PUBLIC_SITE_URL`. `ANTHROPIC_API_KEY` and `AI_DAILY_BUDGET_USD` matter only once AI is switched on.
-- Behind a proxy that sets `x-forwarded-for` (all of the above do); rate limiting relies on it.
+- For per-visitor rate limits, route all traffic through a trusted proxy that strips incoming `X-Forwarded-For` and `X-Real-IP` and sets the visitor address itself. Then set `TRUST_PROXY=on`. The default `off` shares each endpoint’s limit across visitors.
 - Phase 2 can move the database and a scan worker to AWS with Terraform; the founder's DevOps background makes this good public content, but only when traffic or cost justify it.

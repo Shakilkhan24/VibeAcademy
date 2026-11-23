@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     assertSameOrigin(req);
     const ctx = await getAppContext();
-    return json(await joinWaitlist(ctx, { body: await readJson(req), clientIp: clientIp(req) }), 201);
+    return json(await joinWaitlist(ctx, { body: await readJson(req), clientIp: clientIp(req, ctx.config.trustProxy) }), 201);
   } catch (error) {
     return errorJson(error, "POST /api/waitlist");
   }
