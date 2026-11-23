@@ -6,14 +6,15 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 | --- | --- | --- | --- | --- |
 | 4 | Whether and when to switch on AI features, and the daily budget | Paid API spend | Off: rule-based check only (ADR 0011). `AI_DAILY_BUDGET_USD=2` applies only once switched on | Later (deferred) |
 | 5 | Hosting and database vendors | Cost, region, data residency | Recommended: Vercel + Neon (or Supabase Postgres); not provisioned | M1 |
-| 6 | Email provider (double opt-in, magic links) | Vendor, deliverability, cost | None; waitlist stores consented emails without confirmation | M1/M2 |
+| 6 | Email provider (double opt-in, magic links) | Vendor, deliverability, cost | Founder deferred double opt-in until deployment. Choose a provider then. | Deployment / M2 |
 | 7 | Authentication library and sign-in methods | Identity data and lock-in | ADR 0010 proposes Better Auth with magic link + Google | M2 |
 | 8 | Merchant of record and prices | Revenue, tax, payouts to the founder's country | None. Plan hypotheses ($9 Builder, $24 Pro) are NOT in the code | M3 |
-| 9 | Privacy policy and terms | Legal requirement before collecting accounts or payments | Plain-language summary at `/privacy`; both `/privacy` and `/terms` identify the pending launch review | M1 (waitlist) / M2 (accounts) |
-| 10 | Contact address for deletion requests | Waitlist deletion before self-service exists | Operator deletion procedure is tested; a monitored public contact is pending | M1 |
+| 9 | Privacy policy and terms | Legal requirement before collecting accounts or payments | Founder confirmed review. Awaiting the source text for publication. The current privacy summary is at `/privacy`. | M1 (waitlist) / M2 (accounts) |
 | 11 | Lab episode 1 tool and filming | First public proof | Episode YAML says "Lovable or Bolt", status planned | M4 |
 
 ## Resolved for M1
+
+- **10. Waitlist deletion contact.** The founder chose `automateanything2@gmail.com`. The privacy page links to this monitored mailbox and the operator procedure verifies control of the signup address.
 
 - **1. Brand.** On 2026-11-23 the founder chose **VibeAcademy**. The repository stays at `Shakilkhan24/VibeAcademy`. The public launch domain and social accounts are still to be selected. [Issue #3](https://github.com/Shakilkhan24/VibeAcademy/issues/3)
   - Registry lookups on that date showed registrations for all four exact-name domains checked. [vibeacademy.com](https://rdap.verisign.com/com/v1/domain/vibeacademy.com) · [vibeacademy.org](https://rdap.publicinterestregistry.org/rdap/domain/vibeacademy.org) · [vibeacademy.dev](https://pubapi.registry.google/rdap/domain/vibeacademy.dev) · [vibeacademy.app](https://pubapi.registry.google/rdap/domain/vibeacademy.app)

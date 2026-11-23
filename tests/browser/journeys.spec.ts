@@ -95,6 +95,7 @@ test("open privacy and terms from the shared footer", async ({ page }) => {
   await footer.getByRole("link", { name: "Privacy", exact: true }).click();
   await expect(page).toHaveURL(/\/privacy$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("What we keep, and what we never keep");
+  await expect(page.getByRole("link", { name: "automateanything2@gmail.com" })).toHaveAttribute("href", "mailto:automateanything2@gmail.com");
   await footer.getByRole("link", { name: "Terms", exact: true }).click();
   await expect(page).toHaveURL(/\/terms$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Terms of use");

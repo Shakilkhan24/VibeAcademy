@@ -81,7 +81,7 @@ All ADRs: [docs/decisions/README.md](docs/decisions/README.md).
 
 **Public launch is deferred.** The founder approved the blueprint design, an easy-to-harder Dream curriculum and an 80% X-Ray agreement target. The implementation and verification records are on GitHub.
 
-When the founder resumes public launch, confirm the domain, hosting and Postgres providers, privacy text and deletion contact. Then run the production migrations, configure monitoring and verify the public URL. See the [roadmap](docs/roadmap.md) and [open decisions](docs/open-decisions.md).
+When the founder resumes public launch, confirm the domain and hosting and Postgres providers, publish the reviewed legal text and revisit double opt-in. Then run the production migrations, configure monitoring and verify the public URL. See the [roadmap](docs/roadmap.md) and [open decisions](docs/open-decisions.md).
 
 **Handing this to a coding agent:** paste-ready prompts for each kind of session (orientation, design pass, the next roadmap step, drafting a tutorial, producing a Lab comparison) are in [docs/agent-prompts.md](docs/agent-prompts.md).
 

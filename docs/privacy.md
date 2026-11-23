@@ -23,7 +23,7 @@ Engineering record of exactly what VibeAcademy stores. Keep it in sync with `src
 
 ## Delete a waitlist signup
 
-1. Confirm control of the address on the request. Send a confirmation to the exact address being removed and wait for a reply before changing the database. Keep the address and correspondence in the private mailbox.
+1. Receive the deletion request at `automateanything2@gmail.com`. Confirm control of the address on the request. Send a confirmation to the exact address being removed and wait for a reply before changing the database. Keep the address and correspondence in the private mailbox.
 2. Connect to the intended database using your configured PostgreSQL service. Check its identity with `psql -X -d service=vibeacademy -c '\conninfo'`. Substitute the service name for the environment you intend to operate. The operator needs permission to read the email and delete a waitlist row, insert an event and read its returned date.
 3. From the repository root, run the following with a PostgreSQL 17 client in a private terminal. Enter the verified address at the prompt. The script binds it as a query parameter. The address stays out of the command line and shell history.
 
@@ -53,6 +53,6 @@ Feedback comments stay in the private table. The public query returns completion
 
 ## Before public launch
 
-- A reviewed privacy policy and terms (open decision 9).
-- A published contact for deletion requests (open decision 10).
+- Publish the reviewed privacy policy and terms when the founder supplies the source text.
+- Choose the waitlist email provider at deployment. The founder deferred double opt-in until then.
 - Re-run the prompt-leak test against a copy of production data.

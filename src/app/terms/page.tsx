@@ -8,7 +8,7 @@ export default function TermsPage() {
   return (
     <Container>
       <PageIntro title="Terms of use">
-        VibeAcademy’s terms for public launch are pending review.
+        VibeAcademy’s terms will be published here before public launch.
       </PageIntro>
       <Link href="/privacy" className="underline">Read the privacy summary</Link>
     </Container>

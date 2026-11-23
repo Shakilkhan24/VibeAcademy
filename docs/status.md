@@ -91,7 +91,7 @@ M1 public launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (AD
 
 ## Awaiting founder
 
-See [open-decisions.md](open-decisions.md): launch domain, auth choice, email provider, payments provider and prices, hosting account, legal privacy policy.
+See [open-decisions.md](open-decisions.md): launch domain, auth choice, email provider, payments provider and prices, hosting account and publication of the reviewed legal text.
 
 ## Known limitations
 
@@ -100,4 +100,4 @@ See [open-decisions.md](open-decisions.md): launch domain, auth choice, email pr
 - X-Ray and waitlist rate limits each use a shared bucket by default. Enable per-visitor limits with `TRUST_PROXY=on` once the origin accepts traffic only from a proxy that replaces client-supplied IP headers.
 - The live HTTP header grade for issue #7 is pending the first public deployment. Run Mozilla HTTP Observatory against the launch HTTPS origin, then record the date, grade and report link here.
 - PGlite is development-only and single-process.
-- The footer links to the privacy summary and terms page. Both pages identify the pending launch review. Issue #8 still needs the reviewed documents, a monitored deletion mailbox and the founder’s decision on double opt-in.
+- The footer links to the privacy summary and terms page. The privacy page publishes the deletion contact. The founder deferred double opt-in until deployment and confirmed review of the legal text. Issue #8 still needs the text to publish.
