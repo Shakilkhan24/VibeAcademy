@@ -511,6 +511,7 @@ export const DECISIONS: readonly Decision[] = [
     promptLine: "Payments: use [payment provider] checkout. Mark an order paid only after a verified server-side webhook, and make payment handling idempotent.",
     addressedWhen: "Names the payment provider AND how payment confirmation works (webhooks, server verification).",
     partialWhen: "Names a payment provider or says 'take payments' without confirmation handling.",
+    cardSlug: "confirm-a-payment",
   },
   {
     id: "cb-ai-costs",

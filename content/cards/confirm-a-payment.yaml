@@ -1,0 +1,66 @@
+slug: confirm-a-payment
+version: 1
+updated: "2026-11-23"
+status: draft
+title: When can you mark an order paid?
+domain: cost-business
+chapter: first-build
+minRank: builder
+decisionIds: [cb-payments]
+
+question: What evidence does the baker need before putting a paid slip on a bag?
+moment: When you decide whether to collect money at pickup or let a customer pay before they arrive.
+ifSilent: >-
+  A builder might use the thank-you page to mark the order paid. A customer who pays and closes
+  the tab may never visit that page. A second payment notification could also print a second
+  packing slip for the same purchase.
+
+options:
+  - key: hosted-checkout
+    label: Take prepayments through a hosted checkout
+    recommended: true
+    summary: The provider collects the online payment. Your server confirms the outcome and updates the matching order.
+    pros:
+      - Customers can pay ahead even when the counter is closed.
+    cons:
+      - Someone must handle delayed payments, retries and mismatches.
+    cost: Check the provider's processing, dispute and refund terms for your region.
+    effort: The builder connects the checkout, verifies notifications and tests recovery.
+    promptLine: >-
+      Use [provider] hosted checkout. Save its checkout ID with the pending order. After a verified
+      webhook, confirm paid status, amount and currency on the server. Record the payment and queue
+      one packing slip in a single transaction. Make repeat deliveries safe.
+  - key: pay-at-pickup
+    label: Collect payment at pickup
+    summary: The app reserves the order. The person at the counter records payment after collecting it.
+    pros:
+      - Maya can try the pickup workflow with her existing till.
+    cons:
+      - A reserved loaf can go uncollected, and the baker must reconcile the till and the list.
+    cost: Existing till or payment terminal costs apply.
+    effort: Give the baker a way to record the receipt and reconcile the day's pickups.
+    promptLine: >-
+      Reserve orders with payment due at pickup. Only the baker can record a till receipt and mark
+      the matching order paid. Reopening an order must never record another payment.
+
+proveIt:
+  steps:
+    - Create a fictional unpaid order and note its identifier, total and currency.
+    - For checkout, use your provider's test environment. Open the return page before confirmation. The order should still be pending. Complete a test payment and have the provider redeliver its successful notification.
+    - For counter payment, reserve an order and check it is still unpaid. Record a test till receipt as the baker, then reopen the order.
+    - Compare the order history with the packing list. Try a separate cancelled checkout or uncollected reservation and check that it stays unpaid.
+  passWhen: The settled order has one payment record and one packing entry. The unsettled order has neither a paid mark nor a paid packing slip.
+
+depths:
+  story: A customer waving from the bakery door tells Maya they have arrived. A till receipt tells her the order was paid for.
+  practical: Choose who can put a paid mark on the order and what receipt they must match to it. Try closing the checkout tab before the packing slip prints.
+  technical: A webhook is a message the provider sends to your server. Verify its signature, then match the provider's settled checkout to the pending order and expected total.
+  engineer: Use a unique provider checkout reference and a conditional pending-to-paid update. Save the packing job in the same transaction. Key the job by order so concurrent confirmations produce one job.
+  senior: Decide how staff reconcile a settled provider payment when local processing was interrupted. Retrying the same recorded checkout should repair the missing work without packing the order twice.
+
+related: [where-secrets-live, who-sees-what]
+sources:
+  - title: Stripe Checkout fulfillment (checked 2026-11-23)
+    url: https://docs.stripe.com/checkout/fulfillment
+  - title: Stripe webhook verification and delivery (checked 2026-11-23)
+    url: https://docs.stripe.com/webhooks
