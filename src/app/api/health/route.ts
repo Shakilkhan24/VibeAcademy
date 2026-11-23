@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { getAppContext } from "@/server/context";
-import { aiCache, aiUsage, events, rateLimits, waitlistEntries, xrayRuns } from "@/server/db/schema";
+import { aiCache, aiUsage, events, lessonFeedback, rateLimits, waitlistEntries, xrayRuns } from "@/server/db/schema";
 import { json, reportApiFailure } from "@/server/http";
 
 export const runtime = "nodejs";
@@ -11,7 +11,7 @@ export async function GET() {
   try {
     const ctx = await getAppContext();
     await ctx.db.execute(sql`
-      select 1 from ${xrayRuns}, ${waitlistEntries}, ${events}, ${rateLimits}, ${aiCache}, ${aiUsage}
+      select 1 from ${xrayRuns}, ${waitlistEntries}, ${events}, ${rateLimits}, ${aiCache}, ${aiUsage}, ${lessonFeedback}
       limit 0
     `);
     return json({ ok: true, database: "up", analysis: ctx.ai.providerName, features: ctx.config.features });

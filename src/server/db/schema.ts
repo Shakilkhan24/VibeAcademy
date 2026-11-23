@@ -1,4 +1,4 @@
-import { boolean, index, integer, jsonb, pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, integer, jsonb, pgTable, primaryKey, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 /**
  * Database schema. Privacy rule: no table stores raw prompt text or anything derived
@@ -113,3 +113,10 @@ export const events = pgTable(
   },
   (t) => [index("events_name_created_at_idx").on(t.name, t.createdAt)],
 );
+
+/** Optional reader comments stay private. Only votes contribute to public aggregates. */
+export const lessonFeedback = pgTable("lesson_feedback", {
+  eventId: text("event_id").primaryKey().references(() => events.id, { onDelete: "cascade" }),
+  helpful: boolean("helpful").notNull(),
+  comment: varchar("comment", { length: 500 }),
+});

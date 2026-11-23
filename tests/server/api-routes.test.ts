@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+import { loadTutorials } from "@/content/tutorials";
 import { sql } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import * as context from "@/server/context";
@@ -109,6 +111,22 @@ describe("API routes", () => {
     expect(JSON.parse(log.mock.calls[0]![0])).toEqual({
       event: "api_failure", operation: "POST /api/xray", status: 503, code: "feature_disabled", timestamp: expect.any(String),
     });
+  });
+
+  it("limits lesson feedback like signups and allows a retry of a saved vote", async () => {
+    const { POST } = await import("@/app/api/lessons/activity/route");
+    const { slug, version } = (await loadTutorials())[0]!;
+    const ctx = await createTestContext();
+    ctx.config.limits.waitlistPerHour = 1;
+    vi.spyOn(context, "getAppContext").mockResolvedValue(ctx);
+    const vote = { slug, version, kind: "feedback", helpful: true, submissionId: randomUUID() };
+    expect((await POST(req("POST", vote, { origin: "https://elsewhere.example" }))).status).toBe(403);
+    expect(await (await POST(req("POST", vote))).json()).toEqual({ ok: true });
+    expect((await POST(req("POST", vote))).status).toBe(200);
+    const limited = await POST(req("POST", { ...vote, submissionId: randomUUID() }));
+    expect(limited.status).toBe(429);
+    expect(Number(limited.headers.get("retry-after"))).toBeGreaterThan(0);
+    expect((await POST(req("POST", { slug, version, kind: "completed", submissionId: randomUUID() }))).status).toBe(200);
   });
 
   it("accepts a waitlist sign-up", async () => {

@@ -13,7 +13,9 @@ export type EventName =
   | "xray_shared"
   | "xray_unshared"
   | "xray_deleted"
-  | "waitlist_joined";
+  | "waitlist_joined"
+  | "lesson_completed"
+  | "lesson_feedback";
 
 export type EventProps = Record<string, string | number | boolean | null>;
 

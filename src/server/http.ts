@@ -14,6 +14,7 @@ type ApiOperation =
   | "DELETE /api/xray"
   | "POST /api/xray/share"
   | "DELETE /api/xray/share"
+  | "POST /api/lessons/activity"
   | "POST /api/waitlist"
   | "GET /api/health";
 
