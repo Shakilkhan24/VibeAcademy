@@ -22,12 +22,12 @@ export const viewport: Viewport = { themeColor: "#0f2d4e", colorScheme: "dark" }
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen">
+      <body className="flex min-h-dvh flex-col">
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-pencil focus:px-3 focus:py-2 focus:text-pencil-ink">
           Skip to content
         </a>
         <SiteHeader />
-        <main id="main">{children}</main>
+        <main id="main" className="grow">{children}</main>
         <SiteFooter />
       </body>
     </html>
