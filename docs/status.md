@@ -4,6 +4,8 @@ Last updated on 2026-11-23 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
+GitHub private vulnerability reporting is enabled. The security policy links directly to the private form. Dependabot is configured to group weekly npm updates and GitHub Actions updates separately. [Security policy](../SECURITY.md) · [Dependabot configuration](../.github/dependabot.yml)
+
 The Decision Card library has eleven cards. The five new drafts cover a written spec, sign-in and sessions, logging, rate limits and estimating monthly costs. The previously merged payment card covers the other topic in issue #6. The sign-in decision now opens its own card, and the ownership decision still opens the access card. The founder approved the wording of these five cards on 2026-11-23. Their Draft labels remain pending a second engineer’s review. [Decision Card library](../content/cards/)
 
 On 2026-11-23, all 112 tests, content validation, the production build and HTTP smoke checks passed for the expanded library. In Chromium at 390 px and 1280 px, the shop fixture's three highest risks opened the ownership, backups and secrets cards. Each also appeared under “Learn these first”. All five new readers displayed their five depth explanations and copied both prompt lines at each width.
