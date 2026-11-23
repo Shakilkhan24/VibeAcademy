@@ -4,6 +4,8 @@ Last updated on 2026-11-23 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
+On 2026-11-23, `pnpm verify` passed all 115 tests, content validation and the production build. Route tests covered both IP headers on the X-Ray and waitlist with proxy trust on and off. The production smoke test passed on PostgreSQL 17, including its local header checks. CI now pins its three Node 24 actions by commit and Gitleaks 8.30.1 by image digest. The pinned scanner found no leaks in the local Git history.
+
 GitHub private vulnerability reporting is enabled. The security policy links directly to the private form. Dependabot is configured to group weekly npm updates and GitHub Actions updates separately. [Security policy](../SECURITY.md) · [Dependabot configuration](../.github/dependabot.yml)
 
 The Decision Card library has eleven cards. The five new drafts cover a written spec, sign-in and sessions, logging, rate limits and estimating monthly costs. The previously merged payment card covers the other topic in issue #6. The sign-in decision now opens its own card, and the ownership decision still opens the access card. The founder approved the wording of these five cards on 2026-11-23. Their Draft labels remain pending a second engineer’s review. [Decision Card library](../content/cards/)
