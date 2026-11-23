@@ -46,6 +46,12 @@ describe("loadConfig", () => {
     expect(loadConfig({ AI_PROVIDER: "anthropic" }).ai.provider).toBe("disabled");
   });
 
+  it("defaults proxy trust to off and rejects unrecognised settings", () => {
+    expect(loadConfig({}).trustProxy).toBe(false);
+    expect(loadConfig({ TRUST_PROXY: "" }).trustProxy).toBe(false);
+    expect(() => loadConfig({ TRUST_PROXY: "enabled" })).toThrow(/TRUST_PROXY/);
+  });
+
   it("requires HASH_SECRET in production", () => {
     expect(() => loadConfig({ NODE_ENV: "production" })).toThrow(/HASH_SECRET/);
   });

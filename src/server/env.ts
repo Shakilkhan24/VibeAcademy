@@ -5,7 +5,7 @@ import { z } from "zod";
  * Validated configuration. Read once per process (or per test via `loadConfig(overrides)`).
  * Never import process.env elsewhere in server code: add the variable here instead.
  */
-const onOff = z.enum(["on", "off"]).default("on").transform((v) => v === "on");
+const onOff = z.enum(["on", "off"]).transform((v) => v === "on");
 const emptyToUndefined = (v: unknown) => (typeof v === "string" && v.trim() === "" ? undefined : v);
 
 const EnvSchema = z.object({
@@ -18,8 +18,9 @@ const EnvSchema = z.object({
   ANTHROPIC_API_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
   AI_MODEL_XRAY: z.preprocess(emptyToUndefined, z.string().default("claude-haiku-5-5")),
   AI_DAILY_BUDGET_USD: z.preprocess(emptyToUndefined, z.coerce.number().nonnegative().default(2)),
-  FEATURE_XRAY: z.preprocess(emptyToUndefined, onOff),
-  FEATURE_WAITLIST: z.preprocess(emptyToUndefined, onOff),
+  TRUST_PROXY: z.preprocess(emptyToUndefined, onOff.default(false)),
+  FEATURE_XRAY: z.preprocess(emptyToUndefined, onOff.default(true)),
+  FEATURE_WAITLIST: z.preprocess(emptyToUndefined, onOff.default(true)),
   XRAY_DAILY_LIMIT: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(8)),
   XRAY_MINUTE_LIMIT: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(3)),
 });
@@ -37,6 +38,7 @@ export interface AppConfig {
   databaseUrl?: string;
   pgliteDataDir: string;
   hashSecret: string;
+  trustProxy: boolean;
   ai: {
     provider: AiProviderName;
     /** Why the provider was chosen; shown on /open and in health checks. */
@@ -84,6 +86,7 @@ export function loadConfig(source: Record<string, string | undefined> = process.
     databaseUrl: e.DATABASE_URL,
     pgliteDataDir: e.PGLITE_DATA_DIR,
     hashSecret: e.HASH_SECRET ?? DEV_HASH_SECRET,
+    trustProxy: e.TRUST_PROXY,
     ai: {
       provider,
       providerReason,

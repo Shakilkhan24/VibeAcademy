@@ -34,12 +34,12 @@ export function errorJson(error: unknown, operation: ApiOperation) {
 
 /**
  * The visitor's IP, for rate limiting only (it is HMAC'd before use, never stored raw).
- * Assumes deployment behind a proxy that sets x-forwarded-for (Vercel, Cloudflare, most PaaS).
+ * Fetch exposes no socket address. Direct requests share one rate-limit bucket.
  */
-export function clientIp(req: Request): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]!.trim();
-  return req.headers.get("x-real-ip")?.trim() || "unknown";
+export function clientIp(req: Request, trustProxy: boolean): string {
+  if (!trustProxy) return "unknown";
+  const forwarded = req.headers.get("x-forwarded-for")?.split(",", 1)[0]?.trim();
+  return forwarded || req.headers.get("x-real-ip")?.trim() || "unknown";
 }
 
 /**

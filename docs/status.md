@@ -84,6 +84,7 @@ See [open-decisions.md](open-decisions.md): launch domain, auth choice, email pr
 
 - The rule-based check is keyword matching: it can miss a decision phrased in unusual words and can credit one that is only mentioned. It is labelled "Rule-based check" everywhere.
 - Local development databases created before ADR 0011 may hold rows with `mode = 'simulated'`; delete `.data/pglite` to reset.
-- Rate limiting trusts `x-forwarded-for`; deploy behind a proxy that sets it.
+- X-Ray and waitlist rate limits each use a shared bucket by default. Enable per-visitor limits with `TRUST_PROXY=on` once the origin accepts traffic only from a proxy that replaces client-supplied IP headers.
+- The live HTTP header grade for issue #7 is pending the first public deployment. Run Mozilla HTTP Observatory against the launch HTTPS origin, then record the date, grade and report link here.
 - PGlite is development-only and single-process.
 - The privacy page is a plain-language summary, not a lawyer-reviewed policy.
