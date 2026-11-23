@@ -17,16 +17,20 @@ options:
     label: Keep the spec beside the code
     recommended: true
     summary: Write the standing decisions and examples in SPEC.md. Point the builder to it from the project's instructions.
-    pros: [A change to a rule can be reviewed alongside the code and check that implement it.]
-    cons: [Someone must keep the file readable as more rules accumulate.]
+    pros:
+      - A change to a rule can be reviewed alongside the code and check that implement it.
+    cons:
+      - Someone must keep the file readable as more rules accumulate.
     cost: Uses the project's existing repository.
     effort: Start with the job, its boundary and a worked example.
     promptLine: Read SPEC.md before editing. Record [agreed rule] and [observable check] there. If a request conflicts with the spec, ask me which rule to change.
   - key: issue-spec
     label: Keep the current feature spec in a tracked issue
     summary: Put the decision, its owner and acceptance examples in an issue that Maya and the builder can both read. Link to it from the repository.
-    pros: [Maya can discuss a change beside the example it affects.]
-    cons: [A builder needs access to the issue and a durable pointer after it closes.]
+    pros:
+      - Maya can discuss a change beside the example it affects.
+    cons:
+      - A builder needs access to the issue and a durable pointer after it closes.
     cost: Uses an issue tracker shared with the builder.
     effort: Name one authoritative issue per feature and link any replacement.
     promptLine: Use [issue link] as the spec for this feature. Link it from the project instructions. Record approved changes beside the original acceptance examples.

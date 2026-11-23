@@ -1,0 +1,57 @@
+slug: limit-repeat-requests
+version: 1
+updated: "2026-11-23"
+status: draft
+title: How many reminders can one person send?
+domain: security-secrets
+chapter: launch
+minRank: shipper
+decisionIds: [ss-abuse]
+
+question: How can Jo retry a missed email without one busy pickup order consuming the bakery’s entire sending allowance?
+moment: Set a limit before opening a form that sends messages or starts paid work.
+ifSilent: Each press of the reminder button can call the sender again. A shared allowance can be spent on one order while other customers are still waiting.
+
+options:
+  - key: app-quota
+    label: Count accepted sends in the app
+    recommended: true
+    summary: Before calling the sender, reserve a slot in a shared counter for the signed-in account and action. Decide what the customer sees when the window is full.
+    pros:
+      - The bakery can express a limit in terms of actual reminder sends.
+    cons:
+      - Every worker handling the action needs the same counter.
+    cost: Include counter storage and writes in the operating budget.
+    effort: Choose a window, reserve slots atomically and return a useful retry message.
+    promptLine: Limit [paid action] to [allowance] per account per [window] before starting work. Share the counter across workers. On refusal return HTTP 429 and tell the customer when to retry.
+  - key: gateway-rule
+    label: Limit a public route at the gateway
+    summary: Put a request limit in front of a public form before requests reach the app. Choose the route, time window and grouping your gateway supports.
+    pros:
+      - One configuration can cover the public entry point before it starts work.
+    cons:
+      - An address can represent a whole shop or household. A gateway may have no verified account identity.
+    cost: Check which limiting rules and request volumes your hosting plan includes.
+    effort: Apply the rule to each public entry point and check which requests it counts.
+    promptLine: Apply [gateway rule] to [public route]. Use a trusted grouping available at that boundary, document the allowance and explain retries in the form. Keep a separate budget guard for paid work.
+
+proveIt:
+  steps:
+    - Use a fake sender and a low limit in a local limiter test. As a practice setting, allow two sends per window. Fix the test clock at the start of the window.
+    - Allow the first two requests for the chosen group and reject the next. Check both the retry response and the fake sender's call count.
+    - Use a second test group with unused allowance. Advance the clock beyond the first window and submit again as the original group.
+  passWhen: Only the allowed requests reach the sender. The second group can still send, and the original group can retry after its window ends.
+
+depths:
+  story: Maya sets aside a small stack of reminder slips for each customer. Finishing one stack leaves other customers’ slips available.
+  practical: Choose what to count. Counting page views will do little for the email bill if pressing the reminder button is the expensive part.
+  technical: A rate limit counts work for a particular group over time. HTTP 429 signals that the client has sent too many requests. A Retry-After header can give it a time to try again.
+  engineer: Make reserving a slot and setting its expiry one atomic operation. Exercise simultaneous requests at the boundary and check the number of sender calls.
+  senior: Decide what should happen if the counter is unavailable. For a paid action, an explicit temporary pause can protect the budget while leaving the pickup list readable.
+
+related: [where-secrets-live, choose-what-to-log]
+sources:
+  - title: RFC 6585 on HTTP 429 and Retry-After
+    url: https://www.rfc-editor.org/rfc/rfc6585#section-4
+  - title: Redis counter and rate limiter patterns
+    url: https://redis.io/docs/latest/commands/incr/

@@ -346,6 +346,7 @@ export const DECISIONS: readonly Decision[] = [
     promptLine: "Rate-limit sign-up, login and every expensive endpoint per IP and per account; add bot protection to public forms.",
     addressedWhen: "Mentions rate limiting, CAPTCHA, bot protection or abuse limits.",
     partialWhen: "Mentions 'secure' or 'safe' generally.",
+    cardSlug: "limit-repeat-requests",
   },
   {
     id: "ss-privacy",
@@ -443,6 +444,7 @@ export const DECISIONS: readonly Decision[] = [
     promptLine: "Log each request with a request id, status and duration; never log passwords, tokens or personal data.",
     addressedWhen: "Mentions structured logging, request ids or audit logs.",
     partialWhen: "Mentions 'logs' without what is logged or excluded.",
+    cardSlug: "choose-what-to-log",
   },
 
   // --- Scale and performance ---------------------------------------------
@@ -499,6 +501,7 @@ export const DECISIONS: readonly Decision[] = [
     promptLine: "Estimate the monthly cost at 100 and at 10,000 users before choosing services, and prefer services with spending limits.",
     addressedWhen: "States a budget, cost limit or asks for a cost estimate.",
     partialWhen: "Says 'cheap' or 'free' without a number or limit.",
+    cardSlug: "estimate-the-monthly-bill",
   },
   {
     id: "cb-payments",

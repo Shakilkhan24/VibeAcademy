@@ -1,0 +1,57 @@
+slug: choose-what-to-log
+version: 1
+updated: "2026-11-23"
+status: draft
+title: What should a failed pickup reminder leave in the logs?
+domain: reliability-operations
+chapter: launch
+minRank: shipper
+decisionIds: [ro-logging]
+
+question: Can Maya tell why a reminder failed without giving everyone who reads the logs a copy of Jo’s message?
+moment: Decide which fields to record before real customers start sending reminders.
+ifSilent: Dumping the entire request can copy private messages and credentials into another system. Recording only “something went wrong” leaves Maya guessing which step failed.
+
+options:
+  - key: hosting-logs
+    label: Write small structured events to the host's logs
+    recommended: true
+    summary: The reminder service records an operation name, outcome, duration and a random request ID. Staff can look up a failed attempt using that ID.
+    pros:
+      - Maya can investigate a single service using a tool the project already has.
+    cons:
+      - Finding one request across separate services can take more work.
+    cost: Check what log volume and retention the hosting plan includes.
+    effort: Define allowed fields and verify the failure path uses them.
+    promptLine: For [operation], log a server-generated request ID, outcome code and elapsed time. Omit message bodies, addresses, credentials and session tokens. Restrict access and retain events for [period].
+  - key: shared-collector
+    label: Correlate events across the app and its worker
+    summary: Send the same small set of fields to one collector. Carry a random correlation ID from the order service to the reminder worker.
+    pros:
+      - Staff can follow a queued reminder from acceptance to its final outcome.
+    cons:
+      - Shipping and storing a second copy introduces another access and retention decision.
+    cost: Estimate ingestion, retention and query charges for the destination.
+    effort: Configure both services to emit approved fields and share the correlation ID.
+    promptLine: Connect [services] with one correlation ID. Export only approved event fields to [destination], limit reader access and set retention on each copy.
+
+proveIt:
+  steps:
+    - Use a fake email sender in a practice project. Give a fictional reminder a distinctive harmless phrase. Have the sender fail one reminder and deliver another.
+    - Give a teammate only the failed request's ID. Ask them to identify the operation, failing step and outcome, then distinguish it from the success.
+    - Inspect the captured request, worker and exported logs that your setup retains. Check the actual fields and search for the fictional phrase and address.
+  passWhen: The failed reminder can be traced to its step and outcome. The captured events contain only the approved fields, and neither the phrase nor the address appears.
+
+depths:
+  story: “The oven stopped during the second batch” helps Maya fix the oven. She does not need a copy of every customer’s order slip to remember what broke.
+  practical: Agree on short outcome names such as reminder_queued and sender_unavailable. Give the person reporting trouble a reference they can read back.
+  technical: A structured event has named fields. A correlation ID connects related events without using a person's email address as the identifier.
+  engineer: Build log records from an allowlist and map provider errors to known codes. Test exceptions and background jobs too, since a framework or worker may have its own logger.
+  senior: For each retained field, name the support question it answers and the people who can read it. Revisit the list when a new log sink or integration gets a copy.
+
+related: [where-secrets-live, who-sees-what]
+sources:
+  - title: OWASP logging guidance and data to exclude
+    url: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
+  - title: OpenTelemetry log fields and trace context
+    url: https://opentelemetry.io/docs/specs/otel/logs/data-model/

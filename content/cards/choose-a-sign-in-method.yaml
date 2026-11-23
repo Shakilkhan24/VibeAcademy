@@ -17,16 +17,20 @@ options:
     label: Send a one-time sign-in link
     recommended: true
     summary: Jo opens a time-limited link from her inbox. A managed sign-in service checks it and starts a bakery session.
-    pros: [Jo can use the inbox where she already receives pickup reminders.]
-    cons: [Late or filtered messages can keep a customer waiting.]
+    pros:
+      - Jo can use the inbox where she already receives pickup reminders.
+    cons:
+      - Late or filtered messages can keep a customer waiting.
     cost: Allow for sign-in emails and the provider's active-user charges.
     effort: Configure the sender and return address, then try the whole trip from a test inbox.
     promptLine: Use [managed provider] email links. Make links single-use and time-limited. Set [session lifetime], provide sign-out and enforce expiry on the server.
   - key: existing-provider
     label: Use an account customers already have
     summary: Offer a named identity provider through your authentication library. The bakery still controls its own session and access rules.
-    pros: [Customers who already use the provider can sign in without waiting for email.]
-    cons: [People without that account need another way to order.]
+    pros:
+      - Customers who already use the provider can sign in without waiting for email.
+    cons:
+      - People without that account need another way to order.
     cost: Check the identity provider and authentication service terms for your expected usage.
     effort: Register the app and its return URL for each environment.
     promptLine: Offer sign-in with [identity provider] through [auth library]. Bind the verified identity to a bakery account. Expire the bakery session after [lifetime] and end it on sign-out.
@@ -34,7 +38,7 @@ options:
 proveIt:
   steps:
     - Sign into the test bakery as Jo using the chosen method. Reload her pickup list and confirm the rye order appears.
-    - For email links, test the used and expired links through the provider's test flow. For a provider account, cancel a fresh sign-in. None of these attempts should start a new session.
+    - For email links, test used and expired links in signed-out sessions through the provider's test flow. For a provider account, cancel a fresh sign-in. None of these attempts should start a new session.
     - Sign out of the bakery and reopen the private page. In a separate test, advance the session test clock past expiry and refresh.
   passWhen: A fresh sign-in opens Jo's pickup list. Signing out or reaching expiry makes the next private request require sign-in again.
 
