@@ -79,3 +79,33 @@ if [[ -z "$before" || "$before" != "$after" ]]; then
   exit 1
 fi
 echo "PostgreSQL readiness, migrations and signup persistence passed."
+
+# Rehearse a verified request, keeping the earlier smoke signup as the unaffected control.
+started=$SECONDS
+curl --fail --silent --show-error --output /dev/null -H 'Content-Type: application/json' \
+  --data '{"email":"deletion-rehearsal@example.com","consent":true}' "$BASE_URL/api/waitlist"
+docker cp scripts/delete-waitlist-entry.sql "$container:/tmp/delete-waitlist-entry.sql"
+delete_fixture() {
+  printf '%s\n' ' Deletion-Rehearsal@Example.COM ' | docker exec -i "$container" \
+    psql -XAtq -U postgres -d seniorseat_ci -f /tmp/delete-waitlist-entry.sql
+}
+audit_count() {
+  docker exec "$container" psql -XAt -U postgres -d seniorseat_ci -c \
+    "select count(*) from events where name = 'waitlist_deleted'
+     and props = '{}'::jsonb and created_at = date_trunc('day', created_at, 'UTC')"
+}
+date_deleted=$(delete_fixture)
+if [[ ! "$date_deleted" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+  echo "Expected one UTC date from the deletion rehearsal, received '$date_deleted'." >&2
+  exit 1
+fi
+if [[ "$(signup_ids)" != "$before" || "$(audit_count)" != 1 ]]; then
+  echo "Expected the control signup and one date-only deletion event." >&2
+  exit 1
+fi
+retry_date=$(delete_fixture)
+if [[ -n "$retry_date" || "$(audit_count)" != 1 ]]; then
+  echo "Repeating the deletion should leave the audit count unchanged." >&2
+  exit 1
+fi
+echo "Verified waitlist deletion, date-only audit and retry in $((SECONDS - started)) seconds."

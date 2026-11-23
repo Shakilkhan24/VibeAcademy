@@ -4,6 +4,8 @@ Last updated on 2026-11-23 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
+A PostgreSQL 17 rehearsal created a synthetic waitlist signup, removed it by its verified address and recorded its UTC deletion date with empty event properties. The control signup survived and retrying the request added no second audit event. The database portion finished in under ten seconds locally. [Waitlist deletion procedure](privacy.md#delete-a-waitlist-signup)
+
 Each lesson accepts a Yes or Not yet vote and an optional private comment. The reader can still mark lessons complete locally when offline. The server counts accepted completion marks and feedback responses across lesson versions. On `/open`, each lesson’s completion count and helpful rate appear after its tenth response. [Privacy inventory](privacy.md) · [Reporting decision](decisions/0013-lesson-feedback.md)
 
 For issue #10, `pnpm verify` passed 120 tests and the production build. All 22 browser checks and the PostgreSQL 17 migration and smoke checks passed. A disposable database with nine synthetic responses kept the lesson hidden. A tenth vote made the expected completion count and helpful rate visible at 390 px and 1280 px. Neither private fixture comment appeared in the public response.
