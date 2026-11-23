@@ -52,12 +52,12 @@ Status key: **Done**, **Next**, **Planned**, **Deferred**, **Awaiting founder** 
 - **Outcome:** a learner signs in, keeps their tutorial progress across devices, creates a project (optionally from an X-Ray), records decisions from cards and tutorials, and sees their Blueprint grow.
 - **Needs first:** M1, and ADR 0010 approved (auth library and sign-in methods).
 - **Scope:**
-  - Auth and the Phase 1 tables (see architecture.md).
-  - Browser progress migrates to the account on first sign-in.
-  - A project page with the App Life Path for that project.
-  - "Use this option" on card options writes a `project_decisions` row.
-  - The X-Ray result's "Start a project from this" pre-fills traits and the decided items.
-  - Nonce-based CSP.
+  - Add learner sessions and the Phase 1 tables. [#23](https://github.com/Shakilkhan24/VibeAcademy/issues/23)
+  - Import browser lesson progress on first sign-in. [#24](https://github.com/Shakilkhan24/VibeAcademy/issues/24)
+  - Create a project and reopen its App Life Path. [#25](https://github.com/Shakilkhan24/VibeAcademy/issues/25)
+  - Save a Decision Card option to the project Blueprint. [#26](https://github.com/Shakilkhan24/VibeAcademy/issues/26)
+  - Start a project from an owned X-Ray result. [#27](https://github.com/Shakilkhan24/VibeAcademy/issues/27)
+  - Apply a per-response nonce to the Content Security Policy. [#28](https://github.com/Shakilkhan24/VibeAcademy/issues/28)
 - **Success check:**
   - Every new endpoint has two-user access tests.
   - A learner can go from an X-Ray to a Blueprint with 10 decisions in one sitting (usability test with five people).
