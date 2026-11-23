@@ -9,7 +9,7 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 | 6 | Email provider (double opt-in, magic links) | Vendor, deliverability, cost | Founder deferred double opt-in until deployment. Choose a provider then. | Deployment / M2 |
 | 7 | Authentication library and sign-in methods | Identity data and lock-in | ADR 0010 proposes Better Auth with magic link + Google | M2 |
 | 8 | Merchant of record and prices | Revenue, tax, payouts to the founder's country | None. Plan hypotheses ($9 Builder, $24 Pro) are NOT in the code | M3 |
-| 9 | Privacy policy and terms | Legal requirement before collecting accounts or payments | Founder confirmed review. Awaiting the source text for publication. The current privacy summary is at `/privacy`. | M1 (waitlist) / M2 (accounts) |
+| 9 | Privacy policy and terms | Legal requirement before collecting accounts or payments | Founder chose the existing `/privacy` summary and `/terms` placeholder for the GitHub milestone. Final wording is deferred until before public launch. | M1 (waitlist) / M2 (accounts) |
 | 11 | Lab episode 1 tool and filming | First public proof | Episode YAML says "Lovable or Bolt", status planned | M4 |
 
 ## Resolved for M1

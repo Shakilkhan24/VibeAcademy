@@ -77,6 +77,8 @@ On 2026-11-22, `pnpm verify` passed type checking, lint, all 112 tests, content 
 
 ## Planned (designed, not built)
 
+M2 has six linked implementation issues. Each includes dependencies, acceptance checks and an access test with two independent learner sessions. The account work awaits the founder’s choice of sign-in methods in ADR 0010. [M2 plan](https://github.com/Shakilkhan24/VibeAcademy/issues/11)
+
 M1 public launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (ADR 0010, proposed), Phase 1 tables (architecture.md), Blueprint, Build Pack v1, progress and ranks, Crash Theater, payments, Reality Check, mentor, agent skill. See [roadmap.md](roadmap.md).
 
 ## Deferred on purpose
@@ -100,4 +102,4 @@ See [open-decisions.md](open-decisions.md): launch domain, auth choice, email pr
 - X-Ray and waitlist rate limits each use a shared bucket by default. Enable per-visitor limits with `TRUST_PROXY=on` once the origin accepts traffic only from a proxy that replaces client-supplied IP headers.
 - The live HTTP header grade for issue #7 is pending the first public deployment. Run Mozilla HTTP Observatory against the launch HTTPS origin, then record the date, grade and report link here.
 - PGlite is development-only and single-process.
-- The footer links to the privacy summary and terms page. The privacy page publishes the deletion contact. The founder deferred double opt-in until deployment and confirmed review of the legal text. Issue #8 still needs the text to publish.
+- The footer links to the privacy summary and terms page. The privacy page publishes the deletion contact. The founder deferred double opt-in until deployment and chose to keep the current privacy summary and terms placeholder for this milestone. The final wording remains a pre-launch item. [Issue #8](https://github.com/Shakilkhan24/VibeAcademy/issues/8)
