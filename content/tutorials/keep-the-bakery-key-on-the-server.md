@@ -2,7 +2,7 @@
 slug: keep-the-bakery-key-on-the-server
 title: Keep the bakery’s private key on the server
 summary: Use two harmless labels in a practice build to see which settings reach a customer’s browser.
-status: draft
+status: reviewed
 version: 1
 updatedAt: 2026-11-23
 chapter: first-build

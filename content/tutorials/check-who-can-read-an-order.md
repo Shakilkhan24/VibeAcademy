@@ -2,7 +2,7 @@
 slug: check-who-can-read-an-order
 title: Check who can read an order
 summary: Run the same order query as Jo and Lee and see the database return a different pickup slip to each customer.
-status: draft
+status: reviewed
 version: 1
 updatedAt: 2026-11-23
 chapter: first-build

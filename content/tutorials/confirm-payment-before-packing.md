@@ -2,7 +2,7 @@
 slug: confirm-payment-before-packing
 title: Confirm a payment before packing the order
 summary: Trace a prepaid pickup from checkout to the packing list, including a late confirmation and a repeated notification.
-status: draft
+status: reviewed
 version: 1
 updatedAt: 2026-11-23
 chapter: first-build
