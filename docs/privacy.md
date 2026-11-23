@@ -4,7 +4,7 @@ Engineering record of exactly what VibeAcademy stores. Keep it in sync with `src
 
 ## What is never stored
 
-- Raw prompt text, in any table, cache, log or response.
+- Raw text submitted to the X-Ray, in any table, cache, log or response.
 - Any free text produced from the prompt (the classifier output has no free-text fields).
 - Raw IP addresses.
 - Owner tokens in the clear.
@@ -18,7 +18,8 @@ Engineering record of exactly what VibeAcademy stores. Keep it in sync with `src
 | `ai_usage` | None (feature, model, tokens, cost, outcome) | Indefinite | n/a |
 | `rate_limits` | HMAC of IP in the key | Pruned after about 2 days | Automatic |
 | `waitlist_entries` | Email, chosen tool, experience, source, consent time | Until launch email + a reasonable period (founder to decide) | On request (manual until accounts exist) |
-| `events` | Event name and coarse properties. A new waitlist signup records whether it used the X-Ray link. | Indefinite | n/a |
+| `lesson_feedback` | Yes/Not yet, optional private comment (500 characters), and a submission-specific event key. No IP, rate-limit key or account reference. | No automatic expiry | Maintainers can delete a response by its event key |
+| `events` | Lesson events contain the slug and version. Other events use coarse properties. A new waitlist signup records whether it used the X-Ray link. | Indefinite | n/a |
 
 ## Application failure logs
 
@@ -28,7 +29,9 @@ The application writes these records directly to standard error so a database ou
 
 ## Processors
 
-Tutorial completion is stored locally by lesson slug using the browser's local storage. The reader keeps an in-memory fallback when storage is unavailable. Marking a lesson incomplete removes its completion record. The server receives no completion events.
+Tutorial completion is stored locally by lesson slug using the browser's local storage. The reader keeps an in-memory fallback when storage is unavailable. Marking a lesson incomplete removes its completion record. A completion mark sends the slug, version and a random submission key scoped to that lesson version. An offline mark still updates local progress. Undoing it changes the browser checklist. The server counts accepted marks across versions and treats a retried submission as one mark.
+
+Feedback comments stay in the private table. The public query returns completion counts, response counts and helpful rates only for lessons with at least ten votes. The feedback quota uses the same hourly limit as signups, with its own counter. Completion marks have a separate limit of 60 per hour. [Lesson feedback decision](decisions/0013-lesson-feedback.md)
 
 - With the rule-based check (the default, ADR 0011), the prompt never leaves our server. If AI-assisted analysis is switched on later, the AI provider receives the prompt for a single request under its API data terms: verify its retention and training terms first and update `/privacy` before switching.
 - Hosting and database providers (once chosen) store the tables above.

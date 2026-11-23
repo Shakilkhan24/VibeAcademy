@@ -29,7 +29,9 @@ test("mark a lesson done and sync the learning path across tabs", async ({ page,
   await expect(progress).toHaveAccessibleName(`0 of ${total} lessons completed`);
   const lesson = await context.newPage();
   await lesson.goto("/learn/choose-one-job");
+  const completion = lesson.waitForResponse((res) => res.url().endsWith("/api/lessons/activity") && res.request().method() === "POST");
   await lesson.getByRole("button", { name: "Mark as done" }).click();
+  expect((await completion).status()).toBe(200);
   await expect(progress).toHaveAccessibleName(`1 of ${total} lessons completed`);
   await page.reload();
   await expect(progress).toHaveAttribute("value", "1");
@@ -67,4 +69,22 @@ test("join the waitlist", async ({ page }, testInfo) => {
   await page.getByRole("checkbox", { name: /Email me when/ }).check();
   await page.getByRole("button", { name: "Join the waitlist" }).click();
   await expect(page.getByRole("status")).toContainText("You're on the list");
+});
+
+test("retry private feedback and read the public reporting threshold", async ({ page }) => {
+  await page.goto("/learn/choose-one-job");
+  const form = page.getByRole("region", { name: "Did this help you decide?" });
+  const comment = "Private browser fixture about the bakery example.";
+  await form.getByRole("radio", { name: "Not yet" }).check();
+  await form.getByRole("textbox").fill(comment);
+  await page.route("**/api/lessons/activity", (route) => route.abort(), { times: 1 });
+  await form.getByRole("button", { name: "Send feedback" }).click();
+  await expect(form.getByRole("alert")).toContainText("Try again");
+  await expect(form.getByRole("textbox")).toHaveValue(comment);
+  await form.getByRole("button", { name: "Send feedback" }).click();
+  await expect(form.getByRole("status")).toHaveText("Thanks for your feedback.");
+  await page.goto("/open");
+  const metrics = page.getByRole("region", { name: "Lesson feedback" });
+  await expect(metrics).toContainText("10 responses");
+  await expect(page.locator("body")).not.toContainText(comment);
 });
