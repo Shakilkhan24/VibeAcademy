@@ -4,6 +4,8 @@ Last updated on 2026-11-23 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
+The browser suite passed all 20 checks locally at 390 px and 1280 px. Chromium covered X-Ray sharing and revocation, lesson completion across tabs, copying a lesson block, keyboard depth selection and waitlist signup. Axe reported zero serious or critical findings on the home page, learning path, first Dream lesson, X-Ray form and card index at either width. The CI browser job shares the production server with the HTTP smoke tests. [Browser tests and commands](testing.md)
+
 On 2026-11-23, `pnpm verify` passed all 115 tests, content validation and the production build. Route tests covered both IP headers on the X-Ray and waitlist with proxy trust on and off. The production smoke test passed on PostgreSQL 17, including its local header checks. CI now pins its three Node 24 actions by commit and Gitleaks 8.30.1 by image digest. The pinned scanner found no leaks in the local Git history.
 
 GitHub private vulnerability reporting is enabled. The security policy links directly to the private form. Dependabot is configured to group weekly npm updates and GitHub Actions updates separately. [Security policy](../SECURITY.md) · [Dependabot configuration](../.github/dependabot.yml)
@@ -76,7 +78,6 @@ M1 public launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (AD
 | Third-party analytics and session replay | First-party events cover Phase 0 (ADR 0007). |
 | Light theme | Tokens are centralised; not needed to validate demand. |
 | Nonce-based CSP | Planned for M2; current CSP still blocks third-party scripts, frames and connections. |
-| Browser end-to-end tests in CI (Playwright) | The smoke script covers the journey over HTTP; add Playwright when the UI has more interaction (M2). |
 | Translations | English first; content schema supports adding locale fields later. |
 | AI-assisted X-Ray and AI mentor | Founder decision: no paid API spend for now (ADR 0011). The Anthropic provider is built and tested against mocks, switched off unless `AI_PROVIDER=anthropic`. See roadmap, "Later: AI features". |
 

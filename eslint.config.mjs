@@ -13,7 +13,7 @@ const config = [
   ...nextVitals,
   ...nextTs,
   {
-    ignores: [".next/**", "node_modules/**", "drizzle/**", "next-env.d.ts", "lab/k6/**"],
+    ignores: [".next/**", "node_modules/**", "drizzle/**", "next-env.d.ts", "lab/k6/**", "test-results/**", "playwright-report/**"],
   },
   {
     rules: {
