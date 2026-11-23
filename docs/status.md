@@ -4,6 +4,10 @@ Last updated on 2026-11-23 during M1 verification. Update this file in the same 
 
 ## Implemented and verified
 
+The Decision Card library has eleven cards. The five new drafts cover a written spec, sign-in and sessions, logging, rate limits and estimating monthly costs. The previously merged payment card covers the other topic in issue #6. The sign-in decision now opens its own card, and the ownership decision still opens the access card. The founder approved the wording of these five cards on 2026-11-23. Their Draft labels remain pending a second engineer’s review. [Decision Card library](../content/cards/)
+
+On 2026-11-23, all 112 tests, content validation, the production build and HTTP smoke checks passed for the expanded library. In Chromium at 390 px and 1280 px, the shop fixture's three highest risks opened the ownership, backups and secrets cards. Each also appeared under “Learn these first”. All five new readers displayed their five depth explanations and copied both prompt lines at each width.
+
 The founder approved all three First Build lessons on 2026-11-23. Learners check a browser bundle for a harmless rehearsal value, run the same order query as two customer roles and trace a verified payment through to a single packing job. The payment Decision Card now links to the critical payments decision in the X-Ray. Its checkout example is for the fictional bakery. The card awaits second-engineer review. [Keys](../content/tutorials/keep-the-bakery-key-on-the-server.md) · [Orders](../content/tutorials/check-who-can-read-an-order.md) · [Payments](../content/tutorials/confirm-payment-before-packing.md) · [Decision Card](../content/cards/confirm-a-payment.yaml)
 
 On 2026-11-23, all 112 tests, content validation, the production build and the smoke journey passed with nine lessons and six cards. Chromium checks at 390 px and 1280 px covered the new readers, clipboard, completion and the shop X-Ray link to the payment card. A disposable Next.js production build exposed only the public rehearsal label in the checked browser assets. The published SQL isolated Jo and Lee and rolled back its fixtures. A local payment test with a simulated provider produced one packing job under concurrent duplicate confirmation.
@@ -40,7 +44,7 @@ On 2026-11-22, `pnpm verify` passed type checking, lint, all 112 tests, content 
 | Scoring | 36 decisions, 12 domains, 7 traits, applicability rules, weights, critical cap, bands, top risks, versioned | `tests/domain/*` |
 | Privacy | No prompt text stored, cached, logged or returned; HMAC'd IPs; owner tokens hashed | Test that searches every table for a prompt phrase |
 | Security | Security headers, same-origin checks, JSON size limits, Zod validation, rate limits, production config guards | Route tests, smoke test |
-| Decision Cards | Schema with the 8 parts, 6 cards (all `draft`), Depth Dial (keyboard accessible, remembered), App Life Path page | Content tests, `pnpm content:check`, browser run |
+| Decision Cards | Schema with the 8 parts, 11 cards (all `draft`), Depth Dial (keyboard accessible, remembered), App Life Path page | Content tests, `pnpm content:check`, browser run |
 | Twin Builds Lab | Methodology (11 metrics), episode schema that forbids unpublished numbers, episode 1 planned, fight card that shows "Not measured yet" | Content tests |
 | `/open` | Live counts, cache hit rate, AI spend, average cost per paid call, budget cap and waitlist size. First-party events give the rolling 30-day signup pace and signups from the X-Ray link per 100 completed checks. | Integration tests cover duplicates, missing denominators, older unattributed events and the reporting window. The production smoke test reads the metrics on `/open`. |
 | Waitlist | Email, tool, experience, consent; no enumeration; rate-limited | Integration tests, smoke test |

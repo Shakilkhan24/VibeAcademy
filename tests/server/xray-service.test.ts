@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { sql } from "drizzle-orm";
+import { loadCards } from "@/content";
 import { aiCache, aiUsage, events, xrayRuns } from "@/server/db/schema";
 import { deleteRun, getSharedSummary, runXRay, shareRun, unshareRun } from "@/server/services/xray";
 import { ServiceError } from "@/server/services/errors";
@@ -18,7 +19,13 @@ describe("runXRay", () => {
     expect(r.score).toBeGreaterThanOrEqual(0);
     expect(r.score).toBeLessThanOrEqual(100);
     expect(r.domains).toHaveLength(12);
-    expect(r.topRisks.length).toBeGreaterThan(0);
+    expect(r.topRisks).toHaveLength(3);
+    const cards = await loadCards();
+    for (const id of r.topRisks) {
+      const line = r.upgradeLines.find((entry) => entry.decisionId === id);
+      const card = cards.find((entry) => entry.slug === line?.cardSlug);
+      expect(card?.decisionIds, id).toContain(id);
+    }
     expect(r.upgradeLines.length).toBe(r.silentCount + r.partialCount);
     expect(r.ownerToken.length).toBeGreaterThan(20);
   });

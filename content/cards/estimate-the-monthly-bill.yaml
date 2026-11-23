@@ -1,0 +1,57 @@
+slug: estimate-the-monthly-bill
+version: 1
+updated: "2026-11-23"
+status: draft
+title: What makes the bakery app’s bill grow?
+domain: cost-business
+chapter: launch
+minRank: shipper
+decisionIds: [cb-monthly-cost]
+
+question: If the bakery attracts more customers, which part of the bill changes first?
+moment: Compare the cost of a quiet month and a busy month before choosing a hosting or message plan.
+ifSilent: A headcount alone cannot tell Maya how many reminders she will pay for. Two shops with the same number of customers can send very different numbers of messages.
+
+options:
+  - key: included-allowance
+    label: Start with a plan that includes an allowance
+    recommended: true
+    summary: Choose a base plan whose included work fits a normal month. Record what happens when the bakery uses the last included send.
+    pros:
+      - The fixed portion is easy to budget for.
+    cons:
+      - A busy month may add overage fees or pause work, depending on the plan.
+    cost: Add the plan fee and any usage billed beyond the included units.
+    effort: Check included units, billing period and overage behaviour on the provider's current plan.
+    promptLine: Estimate [base plan] at 100 and 10,000 monthly users. Show included units and the first overage or service limit. Record the price source, region and date.
+  - key: metered
+    label: Pay for measured usage
+    summary: List the billable units for each service, then multiply the expected monthly units by the applicable prices and add any fixed fees.
+    pros:
+      - A small trial can start with little committed capacity.
+    cons:
+      - Retries or unusually active users can increase the bill.
+    cost: Price sends, storage and other units separately. Apply minimum fees, tiers and allowances where relevant.
+    effort: Measure a sample workflow and compare the estimate with billing data after launch.
+    promptLine: Estimate a quiet and a busy month using [orders per user], [sends per order] and current unit prices. Set a budget alert and name the person who can pause optional sends.
+
+proveIt:
+  steps:
+    - Make a worksheet with monthly users, orders per user, emails per order, included emails and price source. Keep fixed fees on a separate row.
+    - For a fictional rehearsal, assume two orders per user and three emails per order. Calculate sends for 100 and 10,000 users. Then remove one email per order and recalculate.
+    - Apply the actual allowance and prices for the plan under consideration to both scenarios. Write down what happens at the limit and who receives the budget alert.
+  passWhen: The rehearsal produces 600 and 60,000 sends, then 400 and 40,000. Another reader can reproduce both bill estimates from the dated prices and separate the fixed fee from usage.
+
+depths:
+  story: Maya pays rent even when the ovens are cold. She buys more bags when more loaves leave the counter. Find the rent and the bags in each service bill.
+  practical: Give each cost a unit such as emails sent or gigabytes stored. Ask what would make that unit double and which feature could reduce it.
+  technical: For a simple plan with one overage rate, chargeable units are the usage above the included allowance, floored at zero. Tiered pricing needs a separate calculation for each band.
+  engineer: Record the expected operation count per order and include retries. Compare the prediction with one observed billing period before relying on it for the next forecast.
+  senior: Agree on the action behind each alert. Billing notifications can lag usage. If the bakery needs a firm ceiling, enforce a budget for optional work in the app before it incurs the charge.
+
+related: [limit-repeat-requests, confirm-a-payment]
+sources:
+  - title: AWS Pricing Calculator guide
+    url: https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html
+  - title: AWS Budgets notifications and billing delays
+    url: https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html

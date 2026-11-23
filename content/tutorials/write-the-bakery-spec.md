@@ -11,7 +11,7 @@ level: technical
 domains: [planning-specs, data, identity-access]
 estimatedMinutes: 9
 prerequisites: [sketch-order-permissions]
-relatedCards: [where-data-lives, who-sees-what]
+relatedCards: [keep-a-build-spec, where-data-lives, who-sees-what]
 ---
 
 ## Give an order an identity
