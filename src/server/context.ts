@@ -1,5 +1,6 @@
 import "server-only";
 import { AiGateway } from "./ai/gateway";
+import { createAuth, type Auth } from "./auth";
 import { createAnthropicProvider } from "./ai/providers/anthropic";
 import { createRulesProvider } from "./ai/providers/rules";
 import type { AiProvider } from "./ai/types";
@@ -14,6 +15,7 @@ export interface AppContext {
   db: Db;
   config: AppConfig;
   ai: AiGateway;
+  auth: Auth;
   now: () => Date;
 }
 
@@ -35,6 +37,7 @@ export function createAppContext(parts: { db: Db; config: AppConfig; provider?: 
     db: parts.db,
     config: parts.config,
     now,
+    auth: createAuth({ db: parts.db, config: parts.config }),
     ai: new AiGateway({ db: parts.db, provider, config: parts.config, now, retryDelayMs: parts.retryDelayMs }),
   };
 }

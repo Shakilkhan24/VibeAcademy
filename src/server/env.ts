@@ -1,4 +1,5 @@
 import "server-only";
+import { createHmac } from "node:crypto";
 import { z } from "zod";
 
 /**
@@ -19,6 +20,9 @@ const EnvSchema = z.object({
   AI_MODEL_XRAY: z.preprocess(emptyToUndefined, z.string().default("claude-haiku-5-5")),
   AI_DAILY_BUDGET_USD: z.preprocess(emptyToUndefined, z.coerce.number().nonnegative().default(2)),
   TRUST_PROXY: z.preprocess(emptyToUndefined, onOff.default(false)),
+  AUTH_SECRET: z.preprocess(emptyToUndefined, z.string().min(32).optional()),
+  GOOGLE_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().optional()),
+  GOOGLE_CLIENT_SECRET: z.preprocess(emptyToUndefined, z.string().optional()),
   FEATURE_XRAY: z.preprocess(emptyToUndefined, onOff.default(true)),
   FEATURE_WAITLIST: z.preprocess(emptyToUndefined, onOff.default(true)),
   XRAY_DAILY_LIMIT: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().default(8)),
@@ -39,6 +43,12 @@ export interface AppConfig {
   pgliteDataDir: string;
   hashSecret: string;
   trustProxy: boolean;
+  auth: {
+    /** Signs session cookies. AUTH_SECRET, or derived from HASH_SECRET so one secret is enough. */
+    secret: string;
+    /** Google is the only sign-in method (ADR 0010). Absent until both credentials are set. */
+    google: { clientId: string; clientSecret: string } | null;
+  };
   ai: {
     provider: AiProviderName;
     /** Why the provider was chosen; shown on /open and in health checks. */
@@ -80,13 +90,22 @@ export function loadConfig(source: Record<string, string | undefined> = process.
     providerReason = "Rule-based check (the default). AI-assisted analysis is a later milestone.";
   }
 
+  if (Boolean(e.GOOGLE_CLIENT_ID) !== Boolean(e.GOOGLE_CLIENT_SECRET)) {
+    throw new Error("Set both GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET, or neither.");
+  }
+  const hashSecret = e.HASH_SECRET ?? DEV_HASH_SECRET;
+
   return {
     env: e.NODE_ENV,
     siteUrl: e.NEXT_PUBLIC_SITE_URL.replace(/\/$/, ""),
     databaseUrl: e.DATABASE_URL,
     pgliteDataDir: e.PGLITE_DATA_DIR,
-    hashSecret: e.HASH_SECRET ?? DEV_HASH_SECRET,
+    hashSecret,
     trustProxy: e.TRUST_PROXY,
+    auth: {
+      secret: e.AUTH_SECRET ?? createHmac("sha256", hashSecret).update("vibeacademy/auth-secret/v1").digest("base64url"),
+      google: e.GOOGLE_CLIENT_ID && e.GOOGLE_CLIENT_SECRET ? { clientId: e.GOOGLE_CLIENT_ID, clientSecret: e.GOOGLE_CLIENT_SECRET } : null,
+    },
     ai: {
       provider,
       providerReason,

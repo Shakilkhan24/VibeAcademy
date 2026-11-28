@@ -1,8 +1,12 @@
 # Project status
 
-Last updated on 2026-11-23 during M1 verification. Update this file in the same change as the work it describes.
+Last updated on 2026-11-29 during M2 (accounts). Update this file in the same change as the work it describes.
 
 ## Implemented and verified
+
+**M2 accounts (issue #23, ADR 0010 accepted in #11).** Better Auth runs inside the app with Google as the only sign-in method, and stores users, sessions, encrypted OAuth tokens and OAuth state in Postgres (migration `0002_accounts_and_projects`, which also adds `lesson_completions`, `projects`, `project_decisions` and `xray_runs.user_id`). The header shows "Sign in" or "Your account". `/sign-in` explains when Google is not configured, `/account` shows the profile and signs out, and `GET`/`PATCH /api/account` read and rename only the caller's own account.
+
+Verified on 2026-11-29: a test drives the full Google redirect flow against a stand-in for Google's token and key endpoints, so Better Auth's real ID-token verification runs: sign-in start, callback, session cookie, encrypted token storage, no IP address, sign-out. Other tests cover rejection of email and other providers, expired and tampered sessions, two learners reading and renaming only their own accounts, A signing out while B stays signed in, and the migration applied to an M1 database twice with signups, feedback and an anonymous X-Ray intact. The production smoke test checks the signed-out paths, and the Chromium suite follows "Sign in" at both widths. Real Google sign-in has not been tried: it needs an OAuth client from the founder at deployment.
 
 A PostgreSQL 17 rehearsal created a synthetic waitlist signup, removed it by its verified address and recorded its UTC deletion date with empty event properties. The control signup survived and retrying the request added no second audit event. The database portion finished in under ten seconds locally. [Waitlist deletion procedure](privacy.md#delete-a-waitlist-signup)
 
@@ -93,7 +97,7 @@ M1 public launch ([roadmap.md](roadmap.md)). Then accounts and authorisation (AD
 
 ## Awaiting founder
 
-See [open-decisions.md](open-decisions.md): launch domain, auth choice, email provider, payments provider and prices, hosting account and publication of the reviewed legal text.
+See [open-decisions.md](open-decisions.md): launch domain, Google OAuth client, email provider, payments provider and prices, hosting account and publication of the reviewed legal text.
 
 ## Known limitations
 

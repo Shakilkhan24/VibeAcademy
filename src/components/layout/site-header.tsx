@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
+import { AccountMenu } from "@/components/account/account-menu";
 import { Wordmark } from "./wordmark";
 
 const NAV = [
@@ -28,7 +29,8 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-5">
+          <AccountMenu />
           <ButtonLink href="/waitlist" variant="secondary">
             Join the waitlist
           </ButtonLink>

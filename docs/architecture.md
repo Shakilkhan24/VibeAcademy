@@ -94,7 +94,7 @@ sequenceDiagram
 
 Phase 0 tables (`src/server/db/schema.ts`): `xray_runs`, `ai_cache`, `ai_usage`, `rate_limits`, `waitlist_entries`, `events`, `lesson_feedback`. The private feedback table holds votes and optional comments. The X-Ray discards submitted prompts after analysis. See [privacy.md](privacy.md) for the column-level inventory.
 
-Phase 1 additions (designed, not built). Create them in one migration when M2 starts:
+Phase 1 additions. Built in migration `0002_accounts_and_projects`: Better Auth's `users`, `sessions`, `accounts`, `verifications`; `lesson_completions`; `projects`; `project_decisions`; `xray_runs.user_id`. The rest of this table is still designed, not built:
 
 | Table | Key columns | Notes |
 | --- | --- | --- |

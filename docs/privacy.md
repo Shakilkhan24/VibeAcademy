@@ -19,6 +19,11 @@ Engineering record of exactly what VibeAcademy stores. Keep it in sync with `src
 | `rate_limits` | HMAC of IP in the key | Pruned after about 2 days | Automatic |
 | `waitlist_entries` | Email, chosen tool, experience, source, consent time | Until launch email + a reasonable period (founder to decide) | On a verified request using the procedure below |
 | `lesson_feedback` | Yes/Not yet, optional private comment (500 characters), and a submission-specific event key. No IP, rate-limit key or account reference. | No automatic expiry | Maintainers can delete a response by its event key |
+| `users` | Name, email address and profile picture URL from Google, plus whether Google verified the email | While the account exists | Cascades to sessions, accounts, completions and projects when the user row is deleted |
+| `sessions` | Session token, expiry, browser user agent. No IP address (tracking disabled). | 30 days, refreshed on use | Sign-out deletes the session; expired rows are ignored |
+| `accounts` | Google account id and OAuth tokens, encrypted with the auth secret. No password. | While the account exists | With the user |
+| `verifications` | Short-lived OAuth state for the Google redirect | Minutes | Expiry |
+| `xray_runs.user_id` | Links a run to the learner who ran it while signed in | With the run | Set to null if the account is deleted |
 | `events` | Lesson events contain the slug and version. Other events use coarse properties. A new waitlist signup records whether it used the X-Ray link. | Indefinite | n/a |
 
 ## Delete a waitlist signup

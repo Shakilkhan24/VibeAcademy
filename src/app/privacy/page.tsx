@@ -38,6 +38,15 @@ export default function PrivacyPage() {
           <p className="mt-3 text-chalk-dim">Marking a lesson done also sends its short name and version so we can count completions. An optional Yes or Not yet response tells us whether the lesson helped. Your written comment stays private to the team. The public numbers appear after a lesson receives ten responses.</p>
         </section>
         <section>
+          <h2 className="text-h2">If you sign in</h2>
+          <ul className="mt-4 list-disc space-y-2 pl-5 text-chalk-dim">
+            <li>You can only sign in with Google. We receive your name, email address and profile picture, and we keep them with your account.</li>
+            <li>We do not post to Google or read your Google data. The access keys Google issues at sign-in are stored encrypted and are not used.</li>
+            <li>Your session lasts 30 days unless you sign out. We do not record your IP address with it.</li>
+            <li>To delete your account, email <a className="underline" href="mailto:automateanything2@gmail.com">automateanything2@gmail.com</a> from the address you sign in with.</li>
+          </ul>
+        </section>
+        <section>
           <h2 className="text-h2">Your visit and your email</h2>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-chalk-dim">
             <li>Your IP address is turned into a keyed fingerprint to enforce fair-use limits. We do not store the address itself.</li>
