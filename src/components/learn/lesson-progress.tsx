@@ -1,14 +1,26 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 
-// One key per lesson lets different tabs finish different lessons without overwriting each other.
+/**
+ * Lesson progress has two homes:
+ *  - signed out: this browser's checklist (one localStorage key per lesson, so tabs that finish
+ *    different lessons never overwrite each other);
+ *  - signed in: the learner's saved progress on the server (/api/progress).
+ *
+ * On sign-in the browser checklist is imported once and then cleared, so a different learner
+ * signing in on the same browser later starts from their own progress only. If the import
+ * fails, the checklist stays and the import is retried on the next page.
+ */
 const prefix = "seniorseat:learn:done:";
 const change = "seniorseat:lesson-change";
 const unsaved = new Map<string, boolean>();
 
-function isDone(slug: string): boolean {
+// ---- Browser checklist --------------------------------------------------------------
+
+function isDoneLocally(slug: string): boolean {
   const fallback = unsaved.get(slug);
   if (fallback !== undefined) return fallback;
   try {
@@ -18,8 +30,7 @@ function isDone(slug: string): boolean {
   }
 }
 
-function toggle(slug: string) {
-  const done = !isDone(slug);
+function setLocal(slug: string, done: boolean) {
   try {
     if (done) window.localStorage.setItem(prefix + slug, "1");
     else window.localStorage.removeItem(prefix + slug);
@@ -27,7 +38,103 @@ function toggle(slug: string) {
   } catch {
     unsaved.set(slug, done);
   }
+}
+
+function localSlugs(): string[] {
+  const slugs = new Set([...unsaved].filter(([, done]) => done).map(([slug]) => slug));
+  try {
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const key = window.localStorage.key(i);
+      if (key?.startsWith(prefix) && window.localStorage.getItem(key) === "1") slugs.add(key.slice(prefix.length));
+    }
+  } catch { /* Storage unavailable: only the in-memory marks exist. */ }
+  return [...slugs];
+}
+
+// ---- Saved progress (signed in) -----------------------------------------------------
+
+interface Saved {
+  userId: string;
+  completed: Set<string>;
+}
+let saved: Saved | null = null;
+let loading: { userId: string; promise: Promise<void> } | null = null;
+
+function notify() {
   window.dispatchEvent(new Event(change));
+}
+
+async function readJson(res: Response): Promise<{ completed: string[] }> {
+  if (!res.ok) throw new Error(`progress ${res.status}`);
+  return (await res.json()) as { completed: string[] };
+}
+
+/** Loads the learner's saved progress, importing this browser's checklist first. */
+function loadSaved(userId: string) {
+  if (saved?.userId === userId || loading?.userId === userId) return;
+  const promise = (async () => {
+    const marks = localSlugs();
+    let completed: string[];
+    if (marks.length) {
+      try {
+        completed = (await readJson(await fetch("/api/progress/import", {
+          method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ slugs: marks }),
+        }))).completed;
+        for (const slug of marks) setLocal(slug, false); // moved to the account
+      } catch {
+        // Keep the checklist for a retry, and show it alongside whatever is already saved.
+        const server = await fetch("/api/progress").then(readJson).catch(() => ({ completed: [] as string[] }));
+        completed = [...new Set([...server.completed, ...marks])];
+      }
+    } else {
+      completed = (await fetch("/api/progress").then(readJson).catch(() => ({ completed: [] as string[] }))).completed;
+    }
+    saved = { userId, completed: new Set(completed) };
+    notify();
+  })().finally(() => {
+    loading = null;
+  });
+  loading = { userId, promise };
+}
+
+function useLearnerId(): string | null {
+  const { data } = authClient.useSession();
+  const userId = data?.user.id ?? null;
+  useEffect(() => {
+    if (userId) loadSaved(userId);
+    else if (saved) {
+      saved = null;
+      notify();
+    }
+  }, [userId]);
+  return userId;
+}
+
+function isDone(userId: string | null, slug: string): boolean {
+  if (userId && saved?.userId === userId) return saved.completed.has(slug);
+  return isDoneLocally(slug);
+}
+
+async function toggle(userId: string | null, slug: string): Promise<boolean> {
+  const done = !isDone(userId, slug);
+  if (userId && saved?.userId === userId) {
+    const before = new Set(saved.completed);
+    if (done) saved.completed.add(slug);
+    else saved.completed.delete(slug);
+    notify();
+    try {
+      const res = await fetch("/api/progress", {
+        method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ slug, done }),
+      });
+      saved.completed = new Set((await readJson(res)).completed);
+    } catch {
+      saved.completed = before; // not saved: show the true state
+    }
+    notify();
+  } else {
+    setLocal(slug, done);
+    notify();
+  }
   return done;
 }
 
@@ -50,42 +157,49 @@ async function reportCompletion(slug: string, version: number) {
   });
 }
 
-function subscribe(notify: () => void) {
+function subscribe(onChange: () => void) {
   const onStorage = (event: StorageEvent) => {
-    if (event.key === null || event.key.startsWith(prefix)) notify();
+    if (event.key === null || event.key.startsWith(prefix)) onChange();
   };
   window.addEventListener("storage", onStorage);
-  window.addEventListener(change, notify);
+  window.addEventListener(change, onChange);
   return () => {
     window.removeEventListener("storage", onStorage);
-    window.removeEventListener(change, notify);
+    window.removeEventListener(change, onChange);
   };
 }
 
 function useDone(slug: string) {
-  return useSyncExternalStore(subscribe, () => isDone(slug), () => false);
+  const userId = useLearnerId();
+  const done = useSyncExternalStore(subscribe, () => isDone(userId, slug), () => false);
+  return { userId, done };
 }
 
 export function LessonCompletion({ slug, version }: { slug: string; version: number }) {
-  const done = useDone(slug);
+  const { userId, done } = useDone(slug);
   return (
     <div className="mt-8 flex flex-wrap items-center gap-4">
-      <Button variant={done ? "secondary" : "primary"} onClick={() => {
-        if (toggle(slug)) void reportCompletion(slug, version).catch(() => { /* Local progress works offline. */ });
+      <Button variant={done ? "secondary" : "primary"} onClick={async () => {
+        if (await toggle(userId, slug)) void reportCompletion(slug, version).catch(() => { /* Local progress works offline. */ });
       }}>
         {done ? "Mark as incomplete" : "Mark as done"}
       </Button>
-      <span className="text-small text-chalk-dim" role="status">{done ? "Lesson marked complete in this browser." : "This browser saves your checklist. We count completion marks."}</span>
+      <span className="text-small text-chalk-dim" role="status">
+        {userId
+          ? done ? "Lesson saved as complete to your account." : "Your account saves your checklist on every device. We count completion marks."
+          : done ? "Lesson marked complete in this browser." : "This browser saves your checklist. We count completion marks."}
+      </span>
     </div>
   );
 }
 
 export function CompletionLabel({ slug }: { slug: string }) {
-  return useDone(slug) ? <span className="text-pencil">Completed</span> : null;
+  return useDone(slug).done ? <span className="text-pencil">Completed</span> : null;
 }
 
 export function ProgressSummary({ slugs }: { slugs: string[] }) {
-  const count = useSyncExternalStore(subscribe, () => slugs.filter(isDone).length, () => 0);
+  const userId = useLearnerId();
+  const count = useSyncExternalStore(subscribe, () => slugs.filter((s) => isDone(userId, s)).length, () => 0);
   if (!slugs.length) return null;
   return (
     <div className="mt-5 border-t border-line pt-4">
@@ -93,6 +207,7 @@ export function ProgressSummary({ slugs }: { slugs: string[] }) {
         {count} of {slugs.length} {slugs.length === 1 ? "lesson" : "lessons"} completed
         <progress className="mt-2 block h-2 w-full accent-pencil" value={count} max={slugs.length} />
       </label>
+      <p className="mt-2 text-micro text-chalk-dim">{userId ? "Saved to your account." : "Saved in this browser. Sign in to keep it on every device."}</p>
     </div>
   );
 }

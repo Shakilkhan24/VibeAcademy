@@ -23,6 +23,7 @@ Engineering record of exactly what VibeAcademy stores. Keep it in sync with `src
 | `sessions` | Session token, expiry, browser user agent. No IP address (tracking disabled). | 30 days, refreshed on use | Sign-out deletes the session; expired rows are ignored |
 | `accounts` | Google account id and OAuth tokens, encrypted with the auth secret. No password. | While the account exists | With the user |
 | `verifications` | Short-lived OAuth state for the Google redirect | Minutes | Expiry |
+| `lesson_completions` | Lesson slugs a signed-in learner completed, with the time. Imports from the browser checklist add no analytics events. | While the account exists | Unmarking deletes the row; cascades with the user |
 | `xray_runs.user_id` | Links a run to the learner who ran it while signed in | With the run | Set to null if the account is deleted |
 | `events` | Lesson events contain the slug and version. Other events use coarse properties. A new waitlist signup records whether it used the X-Ray link. | Indefinite | n/a |
 
