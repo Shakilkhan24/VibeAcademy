@@ -65,3 +65,34 @@ describe("account routes", () => {
     expect((await route.PATCH(call("PATCH", "/api/account", h, { name: "x" }))).status).toBe(403);
   });
 });
+
+describe("progress routes", () => {
+  it("require a session", async () => {
+    const progress = await import("@/app/api/progress/route");
+    const imp = await import("@/app/api/progress/import/route");
+    expect((await progress.GET(call("GET", "/api/progress"))).status).toBe(401);
+    expect((await progress.POST(call("POST", "/api/progress", undefined, { slug: "choose-one-job", done: true }))).status).toBe(401);
+    expect((await imp.POST(call("POST", "/api/progress/import", undefined, { slugs: ["choose-one-job"] }))).status).toBe(401);
+  });
+
+  it("import, read on a second device, and stay separate between learners", async () => {
+    const progress = await import("@/app/api/progress/route");
+    const imp = await import("@/app/api/progress/import/route");
+    const { ctx, a, b } = await twoLearners();
+    const first = await imp.POST(call("POST", "/api/progress/import", a.headers, { slugs: ["choose-one-job", "sketch-the-first-workflow"] }));
+    expect(await first.json()).toMatchObject({ imported: 2 });
+    const repeat = await imp.POST(call("POST", "/api/progress/import", a.headers, { slugs: ["choose-one-job"] }));
+    expect(await repeat.json()).toMatchObject({ imported: 0 });
+
+    // A's second device: a new session for the same learner.
+    const device2 = (await ctx.auth.$context).internalAdapter;
+    const session2 = await device2.createSession(a.user.id, false);
+    const { headersFor } = await import("../support/auth");
+    const onSecondDevice = await (await progress.GET(call("GET", "/api/progress", headersFor(ctx, session2.token)))).json();
+    expect(onSecondDevice.completed.sort()).toEqual(["choose-one-job", "sketch-the-first-workflow"]);
+
+    expect(await (await progress.GET(call("GET", "/api/progress", b.headers))).json()).toEqual({ completed: [] });
+    await progress.POST(call("POST", "/api/progress", b.headers, { slug: "choose-one-job", done: false }));
+    expect((await (await progress.GET(call("GET", "/api/progress", a.headers))).json()).completed).toHaveLength(2);
+  });
+});

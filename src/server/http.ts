@@ -20,7 +20,10 @@ type ApiOperation =
   | "POST /api/waitlist"
   | "GET /api/health"
   | "GET /api/account"
-  | "PATCH /api/account";
+  | "PATCH /api/account"
+  | "GET /api/progress"
+  | "POST /api/progress"
+  | "POST /api/progress/import";
 
 /** Use handler constants here. Database and provider exceptions can contain request data. */
 export function reportApiFailure(operation: ApiOperation, status: number, code: ServiceErrorCode | "internal" | "not_ready") {
