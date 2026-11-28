@@ -7,7 +7,7 @@ These affect product direction, money, legal exposure or vendors. Agents must no
 | 4 | Whether and when to switch on AI features, and the daily budget | Paid API spend | Off: rule-based check only (ADR 0011). `AI_DAILY_BUDGET_USD=2` applies only once switched on | Later (deferred) |
 | 5 | Hosting and database vendors | Cost, region, data residency | Recommended: Vercel + Neon (or Supabase Postgres); not provisioned | M1 |
 | 6 | Email provider (double opt-in, magic links) | Vendor, deliverability, cost | Founder deferred double opt-in until deployment. Choose a provider then. | Deployment / M2 |
-| 7 | Authentication library and sign-in methods | Identity data and lock-in | ADR 0010 proposes Better Auth with magic link + Google | M2 |
+| 7 | Authentication library and sign-in methods | Identity data and lock-in | **Decided 2026-11-29:** Better Auth with Google only (ADR 0010, issue #11). Needs a Google OAuth client at deployment | M2 |
 | 8 | Merchant of record and prices | Revenue, tax, payouts to the founder's country | None. Plan hypotheses ($9 Builder, $24 Pro) are NOT in the code | M3 |
 | 9 | Privacy policy and terms | Legal requirement before collecting accounts or payments | Founder chose the existing `/privacy` summary and `/terms` placeholder for the GitHub milestone. Final wording is deferred until before public launch. | M1 (waitlist) / M2 (accounts) |
 | 11 | Lab episode 1 tool and filming | First public proof | Episode YAML says "Lovable or Bolt", status planned | M4 |

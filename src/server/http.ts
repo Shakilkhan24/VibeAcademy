@@ -1,5 +1,7 @@
 import "server-only";
 import { NextResponse } from "next/server";
+import { getLearner, type Learner } from "./auth";
+import type { AppContext } from "./context";
 import { ServiceError, type ServiceErrorCode } from "./services/errors";
 
 const NO_STORE = { "Cache-Control": "no-store" };
@@ -16,7 +18,9 @@ type ApiOperation =
   | "DELETE /api/xray/share"
   | "POST /api/lessons/activity"
   | "POST /api/waitlist"
-  | "GET /api/health";
+  | "GET /api/health"
+  | "GET /api/account"
+  | "PATCH /api/account";
 
 /** Use handler constants here. Database and provider exceptions can contain request data. */
 export function reportApiFailure(operation: ApiOperation, status: number, code: ServiceErrorCode | "internal" | "not_ready") {
@@ -73,4 +77,11 @@ export async function readJson(req: Request): Promise<unknown> {
   } catch {
     throw new ServiceError("invalid_input", "Request body is not valid JSON.");
   }
+}
+
+/** The signed-in learner, or a 401 the client can act on. */
+export async function requireLearner(ctx: AppContext, req: Request): Promise<Learner> {
+  const learner = await getLearner(ctx.auth, req.headers);
+  if (!learner) throw new ServiceError("unauthenticated", "Sign in with Google to continue.");
+  return learner;
 }

@@ -123,5 +123,15 @@ const open = await get("/open");
 check("/open counts the X-Ray run", /Prompt X-Rays run/.test(open.text));
 check("/open reports event-based signup rates", open.text.includes("Waitlist sign-ups per day") && open.text.includes("Waitlist sign-ups per 100 X-Rays"));
 
+// Accounts (M2). The smoke run has no Google credentials, so it checks the signed-out paths.
+const signIn = await get("/sign-in");
+check("sign-in page renders", signIn.res.status === 200 && signIn.text.includes("Keep your progress on every device"), `status ${signIn.res.status}`);
+const accountPage = await get("/account");
+check("account page sends signed-out visitors to sign in", [303, 307, 308].includes(accountPage.res.status) && (accountPage.res.headers.get("location") ?? "").includes("/sign-in"), `status ${accountPage.res.status}`);
+const accountApi = await get("/api/account");
+check("account API requires a session", accountApi.res.status === 401, `status ${accountApi.res.status}`);
+const session = await get("/api/auth/get-session");
+check("session endpoint reports no session", session.res.status === 200 && ["null", ""].includes(session.text.trim()), `status ${session.res.status} ${session.text.slice(0, 40)}`);
+
 console.info(failures === 0 ? "\nAll smoke checks passed." : `\n${failures} smoke check(s) failed.`);
 process.exit(failures === 0 ? 0 : 1);

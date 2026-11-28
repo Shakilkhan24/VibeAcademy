@@ -2,6 +2,7 @@ import "server-only";
 
 export type ServiceErrorCode =
   | "invalid_input"
+  | "unauthenticated"
   | "feature_disabled"
   | "analysis_unavailable"
   | "rate_limited"
@@ -12,6 +13,7 @@ export type ServiceErrorCode =
 
 const STATUS: Record<ServiceErrorCode, number> = {
   invalid_input: 400,
+  unauthenticated: 401,
   forbidden: 403,
   not_found: 404,
   rate_limited: 429,

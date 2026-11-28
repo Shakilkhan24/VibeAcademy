@@ -95,8 +95,22 @@ test("open privacy and terms from the shared footer", async ({ page }) => {
   await footer.getByRole("link", { name: "Privacy", exact: true }).click();
   await expect(page).toHaveURL(/\/privacy$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("What we keep, and what we never keep");
-  await expect(page.getByRole("link", { name: "automateanything2@gmail.com" })).toHaveAttribute("href", "mailto:automateanything2@gmail.com");
+  // The address appears for account deletion and for leaving the waitlist.
+  const contact = page.getByRole("link", { name: "automateanything2@gmail.com" });
+  await expect(contact).toHaveCount(2);
+  for (const link of await contact.all()) await expect(link).toHaveAttribute("href", "mailto:automateanything2@gmail.com");
   await footer.getByRole("link", { name: "Terms", exact: true }).click();
   await expect(page).toHaveURL(/\/terms$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Terms of use");
+});
+
+test("signed-out visitors see sign-in and are sent to it from account pages", async ({ page }) => {
+  await page.goto("/learn");
+  await page.getByRole("link", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(/\/sign-in$/);
+  await expect(page.getByRole("heading", { name: "Keep your progress on every device" })).toBeVisible();
+  // The test server has no Google credentials, so the page explains that instead of offering a button.
+  await expect(page.getByText("Sign-in is not set up on this server")).toBeVisible();
+  await page.goto("/account");
+  await expect(page).toHaveURL(/\/sign-in$/);
 });
