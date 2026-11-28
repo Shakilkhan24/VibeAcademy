@@ -7,6 +7,16 @@ updates:
     groups:
       npm-dependencies:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
+    ignore:
+      # Majors need a planned upgrade: typescript-eslint does not support TypeScript 7 yet,
+      # eslint-config-next pins ESLint 9, and @types/node must match the Node 22 runtime.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: "/"
